@@ -5,7 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "apod")
+@Entity(tableName = "apod_favorites")
 public class ApodEntity implements Image {
 
     @PrimaryKey(autoGenerate = true)
@@ -19,48 +19,51 @@ public class ApodEntity implements Image {
     private String url;
     private boolean isFavorite;
 
-    @Override
     public int getId() {
         return id;
     }
 
-    @Override
     public String getCopyright() {
         return copyright;
     }
 
-    @Override
     public String getDate() {
         return date;
     }
 
-    @Override
     public String getExplanation() {
         return explanation;
     }
 
-    @Override
     public String getMediaType() {
         return mediaType;
     }
 
-    @Override
     public String getTitle() {
         return title;
     }
 
-    @Override
     public String getUrl() {
         return url;
     }
 
-    @Override
     public boolean getIsFavorite() {
         return isFavorite;
     }
 
     @Ignore
     public ApodEntity(String copyright, String date, String explanation, String mediaType, String title, String url, boolean isFavorite) {
+        this.copyright = copyright;
+        this.date = date;
+        this.explanation = explanation;
+        this.mediaType = mediaType;
+        this.title = title;
+        this.url = url;
+        this.isFavorite = isFavorite;
+    }
+
+    public ApodEntity(int id, String copyright, String date, String explanation, String mediaType, String title, String url, boolean isFavorite) {
+        this.id = id;
         this.copyright = copyright;
         this.date = date;
         this.explanation = explanation;
