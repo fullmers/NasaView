@@ -17,8 +17,6 @@ public class ApodEntity implements Image {
     private String mediaType;
     private String title;
     private String url;
-    private boolean isFavorite;
-
     public int getId() {
         return id;
     }
@@ -47,22 +45,17 @@ public class ApodEntity implements Image {
         return url;
     }
 
-    public boolean getIsFavorite() {
-        return isFavorite;
-    }
-
     @Ignore
-    public ApodEntity(String copyright, String date, String explanation, String mediaType, String title, String url, boolean isFavorite) {
+    public ApodEntity(String copyright, String date, String explanation, String mediaType, String title, String url) {
         this.copyright = copyright;
         this.date = date;
         this.explanation = explanation;
         this.mediaType = mediaType;
         this.title = title;
         this.url = url;
-        this.isFavorite = isFavorite;
     }
 
-    public ApodEntity(int id, String copyright, String date, String explanation, String mediaType, String title, String url, boolean isFavorite) {
+    public ApodEntity(int id, String copyright, String date, String explanation, String mediaType, String title, String url) {
         this.id = id;
         this.copyright = copyright;
         this.date = date;
@@ -70,7 +63,6 @@ public class ApodEntity implements Image {
         this.mediaType = mediaType;
         this.title = title;
         this.url = url;
-        this.isFavorite = isFavorite;
     }
 
     public ApodEntity(Image image) {
@@ -81,7 +73,6 @@ public class ApodEntity implements Image {
         this.mediaType = image.getMediaType();
         this.title = image.getTitle();
         this.url = image.getUrl();
-        this.isFavorite = image.getIsFavorite();
     }
 
 

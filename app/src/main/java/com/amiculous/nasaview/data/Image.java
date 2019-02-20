@@ -1,7 +1,6 @@
 package com.amiculous.nasaview.data;
 
 public interface Image {
-
     int getId();
     String getCopyright();
     String getDate();
@@ -9,5 +8,4 @@ public interface Image {
     String getMediaType();
     String getTitle();
     String getUrl();
-    boolean getIsFavorite();
 }
