@@ -4,9 +4,11 @@ package com.amiculous.nasaview.data;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 @Entity(tableName = "apod_favorites")
-public class ApodEntity implements Image {
+public class ApodEntity implements Image, Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -75,5 +77,43 @@ public class ApodEntity implements Image {
         this.url = image.getUrl();
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(copyright);
+        parcel.writeString(date);
+        parcel.writeString(explanation);
+        parcel.writeString(mediaType);
+        parcel.writeString(url);
+        parcel.writeString(title);
+    }
+
+    private ApodEntity(Parcel in) {
+        id = in.readInt();
+        copyright = in.readString();
+        date = in.readString();
+        explanation = in.readString();
+        mediaType = in.readString();
+        url = in.readString();
+        title = in.readString();
+    }
+
+    public static final Parcelable.Creator<ApodEntity> CREATOR = new Parcelable.Creator<ApodEntity>() {
+        @Override
+        public ApodEntity createFromParcel(Parcel parcel) {
+            return new ApodEntity(parcel);
+        }
+
+        @Override
+        public ApodEntity[] newArray(int i) {
+            return new ApodEntity[i];
+        }
+    };
 
 }
