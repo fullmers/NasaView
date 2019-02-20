@@ -7,11 +7,12 @@ import java.util.List;
 
 public interface ApodContract {
 
-    interface View extends BaseView<Presenter> {
-        void addApodImage(String imageUrl);
-        void addApodTitle(String title);
-        void addApodDate(String date);
+    interface View  {
+    //    void addApodImage(String imageUrl);
+    //    void addApodTitle(String title);
+    //    void addApodDate(String date);
         void addApodExplanation(String explanation);
+        void setPresenter();
     }
 
     interface Presenter extends BasePresenter {
