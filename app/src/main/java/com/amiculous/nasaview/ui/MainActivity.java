@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amiculous.nasaview.R;
+import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.Image;
 import com.squareup.picasso.Picasso;
 
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements ApodContract.View
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private ApodContract.Presenter presenter;
+    private ApodEntity apodEntity;
 
     @BindView(R.id.image) ImageView imageView;
     @BindView(R.id.date_text) TextView dateText;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements ApodContract.View
 
     @OnClick(R.id.image)
     public void selectImage(View view) {
-        presenter.openImageDetails();
+        presenter.openImageDetails(apodEntity);
     }
 
     @Override
@@ -64,6 +66,12 @@ public class MainActivity extends AppCompatActivity implements ApodContract.View
     }
 
     @Override
+    public void setApod(String copyright, String date, String explanation, String mediaType, String title, String url) {
+        Log.d(TAG,"setting apod");
+        apodEntity = new ApodEntity(copyright, date, explanation, mediaType, title, url);
+    }
+
+    @Override
     public void setPresenter() {
         this.presenter = new ApodPresenter(this);
     }
@@ -73,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ApodContract.View
         Log.d(TAG,"showImageDetails");
         Log.d(TAG,image.getTitle());
         Intent imageDetailIntent = new Intent(MainActivity.this,ImageDetail.class);
-        //imageDetailIntent.putExtra(getString(R.string.image_extra_key),image);
+        imageDetailIntent.putExtra("IMAGE",(ApodEntity) image);
         startActivity(imageDetailIntent);
     }
 }

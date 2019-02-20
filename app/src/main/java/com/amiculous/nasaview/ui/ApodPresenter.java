@@ -6,6 +6,7 @@ import android.util.Log;
 import com.amiculous.nasaview.BuildConfig;
 import com.amiculous.nasaview.api.ApodApi;
 import com.amiculous.nasaview.data.ApodEntity;
+import com.amiculous.nasaview.data.Image;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,9 +29,10 @@ public class ApodPresenter implements ApodContract.Presenter {
 
 
     @Override
-    public void openImageDetails(){
-        checkNotNull(apod);
-        apodView.showImageDetails(apod);
+    public void openImageDetails(Image image){
+        //TODO figure out why image is sometimes null?!
+        checkNotNull(image);
+        apodView.showImageDetails(image);
     }
 
     @Override
@@ -48,6 +50,7 @@ public class ApodPresenter implements ApodContract.Presenter {
                 apodView.addApodDate(apod.getDate());
                 apodView.addApodTitle(apod.getTitle());
                 apodView.addApodImage(apod.getUrl());
+                apodView.setApod(apod.getCopyright(), apod.getDate(), apod.getExplanation(), apod.getMediaType(), apod.getTitle(), apod.getUrl());
             }
 
             @Override
