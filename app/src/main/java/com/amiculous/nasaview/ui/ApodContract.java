@@ -12,10 +12,11 @@ public interface ApodContract {
         void addApodTitle(String title);
         void addApodDate(String date);
         void addApodExplanation(String explanation);
+        void showImageDetails(Image image);
     }
 
     interface Presenter extends BasePresenter {
-        void openImageDetails(@NonNull Image image);
+        void openImageDetails();
         void loadTodaysApod();
         void loadNewApod(boolean forceUpdate);
     }

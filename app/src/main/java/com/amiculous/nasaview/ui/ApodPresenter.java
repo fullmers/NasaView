@@ -6,7 +6,6 @@ import android.util.Log;
 import com.amiculous.nasaview.BuildConfig;
 import com.amiculous.nasaview.api.ApodApi;
 import com.amiculous.nasaview.data.ApodEntity;
-import com.amiculous.nasaview.data.Image;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,17 +21,16 @@ public class ApodPresenter implements ApodContract.Presenter {
     private ApodEntity apod;
     private static final String API_KEY = BuildConfig.API_KEY;
 
-    public ApodPresenter(@NonNull  ApodContract.View apodView) {
+    public ApodPresenter(@NonNull ApodContract.View apodView) {
         checkNotNull(apodView);
         this.apodView = apodView;
-        //apodView.setPresenter();
     }
 
 
     @Override
-    public void openImageDetails(@NonNull Image image){
-        checkNotNull(image);
-
+    public void openImageDetails(){
+        checkNotNull(apod);
+        apodView.showImageDetails(apod);
     }
 
     @Override
@@ -44,12 +42,9 @@ public class ApodPresenter implements ApodContract.Presenter {
         call.enqueue(new Callback<ApodEntity>() {
             @Override
             public void onResponse(Call<ApodEntity> call, Response<ApodEntity> response) {
-
                 apod = response.body();
                 checkNotNull(apod);
-                String explanation = apod.getExplanation();
-               // Log.d(TAG,explanation);
-                apodView.addApodExplanation(explanation);
+                apodView.addApodExplanation(apod.getExplanation());
                 apodView.addApodDate(apod.getDate());
                 apodView.addApodTitle(apod.getTitle());
                 apodView.addApodImage(apod.getUrl());
