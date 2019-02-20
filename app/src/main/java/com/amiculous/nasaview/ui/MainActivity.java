@@ -1,5 +1,6 @@
 package com.amiculous.nasaview.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -71,5 +72,8 @@ public class MainActivity extends AppCompatActivity implements ApodContract.View
     public void showImageDetails(Image image) {
         Log.d(TAG,"showImageDetails");
         Log.d(TAG,image.getTitle());
+        Intent imageDetailIntent = new Intent(MainActivity.this,ImageDetail.class);
+        //imageDetailIntent.putExtra(getString(R.string.image_extra_key),image);
+        startActivity(imageDetailIntent);
     }
 }

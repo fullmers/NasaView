@@ -15,6 +15,7 @@ public interface ApodApi {
 
     String BASE_URL = "https://api.nasa.gov/planetary/";
 
+  //  @GET("apod?date=2019-02-16")
     @GET("apod")
     Call<ApodEntity> getApod(@Query("api_key") String api_key);
 

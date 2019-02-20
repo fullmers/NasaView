@@ -9,8 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.MainActivity">
-
-
         <ImageView
             android:id="@+id/image"
             android:layout_width="0dp"
@@ -19,18 +17,9 @@
             android:scaleType="fitXY"
             android:src="@drawable/default_apod"
             app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
-            app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-            app:layout_constraintLeft_toLeftOf="@id/leftGuideline"
-            app:layout_constraintRight_toRightOf="@id/rightGuideline"
-            app:layout_constraintStart_toStartOf="@id/leftGuideline"
-            app:layout_constraintTop_toTopOf="@id/topGuideline" />
-
-        <android.support.constraint.Guideline
-            android:id="@+id/topGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/main_activity_margin" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.constraint.Guideline
             android:id="@+id/bottomGuideline"
@@ -58,19 +47,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:text="@string/sample_title"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/bottomGuideline"
-            android:text="@string/sample_title" />
+            app:layout_constraintTop_toBottomOf="@+id/bottomGuideline" />
 
         <TextView
             android:id="@+id/date_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:text="@string/sample_date"
             app:layout_constraintStart_toEndOf="@+id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/title_text"
-            android:text="@string/sample_date" />
+            app:layout_constraintTop_toBottomOf="@+id/title_text" />
 
         <TextView
             android:id="@+id/desc_text"
