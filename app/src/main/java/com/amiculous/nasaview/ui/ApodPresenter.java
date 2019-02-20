@@ -48,8 +48,11 @@ public class ApodPresenter implements ApodContract.Presenter {
                 apod = response.body();
                 checkNotNull(apod);
                 String explanation = apod.getExplanation();
-                Log.d(TAG,explanation);
+               // Log.d(TAG,explanation);
                 apodView.addApodExplanation(explanation);
+                apodView.addApodDate(apod.getDate());
+                apodView.addApodTitle(apod.getTitle());
+                apodView.addApodImage(apod.getUrl());
             }
 
             @Override
