@@ -111,11 +111,11 @@
     </android.support.v4.widget.NestedScrollView>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/favorite_fab"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/action_favorite"
+        android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_favorite_border_white_24dp"
         app:backgroundTint="@color/colorAccent"
-        app:layout_anchor="@id/collapsing_toolbar"
-        app:layout_anchorGravity="bottom|right|end" />
+        android:layout_gravity="bottom|end" />
 </android.support.design.widget.CoordinatorLayout>
