@@ -57,7 +57,7 @@ public class ApodFragment extends Fragment implements ApodContract.View {
 
     @OnClick(R.id.image)
     public void selectImage(View view) {
-        presenter.openImageDetails(apodEntity);
+        presenter.openImageFullScreem(apodEntity);
     }
 
     @Override
@@ -105,9 +105,9 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     }
 
     @Override
-    public void showImageDetails(Image image) {
-        Log.d(TAG,"showImageDetails");
-        Log.d(TAG,image.getTitle());
+    public void showImageFullScreen(Image image) {
+        Log.d(TAG,"showImageFullScreen");
+        //TODO open image in a full screen pinch-to-zoom view
     }
 
 }

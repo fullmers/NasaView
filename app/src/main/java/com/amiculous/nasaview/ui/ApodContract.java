@@ -13,13 +13,13 @@ public interface ApodContract {
         void addApodDate(String date);
         void addApodExplanation(String explanation);
         void setApod(String copyright, String date, String explanation, String mediaType, String title, String url);
-        void showImageDetails(Image image);
+        void showImageFullScreen(Image image);
         void showProgressBar();
         void hideProgressBar();
     }
 
     interface Presenter extends BasePresenter {
-        void openImageDetails(Image image);
+        void openImageFullScreem(Image image);
         void loadTodaysApod();
         void loadNewApod(boolean forceUpdate);
     }

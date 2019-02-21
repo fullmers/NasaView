@@ -1,6 +1,5 @@
 package com.amiculous.nasaview.ui;
 
-import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -30,9 +29,9 @@ public class ApodPresenter implements ApodContract.Presenter {
 
 
     @Override
-    public void openImageDetails(Image image){
+    public void openImageFullScreem(Image image){
         try {
-            apodView.showImageDetails(image);
+            apodView.showImageFullScreen(image);
         } catch (NullPointerException e) {
             Log.d(TAG, "image has not loaded yet");
         }
