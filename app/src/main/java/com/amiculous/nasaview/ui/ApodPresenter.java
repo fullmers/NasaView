@@ -45,6 +45,7 @@ public class ApodPresenter implements ApodContract.Presenter {
             @Override
             public void onResponse(Call<ApodEntity> call, Response<ApodEntity> response) {
                 apod = response.body();
+                Log.d(TAG,apod.getExplanation());
                 checkNotNull(apod);
                 apodView.addApodExplanation(apod.getExplanation());
                 apodView.addApodDate(apod.getDate());

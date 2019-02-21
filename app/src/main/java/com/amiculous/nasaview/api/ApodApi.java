@@ -3,6 +3,8 @@ package com.amiculous.nasaview.api;
 import com.amiculous.nasaview.BuildConfig;
 import com.amiculous.nasaview.data.ApodEntity;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -20,7 +22,10 @@ public interface ApodApi {
     Call<ApodEntity> getApod(@Query("api_key") String api_key);
 
     HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-    OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+    OkHttpClient client = new OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .build();
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
