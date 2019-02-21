@@ -1,11 +1,13 @@
 package com.amiculous.nasaview.ui;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,9 +21,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements ApodContract.View {
+public class ApodFragment extends Fragment implements ApodContract.View {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = ApodFragment.class.getSimpleName();
     private ApodContract.Presenter presenter;
     private ApodEntity apodEntity;
 
@@ -31,14 +33,27 @@ public class MainActivity extends AppCompatActivity implements ApodContract.View
     @BindView(R.id.desc_text) TextView descText;
     @BindView(R.id.progress_circular) ProgressBar progressBar;
 
+    public static ApodFragment newInstance() {
+        return new ApodFragment();
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.apod_fragment, container, false);
+        ButterKnife.bind(this, view);
         setPresenter();
         presenter.loadTodaysApod();
+        return view;
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setPresenter();
+    }
+
 
     @OnClick(R.id.image)
     public void selectImage(View view) {
@@ -62,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements ApodContract.View
 
     @Override
     public void addApodImage(String url) {
-        Picasso.with(this)
+        Picasso.with(getActivity().getApplicationContext())
                 .load(url)
                 .placeholder(getResources().getDrawable(R.drawable.default_apod))
                 .into(imageView);
@@ -94,4 +109,5 @@ public class MainActivity extends AppCompatActivity implements ApodContract.View
         Log.d(TAG,"showImageDetails");
         Log.d(TAG,image.getTitle());
     }
+
 }
