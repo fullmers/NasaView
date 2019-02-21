@@ -1,5 +1,6 @@
 package com.amiculous.nasaview.ui;
 
+import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -30,9 +31,11 @@ public class ApodPresenter implements ApodContract.Presenter {
 
     @Override
     public void openImageDetails(Image image){
-        //TODO figure out why image is sometimes null?!
-        checkNotNull(image);
-        apodView.showImageDetails(image);
+        try {
+            apodView.showImageDetails(image);
+        } catch (NullPointerException e) {
+            Log.d(TAG, "image has not loaded yet");
+        }
     }
 
     @Override
@@ -41,12 +44,13 @@ public class ApodPresenter implements ApodContract.Presenter {
         final Call<ApodEntity> call = apodApi.getApod(API_KEY);
         Log.d(TAG,call.request().url().toString());
 
+        apodView.showProgressBar();
         call.enqueue(new Callback<ApodEntity>() {
             @Override
             public void onResponse(Call<ApodEntity> call, Response<ApodEntity> response) {
                 apod = response.body();
                 Log.d(TAG,apod.getExplanation());
-                checkNotNull(apod);
+                apodView.hideProgressBar();
                 apodView.addApodExplanation(apod.getExplanation());
                 apodView.addApodDate(apod.getDate());
                 apodView.addApodTitle(apod.getTitle());
@@ -56,6 +60,7 @@ public class ApodPresenter implements ApodContract.Presenter {
 
             @Override
             public void onFailure(@NonNull Call<ApodEntity> call, @NonNull Throwable t) {
+                apodView.hideProgressBar();
                 Log.d(TAG,t.getMessage());
             }
         });

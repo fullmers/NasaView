@@ -14,6 +14,8 @@ public interface ApodContract {
         void addApodExplanation(String explanation);
         void setApod(String copyright, String date, String explanation, String mediaType, String title, String url);
         void showImageDetails(Image image);
+        void showProgressBar();
+        void hideProgressBar();
     }
 
     interface Presenter extends BasePresenter {

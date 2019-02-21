@@ -1,11 +1,13 @@
 package com.amiculous.nasaview.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amiculous.nasaview.R;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements ApodContract.View
     @BindView(R.id.date_text) TextView dateText;
     @BindView(R.id.title_text) TextView titleText;
     @BindView(R.id.desc_text) TextView descText;
+    @BindView(R.id.progress_circular) ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,16 @@ public class MainActivity extends AppCompatActivity implements ApodContract.View
     }
 
     @Override
+    public void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
     public void setPresenter() {
         this.presenter = new ApodPresenter(this);
     }
@@ -80,8 +93,5 @@ public class MainActivity extends AppCompatActivity implements ApodContract.View
     public void showImageDetails(Image image) {
         Log.d(TAG,"showImageDetails");
         Log.d(TAG,image.getTitle());
-        Intent imageDetailIntent = new Intent(MainActivity.this,ImageDetail.class);
-        imageDetailIntent.putExtra("IMAGE",(ApodEntity) image);
-        startActivity(imageDetailIntent);
     }
 }
