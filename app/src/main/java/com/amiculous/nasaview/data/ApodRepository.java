@@ -11,13 +11,13 @@ public class ApodRepository {
     private ApodFavoritesDao apodFavoritesDao;
     private LiveData<List<ApodEntity>> allFavoriteApods;
 
-    ApodRepository(Application application) {
+    public ApodRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
         apodFavoritesDao = db.apodFavoritesDao();
         allFavoriteApods = apodFavoritesDao.loadAllFavoriteApods();
     }
 
-    LiveData<List<ApodEntity>> getAllFavoriteApods() {
+    public LiveData<List<ApodEntity>> getAllFavoriteApods() {
         return allFavoriteApods;
     }
 
