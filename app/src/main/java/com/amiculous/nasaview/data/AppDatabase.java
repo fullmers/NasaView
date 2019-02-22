@@ -11,16 +11,18 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
     private static final Object LOCK = new Object();
-    private static final String DATABASE_NAME = "nasa-media-db";
+    private static final String DATABASE_NAME = "nasa_media_db";
 
     private static AppDatabase sInstance;
 
+    //use singleton to prevent having multiple instances of the database opened at same tiome
     public static AppDatabase getInstance(Context context) {
         if (sInstance == null) {
             synchronized (LOCK) {
                 Log.d(LOG_TAG, "Creating new database instance");
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         AppDatabase.class, AppDatabase.DATABASE_NAME)
+                        .fallbackToDestructiveMigration()
                         .build();
             }
         }
@@ -28,6 +30,7 @@ public abstract class AppDatabase extends RoomDatabase {
         return sInstance;
     }
 
+    //abstract getter methods for each @Dao
     public abstract ApodFavoritesDao apodFavoritesDao();
 
 }
