@@ -6,6 +6,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = "apod_favorites")
 public class ApodEntity implements Image, Parcelable {
@@ -48,8 +49,11 @@ public class ApodEntity implements Image, Parcelable {
     }
 
     @Ignore
-    public ApodEntity(String copyright, String date, String explanation, String mediaType, String title, String url) {
-        this.copyright = copyright;
+    public ApodEntity(String copyright, @NonNull String date, @NonNull String explanation, @NonNull String mediaType, @NonNull String title, @NonNull String url) {
+        if (copyright == null)
+            this.copyright = "";
+        else
+            this.copyright = copyright;
         this.date = date;
         this.explanation = explanation;
         this.mediaType = mediaType;
@@ -57,9 +61,12 @@ public class ApodEntity implements Image, Parcelable {
         this.url = url;
     }
 
-    public ApodEntity(int id, String copyright, String date, String explanation, String mediaType, String title, String url) {
+    public ApodEntity(int id, String copyright, @NonNull String date, @NonNull String explanation, @NonNull String mediaType, @NonNull String title, @NonNull String url) {
         this.id = id;
-        this.copyright = copyright;
+        if (copyright == null)
+            this.copyright = "";
+        else
+            this.copyright = copyright;
         this.date = date;
         this.explanation = explanation;
         this.mediaType = mediaType;
@@ -67,9 +74,12 @@ public class ApodEntity implements Image, Parcelable {
         this.url = url;
     }
 
-    public ApodEntity(Image image) {
+    public ApodEntity(@NonNull Image image) {
         this.id = image.getId();
-        this.copyright = image.getCopyright();
+        if (image.getCopyright() == null)
+            this.copyright = "";
+        else
+            this.copyright = image.getCopyright();
         this.date = image.getDate();
         this.explanation = image.getExplanation();
         this.mediaType = image.getMediaType();
