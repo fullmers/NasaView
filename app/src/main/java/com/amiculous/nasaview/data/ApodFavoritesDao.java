@@ -11,8 +11,8 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 @Dao
 public interface ApodFavoritesDao {
-    @Query("SELECT * FROM apod_favorites where id = :id")
-    LiveData<ApodEntity> loadApod(int id);
+    @Query("SELECT * FROM apod_favorites where date like :date")
+    LiveData<ApodEntity> loadApod(String date);
 
     @Query("SELECT * FROM apod_favorites")
     LiveData<List<ApodEntity>> loadAllFavoriteApods();
