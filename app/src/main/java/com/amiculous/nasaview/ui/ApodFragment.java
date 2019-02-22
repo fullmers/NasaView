@@ -1,5 +1,6 @@
 package com.amiculous.nasaview.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -107,6 +108,8 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     @Override
     public void showImageFullScreen(Image image) {
         Log.d(TAG,"showImageFullScreen");
+        Intent tempStartFavoritesIntent = new Intent(getActivity(), FavoritesActivity.class);
+        startActivity(tempStartFavoritesIntent);
         //TODO open image in a full screen pinch-to-zoom view
     }
 
