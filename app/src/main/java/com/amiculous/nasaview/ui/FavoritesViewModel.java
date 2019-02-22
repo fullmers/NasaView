@@ -25,4 +25,6 @@ public class FavoritesViewModel extends AndroidViewModel {
 
     public void insert(ApodEntity apodEntity) {apodRepository.insertApod(apodEntity);}
 
+    public void delete(ApodEntity apodEntity) {apodRepository.deleteApod(apodEntity);}
+
 }

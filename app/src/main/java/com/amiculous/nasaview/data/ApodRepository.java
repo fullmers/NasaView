@@ -40,4 +40,23 @@ public class ApodRepository {
         }
     }
 
+    public void deleteApod(ApodEntity apodEntity) {
+        new deleteApodAsyncTask(apodFavoritesDao).execute(apodEntity);
+    }
+
+    private static class deleteApodAsyncTask extends AsyncTask<ApodEntity, Void, Void> {
+
+        private ApodFavoritesDao apodFavoritesAsyncDao;
+
+        deleteApodAsyncTask(ApodFavoritesDao dao) {
+            apodFavoritesAsyncDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final ApodEntity... params) {
+            apodFavoritesAsyncDao.deleteApod(params[0]);
+            return null;
+        }
+    }
+
 }

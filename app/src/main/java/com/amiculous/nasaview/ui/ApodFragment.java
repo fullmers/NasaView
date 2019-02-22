@@ -1,9 +1,11 @@
 package com.amiculous.nasaview.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,12 +29,15 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     private static final String TAG = ApodFragment.class.getSimpleName();
     private ApodContract.Presenter presenter;
     private ApodEntity apodEntity;
+    private boolean isFavorite;
+    private FavoritesViewModel favoritesViewModel;
 
     @BindView(R.id.image) ImageView imageView;
     @BindView(R.id.date_text) TextView dateText;
     @BindView(R.id.title_text) TextView titleText;
     @BindView(R.id.desc_text) TextView descText;
     @BindView(R.id.progress_circular) ProgressBar progressBar;
+    @BindView(R.id.favorite_fab) FloatingActionButton favoritesFAB;
 
     public static ApodFragment newInstance() {
         return new ApodFragment();
@@ -53,12 +58,30 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setPresenter();
+        favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
     }
 
 
     @OnClick(R.id.image)
     public void selectImage(View view) {
         presenter.openImageFullScreem(apodEntity);
+    }
+
+    @OnClick(R.id.favorite_fab)
+    public void onFabTap(View view) {
+        if (isFavorite) {
+            favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_border_white_24dp));
+            isFavorite = false;
+            favoritesViewModel.insert(apodEntity);
+        } else {
+            //Does not work yet
+            //TODO get this working
+            /*
+            favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_white_24dp));
+            isFavorite = true;
+            favoritesViewModel.delete(apodEntity);
+            */
+        }
     }
 
     @Override

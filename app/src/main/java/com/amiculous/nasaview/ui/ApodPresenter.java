@@ -1,11 +1,14 @@
 package com.amiculous.nasaview.ui;
 
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.amiculous.nasaview.BuildConfig;
 import com.amiculous.nasaview.api.ApodApi;
 import com.amiculous.nasaview.data.ApodEntity;
+import com.amiculous.nasaview.data.ApodFavoritesDao;
+import com.amiculous.nasaview.data.AppDatabase;
 import com.amiculous.nasaview.data.Image;
 
 import retrofit2.Call;
@@ -67,6 +70,15 @@ public class ApodPresenter implements ApodContract.Presenter {
 
     @Override
     public void loadNewApod(boolean forceUpdate) {}
+
+    @Override
+    public void addFavoriteApod(ApodEntity apod) {
+        Log.d(TAG,"calling addFavoriteApod");
+        Log.d(TAG,"recieved " + apod.getTitle());
+    }
+
+    @Override
+    public void removeFavoriteApod(ApodEntity apod) {}
 
     @Override
     public void start() {}
