@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Image detail -->
     <dimen name="main_activity_margin">20dp</dimen>
-
     <dimen name="fab_margin">20dp</dimen>
+
+    <!-- Favorites list items -->
+    <dimen name="favorites_list_item_height">100dp</dimen>
+    <dimen name="preview_side">100dp</dimen>
 </resources>
