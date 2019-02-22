@@ -22,4 +22,7 @@ public interface ApodFavoritesDao {
 
     @Delete
     void deleteApod(ApodEntity apodEntity);
+
+    @Query("DELETE FROM apod_favorites")
+    void deleteAll();
 }

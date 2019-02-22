@@ -57,25 +57,14 @@ public abstract class AppDatabase extends RoomDatabase {
         private final ApodFavoritesDao apodFavoritesDao;
 
         PopulateDbAsync(AppDatabase db) {apodFavoritesDao = db.apodFavoritesDao();}
-        ApodEntity apod;
+        String explanation = "Magnificent spiral galaxy NGC 4565 is viewed edge-on from planet Earth. Also known as the Needle Galaxy for its narrow profile, bright NGC 4565 is a stop on many telescopic tours of the northern sky, in the faint but well-groomed constellation Coma Berenices. This sharp, colorful image reveals the galaxy's bulging central core cut by obscuring dust lanes that lace NGC 4565's thin galactic plane. An assortment of other background galaxies is included in the pretty field of view, with neighboring galaxy NGC 4562 at the upper right. NGC 4565 itself lies about 40 million light-years distant and spans some 100,000 light-years.  Easily spotted with small telescopes, sky enthusiasts consider NGC 4565 to be a prominent celestial masterpiece Messier missed.";
+        ApodEntity apod = new ApodEntity("Christoph Kaltseis","2019-02-22",explanation,"image","NGC 4565: Galaxy on Edge","https://apod.nasa.gov/apod/image/1902/N4565ps06d_35tp_Kaltseis2019_1024.jpg");
 
         @Override
         protected Void doInBackground(final Void... params) {
-            ApodApi apodApi= ApodApi.retrofit.create(ApodApi.class);
-            final Call<ApodEntity> call = apodApi.getApod(API_KEY);
+            apodFavoritesDao.deleteAll();
 
-            call.enqueue(new retrofit2.Callback<ApodEntity>() {
-                @Override
-                public void onResponse(Call<ApodEntity> call, Response<ApodEntity> response) {
-                    apod = response.body();
-                    apodFavoritesDao.insertApod(apod);
-               }
-                @Override
-                public void onFailure(@NonNull Call<ApodEntity> call, @NonNull Throwable t) {
-                    Log.d("AppDatabase",t.getMessage());
-                }
-            });
-
+            apodFavoritesDao.insertApod(apod);
             return null;
         }
 
