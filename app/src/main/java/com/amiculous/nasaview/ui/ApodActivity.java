@@ -18,6 +18,6 @@ public class ApodActivity extends AppCompatActivity {
                     .replace(R.id.container, ApodFragment.newInstance())
                     .commitNow();
         }
-        Timber.d("Creating ApodActivity");
+        Timber.i("Creating ApodActivity");
     }
 }

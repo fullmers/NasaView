@@ -23,6 +23,7 @@ import com.squareup.picasso.Picasso;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class ApodFragment extends Fragment implements ApodContract.View {
 
@@ -70,17 +71,19 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     @OnClick(R.id.favorite_fab)
     public void onFabTap(View view) {
         if (isFavorite) {
-            favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_border_white_24dp));
-            isFavorite = false;
-            favoritesViewModel.insert(apodEntity);
-        } else {
             //Does not work yet
             //TODO get this working
-            /*
+            favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_border_white_24dp));
+            isFavorite = false;
+            favoritesViewModel.delete(apodEntity);
+            Timber.i("untapping favorite button");
+        } else {
+
             favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_white_24dp));
             isFavorite = true;
-            favoritesViewModel.delete(apodEntity);
-            */
+            favoritesViewModel.insert(apodEntity);
+            isFavorite = true;
+            Timber.i("tapping favorite button");
         }
     }
 
@@ -109,7 +112,7 @@ public class ApodFragment extends Fragment implements ApodContract.View {
 
     @Override
     public void setApod(String copyright, String date, String explanation, String mediaType, String title, String url) {
-        Log.d(TAG,"setting apod");
+        Timber.i("setting apod");
         apodEntity = new ApodEntity(copyright, date, explanation, mediaType, title, url);
     }
 
@@ -130,7 +133,7 @@ public class ApodFragment extends Fragment implements ApodContract.View {
 
     @Override
     public void showImageFullScreen(Image image) {
-        Log.d(TAG,"showImageFullScreen");
+        Timber.i("showImageFullScreen");
         Intent tempStartFavoritesIntent = new Intent(getActivity(), FavoritesActivity.class);
         startActivity(tempStartFavoritesIntent);
         //TODO open image in a full screen pinch-to-zoom view
