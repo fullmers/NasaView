@@ -1,5 +1,6 @@
 package com.amiculous.nasaview.ui;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -8,8 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,13 @@ import android.widget.TextView;
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.Image;
+import com.amiculous.nasaview.data.SingleApodViewModel;
+import com.amiculous.nasaview.data.SingleApodViewModelFactory;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +38,8 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     private ApodContract.Presenter presenter;
     private ApodEntity apodEntity;
     private boolean isFavorite;
-    private FavoritesViewModel favoritesViewModel;
+    private SingleApodViewModel singleApodViewModel;
+    private LiveData<ApodEntity> liveApod;
 
     @BindView(R.id.image) ImageView imageView;
     @BindView(R.id.date_text) TextView dateText;
@@ -62,19 +66,36 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Timber.i("Calling onActivityCreated");
         setPresenter();
-        favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
-        favoritesViewModel.getAllFavoriteApods().observe(getActivity(), new Observer<List<ApodEntity>>() {
-            @Override
-            public void onChanged(@Nullable List<ApodEntity> apodEntities) {
-                Timber.i("onChanged");
-                if(apodEntities!= null) {
-                    for(ApodEntity apod:apodEntities) {
-                        Timber.i(apod.getTitle());
-                    }
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+        SingleApodViewModelFactory factory = new SingleApodViewModelFactory(getActivity().getApplication(),date);
+        singleApodViewModel = ViewModelProviders.of(getActivity(), factory).get(SingleApodViewModel.class);
+
+        if(singleApodViewModel.getDate() != null ) {
+            liveApod = singleApodViewModel.getApod();
+            liveApod.observe(this, new Observer<ApodEntity>() {
+                @Override
+                public void onChanged(@Nullable ApodEntity apod) {
+                    setFavoritesStateFromViewModel(apod);
                 }
-            }
-        });
+            });
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Timber.i("Calling onResume");
+    }
+
+    public void setFavoritesStateFromViewModel(ApodEntity apod) {
+        if (apod != null) {
+            setFABButtonToFavoriteState();
+        } else {
+            setFABButtonToUnfavoriteState();
+        }
     }
 
 
@@ -86,16 +107,24 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     @OnClick(R.id.favorite_fab)
     public void onFabTap(View view) {
         if (isFavorite) {
-            favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_border_white_24dp));
-            isFavorite = false;
-            favoritesViewModel.delete(apodEntity.getDate());
-            Timber.i("untapping favorite button");
+            setFABButtonToUnfavoriteState();
+            singleApodViewModel.delete(apodEntity.getDate());
         } else {
-            favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_white_24dp));
-            isFavorite = true;
-            favoritesViewModel.insert(apodEntity);
-            Timber.i("tapping favorite button");
+            setFABButtonToFavoriteState();
+            singleApodViewModel.insert(apodEntity);
         }
+    }
+
+    public void setFABButtonToFavoriteState() {
+        Timber.i("setting favorite state to true");
+        isFavorite = true;
+        favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_white_24dp));
+    }
+
+    public void setFABButtonToUnfavoriteState() {
+        Timber.i("setting favorite state to false");
+        isFavorite = false;
+        favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_border_white_24dp));
     }
 
     @Override
@@ -123,7 +152,6 @@ public class ApodFragment extends Fragment implements ApodContract.View {
 
     @Override
     public void setApod(String copyright, String date, String explanation, String mediaType, String title, String url) {
-        Timber.i("setting apod");
         apodEntity = new ApodEntity(copyright, date, explanation, mediaType, title, url);
     }
 
@@ -144,7 +172,6 @@ public class ApodFragment extends Fragment implements ApodContract.View {
 
     @Override
     public void showImageFullScreen(Image image) {
-        Timber.i("showImageFullScreen");
         Intent tempStartFavoritesIntent = new Intent(getActivity(), FavoritesActivity.class);
         startActivity(tempStartFavoritesIntent);
         //TODO open image in a full screen pinch-to-zoom view

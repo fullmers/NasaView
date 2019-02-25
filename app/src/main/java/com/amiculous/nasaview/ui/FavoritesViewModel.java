@@ -7,7 +7,12 @@ import android.arch.lifecycle.LiveData;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.ApodRepository;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import timber.log.Timber;
 
 public class FavoritesViewModel extends AndroidViewModel {
 
@@ -21,7 +26,7 @@ public class FavoritesViewModel extends AndroidViewModel {
         allFavoriteApods = apodRepository.getAllFavoriteApods();
     }
 
-    LiveData<List<ApodEntity>> getAllFavoriteApods() {return allFavoriteApods;};
+    LiveData<List<ApodEntity>> getAllFavoriteApods() {return allFavoriteApods;}
 
     public void insert(ApodEntity apodEntity) {apodRepository.insertApod(apodEntity);}
 

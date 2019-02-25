@@ -20,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class FavoritesFragment extends Fragment {
 
@@ -54,6 +55,10 @@ public class FavoritesFragment extends Fragment {
         favoritesViewModel.getAllFavoriteApods().observe(getActivity(), new Observer<List<ApodEntity>>() {
             @Override
             public void onChanged(@Nullable List<ApodEntity> apodEntities) {
+                Timber.i("Favorites:");
+                for(ApodEntity apod: apodEntities) {
+                    Timber.i(apod.getTitle());
+                }
                 adapter.setFavorites(apodEntities);
             }
         });

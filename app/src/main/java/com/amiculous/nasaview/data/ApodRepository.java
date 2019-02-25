@@ -19,9 +19,13 @@ public class ApodRepository {
         allFavoriteApods = apodFavoritesDao.loadAllFavoriteApods();
     }
 
+    public LiveData<ApodEntity> getApod(String date) {
+        Timber.i("getting apod from " + date);
+        return apodFavoritesDao.loadApod(date);
+    }
+
     public LiveData<List<ApodEntity>> getAllFavoriteApods() {
         Timber.i("getting all favorites from database");
-        List<ApodEntity> apodList = allFavoriteApods.getValue();
         return allFavoriteApods;
     }
 
@@ -48,9 +52,7 @@ public class ApodRepository {
     public void deleteApod(String date) {
         new deleteApodAsyncTask(apodFavoritesDao).execute(date);
     }
-
     private static class deleteApodAsyncTask extends AsyncTask<String, Void, Void> {
-
         private ApodFavoritesDao apodFavoritesAsyncDao;
 
         deleteApodAsyncTask(ApodFavoritesDao dao) {

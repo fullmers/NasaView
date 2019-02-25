@@ -52,6 +52,7 @@ public class ApodPresenter implements ApodContract.Presenter {
             public void onResponse(Call<ApodEntity> call, Response<ApodEntity> response) {
                 apod = response.body();
                 Timber.i(apod.getExplanation());
+                Timber.i(apod.getDate());
                 apodView.hideProgressBar();
                 apodView.addApodExplanation(apod.getExplanation());
                 apodView.addApodDate(apod.getDate());
