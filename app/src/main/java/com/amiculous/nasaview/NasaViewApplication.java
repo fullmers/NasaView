@@ -10,6 +10,6 @@ public class NasaViewApplication extends Application {
     public void onCreate() {
         super.onCreate();
         if (BuildConfig.DEBUG)
-            Timber.plant(new Timber.DebugTree());
+            Timber.plant(new CustomDebugTree());
     }
 }
