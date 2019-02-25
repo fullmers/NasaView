@@ -43,7 +43,7 @@ public class ApodRepository {
 
         @Override
         protected Void doInBackground(final ApodEntity... params) {
-        Timber.i("inserting " + params[0].getTitle() + "into database");
+//        Timber.i("inserting " + params[0].getTitle() + "into database");
             apodFavoritesAsyncDao.insertApod(params[0]);
             return null;
         }

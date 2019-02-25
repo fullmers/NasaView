@@ -72,32 +72,32 @@ public class ApodFragment extends Fragment implements ApodContract.View {
 
         SingleApodViewModelFactory factory = new SingleApodViewModelFactory(getActivity().getApplication(),date);
         singleApodViewModel = ViewModelProviders.of(getActivity(), factory).get(SingleApodViewModel.class);
-
-        if(singleApodViewModel.getDate() != null ) {
-            liveApod = singleApodViewModel.getApod();
-            liveApod.observe(this, new Observer<ApodEntity>() {
-                @Override
-                public void onChanged(@Nullable ApodEntity apod) {
-                    setFavoritesStateFromViewModel(apod);
-                }
-            });
-        }
+        populateUI();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Timber.i("Calling onResume");
+        populateUI();
     }
 
-    public void setFavoritesStateFromViewModel(ApodEntity apod) {
-        if (apod != null) {
-            setFABButtonToFavoriteState();
-        } else {
-            setFABButtonToUnfavoriteState();
+    public void populateUI() {
+        Timber.i("populateUI()");
+        if(singleApodViewModel.getApod().getValue() != null ) {
+            liveApod = singleApodViewModel.getApod();
+            liveApod.observe(this, new Observer<ApodEntity>() {
+                @Override
+                public void onChanged(@Nullable ApodEntity apod) {
+                    if (liveApod != null) {
+                        setFABButtonToFavoriteState();
+                    } else {
+                        setFABButtonToUnfavoriteState();
+                    }
+                }
+            });
         }
     }
-
 
     @OnClick(R.id.image)
     public void selectImage(View view) {
@@ -106,24 +106,25 @@ public class ApodFragment extends Fragment implements ApodContract.View {
 
     @OnClick(R.id.favorite_fab)
     public void onFabTap(View view) {
+        //TODO clean this up
         if (isFavorite) {
             setFABButtonToUnfavoriteState();
-            singleApodViewModel.delete(apodEntity.getDate());
         } else {
             setFABButtonToFavoriteState();
-            singleApodViewModel.insert(apodEntity);
         }
     }
 
     public void setFABButtonToFavoriteState() {
         Timber.i("setting favorite state to true");
         isFavorite = true;
+        singleApodViewModel.insert(apodEntity);
         favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_white_24dp));
     }
 
     public void setFABButtonToUnfavoriteState() {
         Timber.i("setting favorite state to false");
         isFavorite = false;
+        singleApodViewModel.delete(apodEntity.getDate());
         favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_border_white_24dp));
     }
 
