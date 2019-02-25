@@ -64,17 +64,14 @@ public class ApodFragment extends Fragment implements ApodContract.View {
         super.onActivityCreated(savedInstanceState);
         setPresenter();
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
-
         favoritesViewModel.getAllFavoriteApods().observe(getActivity(), new Observer<List<ApodEntity>>() {
             @Override
             public void onChanged(@Nullable List<ApodEntity> apodEntities) {
                 Timber.i("onChanged");
                 if(apodEntities!= null) {
-                    Timber.i("apodEntities NOT null");
-                for(ApodEntity apod:apodEntities) {
-                    Timber.i(apod.getTitle());
-                }} else {
-                    Timber.i("apodEntities NULL");
+                    for(ApodEntity apod:apodEntities) {
+                        Timber.i(apod.getTitle());
+                    }
                 }
             }
         });
@@ -89,18 +86,14 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     @OnClick(R.id.favorite_fab)
     public void onFabTap(View view) {
         if (isFavorite) {
-            //Does not work yet
-            //TODO get this working
             favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_border_white_24dp));
             isFavorite = false;
-            favoritesViewModel.delete(apodEntity);
+            favoritesViewModel.delete(apodEntity.getDate());
             Timber.i("untapping favorite button");
         } else {
-
             favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_white_24dp));
             isFavorite = true;
             favoritesViewModel.insert(apodEntity);
-            isFavorite = true;
             Timber.i("tapping favorite button");
         }
     }

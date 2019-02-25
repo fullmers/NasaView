@@ -20,8 +20,8 @@ public interface ApodFavoritesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertApod(ApodEntity apodEntity);
 
-    @Delete
-    void deleteApod(ApodEntity apodEntity);
+    @Query("DELETE FROM apod_favorites where date like :date")
+    void deleteApod(String date);
 
     @Query("DELETE FROM apod_favorites")
     void deleteAll();
