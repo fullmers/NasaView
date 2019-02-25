@@ -1,5 +1,6 @@
 package com.amiculous.nasaview.ui;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,8 @@ import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.Image;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +64,20 @@ public class ApodFragment extends Fragment implements ApodContract.View {
         super.onActivityCreated(savedInstanceState);
         setPresenter();
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+
+        favoritesViewModel.getAllFavoriteApods().observe(getActivity(), new Observer<List<ApodEntity>>() {
+            @Override
+            public void onChanged(@Nullable List<ApodEntity> apodEntities) {
+                Timber.i("onChanged");
+                if(apodEntities!= null) {
+                    Timber.i("apodEntities NOT null");
+                for(ApodEntity apod:apodEntities) {
+                    Timber.i(apod.getTitle());
+                }} else {
+                    Timber.i("apodEntities NULL");
+                }
+            }
+        });
     }
 
 
