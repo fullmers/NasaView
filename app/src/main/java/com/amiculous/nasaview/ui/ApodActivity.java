@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import com.amiculous.nasaview.R;
 
+import timber.log.Timber;
+
 public class ApodActivity extends AppCompatActivity {
 
     @Override
@@ -16,5 +18,6 @@ public class ApodActivity extends AppCompatActivity {
                     .replace(R.id.container, ApodFragment.newInstance())
                     .commitNow();
         }
+        Timber.d("Creating ApodActivity");
     }
 }
