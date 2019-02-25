@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 public class ApodRepository {
 
     private ApodFavoritesDao apodFavoritesDao;
@@ -18,6 +20,13 @@ public class ApodRepository {
     }
 
     public LiveData<List<ApodEntity>> getAllFavoriteApods() {
+        Timber.i("getting all favorites from database");
+        List<ApodEntity> apodList = allFavoriteApods.getValue();
+        if (apodList != null) {
+       for(ApodEntity apod: apodList) {
+            Timber.i(apod.getTitle());
+        }}
+
         return allFavoriteApods;
     }
 
@@ -35,7 +44,17 @@ public class ApodRepository {
 
         @Override
         protected Void doInBackground(final ApodEntity... params) {
+        Timber.i("inserting " + params[0].getTitle() + "into database");
             apodFavoritesAsyncDao.insertApod(params[0]);
+            LiveData<List<ApodEntity>> apods = apodFavoritesAsyncDao.loadAllFavoriteApods();
+            List<ApodEntity> apodList = apods.getValue();
+            if(apodList!=null) {
+                Timber.i("apodList is not null");
+            for(ApodEntity apod: apodList) {
+                Timber.i(apod.getTitle());
+            }}
+            else {Timber.i("apodList IS null");}
+
             return null;
         }
     }
@@ -54,6 +73,7 @@ public class ApodRepository {
 
         @Override
         protected Void doInBackground(final ApodEntity... params) {
+            Timber.i("deleting " + params[0].getTitle() + "from database");
             apodFavoritesAsyncDao.deleteApod(params[0]);
             return null;
         }
