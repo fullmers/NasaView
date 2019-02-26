@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -40,7 +41,6 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     private ApodContract.Presenter presenter;
     private ApodEntity apodEntity;
     private boolean isFavorite;
-    private MediaType mediaType;
     private SingleApodViewModel singleApodViewModel;
     private LiveData<ApodEntity> liveApod;
 
@@ -49,6 +49,8 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     @BindView(R.id.date_text) TextView dateText;
     @BindView(R.id.title_text) TextView titleText;
     @BindView(R.id.desc_text) TextView descText;
+    @BindView(R.id.copyright_text) TextView copyrightText;
+    @BindView(R.id.copyright_layout) LinearLayout copyrightLayout;
     @BindView(R.id.progress_circular) ProgressBar progressBar;
     @BindView(R.id.favorite_fab) FloatingActionButton favoritesFAB;
 
@@ -73,7 +75,6 @@ public class ApodFragment extends Fragment implements ApodContract.View {
         Timber.i("Calling onActivityCreated");
         setPresenter();
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-
         SingleApodViewModelFactory factory = new SingleApodViewModelFactory(getActivity().getApplication(),date);
         singleApodViewModel = ViewModelProviders.of(getActivity(), factory).get(SingleApodViewModel.class);
         populateUI();
@@ -149,7 +150,6 @@ public class ApodFragment extends Fragment implements ApodContract.View {
 
     @Override
     public void addApodImage(final String url, MediaType mediaType) {
-        this.mediaType = mediaType;
         switch(mediaType) {
             case IMAGE:
                 hidePlayButton();
@@ -200,6 +200,17 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     @Override
     public void hideProgressBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showCopyright(String copyright) {
+        copyrightLayout.setVisibility(View.VISIBLE);
+        copyrightText.setText(copyright);
+    }
+
+    @Override
+    public void hideCopyright() {
+        copyrightLayout.setVisibility(View.GONE);
     }
 
     @Override

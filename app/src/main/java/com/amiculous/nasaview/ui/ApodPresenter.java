@@ -54,6 +54,11 @@ public class ApodPresenter implements ApodContract.Presenter {
                 apodView.addApodDate(apod.getDate());
                 apodView.addApodTitle(apod.getTitle());
                 apodView.addApodImage(apod.getUrl(), getMedia_type());
+                String copyright = apod.getCopyright();
+                if (copyright == null)
+                    apodView.hideCopyright();
+                else
+                    apodView.showCopyright(copyright);
                 apodView.setApod(apod.getCopyright(), apod.getDate(), apod.getExplanation(), apod.getMedia_type(), apod.getTitle(), apod.getUrl());
             }
 

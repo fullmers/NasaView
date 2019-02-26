@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- General -->
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="line_space">4dp</dimen>
+
     <!-- Image detail -->
     <dimen name="main_activity_margin">20dp</dimen>
     <dimen name="fab_margin">20dp</dimen>

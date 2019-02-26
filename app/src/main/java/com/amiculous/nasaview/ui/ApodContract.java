@@ -21,6 +21,8 @@ public interface ApodContract {
         void hideProgressBar();
         void showPlayButton();
         void hidePlayButton();
+        void showCopyright(String copyright);
+        void hideCopyright();
     }
 
     interface Presenter extends BasePresenter {
