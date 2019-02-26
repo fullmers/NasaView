@@ -125,14 +125,14 @@ public class ApodFragment extends Fragment implements ApodContract.View {
         Timber.i("setting favorite state to true");
         isFavorite = true;
         singleApodViewModel.insert(apodEntity);
-        favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_white_24dp));
+        favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_star_white_24dp));
     }
 
     public void setFABButtonToUnfavoriteState() {
         Timber.i("setting favorite state to false");
         isFavorite = false;
         singleApodViewModel.delete(apodEntity.getDate());
-        favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_favorite_border_white_24dp));
+        favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_star_border_white_24dp));
     }
 
     @Override
