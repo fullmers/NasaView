@@ -3,6 +3,7 @@
     <!-- Image detail -->
     <dimen name="main_activity_margin">20dp</dimen>
     <dimen name="fab_margin">20dp</dimen>
+    <dimen name="play_button_size">100dp</dimen>
 
     <!-- Favorites list items -->
     <dimen name="favorites_list_item_height">100dp</dimen>

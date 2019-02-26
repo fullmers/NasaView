@@ -17,7 +17,7 @@ public class ApodEntity implements Image, Parcelable {
     private String copyright;
     private String date;
     private String explanation;
-    private String mediaType;
+    private String media_type;
     private String title;
     private String url;
     public int getId() {
@@ -36,8 +36,8 @@ public class ApodEntity implements Image, Parcelable {
         return explanation;
     }
 
-    public String getMediaType() {
-        return mediaType;
+    public String getMedia_type() {
+        return media_type;
     }
 
     public String getTitle() {
@@ -49,19 +49,19 @@ public class ApodEntity implements Image, Parcelable {
     }
 
     @Ignore
-    public ApodEntity(String copyright, @NonNull String date, @NonNull String explanation, @NonNull String mediaType, @NonNull String title, @NonNull String url) {
+    public ApodEntity(String copyright, @NonNull String date, @NonNull String explanation, @NonNull String media_type, @NonNull String title, @NonNull String url) {
         if (copyright == null)
             this.copyright = "";
         else
             this.copyright = copyright;
         this.date = date;
         this.explanation = explanation;
-        this.mediaType = mediaType;
+        this.media_type = media_type;
         this.title = title;
         this.url = url;
     }
 
-    public ApodEntity(int id, String copyright, @NonNull String date, @NonNull String explanation, @NonNull String mediaType, @NonNull String title, @NonNull String url) {
+    public ApodEntity(int id, String copyright, @NonNull String date, @NonNull String explanation, @NonNull String media_type, @NonNull String title, @NonNull String url) {
         this.id = id;
         if (copyright == null)
             this.copyright = "";
@@ -69,7 +69,7 @@ public class ApodEntity implements Image, Parcelable {
             this.copyright = copyright;
         this.date = date;
         this.explanation = explanation;
-        this.mediaType = mediaType;
+        this.media_type = media_type;
         this.title = title;
         this.url = url;
     }
@@ -82,7 +82,7 @@ public class ApodEntity implements Image, Parcelable {
             this.copyright = image.getCopyright();
         this.date = image.getDate();
         this.explanation = image.getExplanation();
-        this.mediaType = image.getMediaType();
+        this.media_type = image.getMedia_type();
         this.title = image.getTitle();
         this.url = image.getUrl();
     }
@@ -99,7 +99,7 @@ public class ApodEntity implements Image, Parcelable {
         parcel.writeString(copyright);
         parcel.writeString(date);
         parcel.writeString(explanation);
-        parcel.writeString(mediaType);
+        parcel.writeString(media_type);
         parcel.writeString(url);
         parcel.writeString(title);
     }
@@ -109,7 +109,7 @@ public class ApodEntity implements Image, Parcelable {
         copyright = in.readString();
         date = in.readString();
         explanation = in.readString();
-        mediaType = in.readString();
+        media_type = in.readString();
         url = in.readString();
         title = in.readString();
     }

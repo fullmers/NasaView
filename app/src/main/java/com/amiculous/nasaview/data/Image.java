@@ -5,7 +5,7 @@ public interface Image {
     String getCopyright();
     String getDate();
     String getExplanation();
-    String getMediaType();
+    String getMedia_type();
     String getTitle();
     String getUrl();
 }

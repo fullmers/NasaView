@@ -1,15 +1,12 @@
 package com.amiculous.nasaview.ui;
 
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.amiculous.nasaview.BuildConfig;
 import com.amiculous.nasaview.api.ApodApi;
 import com.amiculous.nasaview.data.ApodEntity;
-import com.amiculous.nasaview.data.ApodFavoritesDao;
-import com.amiculous.nasaview.data.AppDatabase;
 import com.amiculous.nasaview.data.Image;
+import com.amiculous.nasaview.data.MediaType;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,14 +48,13 @@ public class ApodPresenter implements ApodContract.Presenter {
             @Override
             public void onResponse(Call<ApodEntity> call, Response<ApodEntity> response) {
                 apod = response.body();
-                Timber.i(apod.getExplanation());
-                Timber.i(apod.getDate());
+
                 apodView.hideProgressBar();
                 apodView.addApodExplanation(apod.getExplanation());
                 apodView.addApodDate(apod.getDate());
                 apodView.addApodTitle(apod.getTitle());
-                apodView.addApodImage(apod.getUrl());
-                apodView.setApod(apod.getCopyright(), apod.getDate(), apod.getExplanation(), apod.getMediaType(), apod.getTitle(), apod.getUrl());
+                apodView.addApodImage(apod.getUrl(), getMedia_type());
+                apodView.setApod(apod.getCopyright(), apod.getDate(), apod.getExplanation(), apod.getMedia_type(), apod.getTitle(), apod.getUrl());
             }
 
             @Override
@@ -66,6 +62,13 @@ public class ApodPresenter implements ApodContract.Presenter {
                 apodView.hideProgressBar();
             }
         });
+    }
+
+    private MediaType getMedia_type() {
+        if (apod.getMedia_type().equals("video"))
+            return MediaType.VIDEO;
+        else
+            return MediaType.IMAGE;
     }
 
     @Override

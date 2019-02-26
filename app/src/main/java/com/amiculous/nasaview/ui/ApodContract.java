@@ -4,12 +4,14 @@ import android.support.annotation.NonNull;
 
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.Image;
+import com.amiculous.nasaview.data.MediaType;
+
 import java.util.List;
 
 public interface ApodContract {
 
     interface View extends BaseView {
-        void addApodImage(String imageUrl);
+        void addApodImage(String imageUrl, MediaType mediaType);
         void addApodTitle(String title);
         void addApodDate(String date);
         void addApodExplanation(String explanation);
@@ -17,6 +19,8 @@ public interface ApodContract {
         void showImageFullScreen(Image image);
         void showProgressBar();
         void hideProgressBar();
+        void showPlayButton();
+        void hidePlayButton();
     }
 
     interface Presenter extends BasePresenter {

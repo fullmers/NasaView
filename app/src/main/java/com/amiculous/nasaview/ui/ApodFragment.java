@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,8 +20,10 @@ import android.widget.TextView;
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.Image;
+import com.amiculous.nasaview.data.MediaType;
 import com.amiculous.nasaview.data.SingleApodViewModel;
 import com.amiculous.nasaview.data.SingleApodViewModelFactory;
+import com.amiculous.nasaview.util.MiscUtils;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -34,14 +37,15 @@ import timber.log.Timber;
 
 public class ApodFragment extends Fragment implements ApodContract.View {
 
-    private static final String TAG = ApodFragment.class.getSimpleName();
     private ApodContract.Presenter presenter;
     private ApodEntity apodEntity;
     private boolean isFavorite;
+    private MediaType mediaType;
     private SingleApodViewModel singleApodViewModel;
     private LiveData<ApodEntity> liveApod;
 
     @BindView(R.id.image) ImageView imageView;
+    @BindView(R.id.play_button) ImageView playButton;
     @BindView(R.id.date_text) TextView dateText;
     @BindView(R.id.title_text) TextView titleText;
     @BindView(R.id.desc_text) TextView descText;
@@ -144,11 +148,43 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     }
 
     @Override
-    public void addApodImage(String url) {
-        Picasso.with(getActivity().getApplicationContext())
-                .load(url)
-                .placeholder(getResources().getDrawable(R.drawable.default_apod))
-                .into(imageView);
+    public void addApodImage(final String url, MediaType mediaType) {
+        this.mediaType = mediaType;
+        switch(mediaType) {
+            case IMAGE:
+                hidePlayButton();
+            Picasso.with(getActivity().getApplicationContext())
+                    .load(url)
+                    .placeholder(getResources().getDrawable(R.drawable.default_apod))
+                    .into(imageView);
+            break;
+            case VIDEO:
+                showPlayButton();
+                String thumbnailUrl = MiscUtils.videoThumbnailUrl(url);
+                Picasso.with(getActivity().getApplicationContext())
+                        .load(thumbnailUrl)
+                        .placeholder(getResources().getDrawable(R.drawable.default_apod))
+                        .into(imageView);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent launchYouTube = new Intent(Intent.ACTION_VIEW);
+                        launchYouTube.setData(Uri.parse(url));
+                        startActivity(launchYouTube);
+                    }
+                });
+        }
+    }
+
+    @Override
+    public void showPlayButton() {
+        //TODO determine if thumbnail is mostly light or dark and display white/black play button
+        playButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hidePlayButton() {
+        playButton.setVisibility(View.INVISIBLE);
     }
 
     @Override
