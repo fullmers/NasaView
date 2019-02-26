@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_favorites"
+        android:icon="@drawable/ic_favorite_white_24dp"
+        android:title="@string/title_favorites" />
+
+    <item
+        android:id="@+id/navigation_apod"
+        android:icon="@drawable/ic_saturn_and_other_planets"
+        android:title="@string/title_apod" />
+
+    <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/ic_telescope"
+        android:title="@string/title_search" />
+
+</menu>

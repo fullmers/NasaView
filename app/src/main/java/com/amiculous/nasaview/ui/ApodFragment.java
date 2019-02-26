@@ -69,6 +69,8 @@ public class ApodFragment extends Fragment implements ApodContract.View {
         return view;
     }
 
+    //TODO don't reload APOD if have already gotten today's when navigating back here from other
+    // bottom navigation tab
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -213,6 +215,7 @@ public class ApodFragment extends Fragment implements ApodContract.View {
         copyrightLayout.setVisibility(View.GONE);
     }
 
+
     @Override
     public void setPresenter() {
         this.presenter = new ApodPresenter(this);
@@ -220,8 +223,6 @@ public class ApodFragment extends Fragment implements ApodContract.View {
 
     @Override
     public void showImageFullScreen(Image image) {
-        Intent tempStartFavoritesIntent = new Intent(getActivity(), FavoritesActivity.class);
-        startActivity(tempStartFavoritesIntent);
         //TODO open image in a full screen pinch-to-zoom view
     }
 
