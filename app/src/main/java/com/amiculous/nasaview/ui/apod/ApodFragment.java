@@ -1,4 +1,4 @@
-package com.amiculous.nasaview.ui;
+package com.amiculous.nasaview.ui.apod;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
@@ -22,8 +22,6 @@ import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.Image;
 import com.amiculous.nasaview.data.MediaType;
-import com.amiculous.nasaview.data.SingleApodViewModel;
-import com.amiculous.nasaview.data.SingleApodViewModelFactory;
 import com.amiculous.nasaview.util.MiscUtils;
 import com.squareup.picasso.Picasso;
 

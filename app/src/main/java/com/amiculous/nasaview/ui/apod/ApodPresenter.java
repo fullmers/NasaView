@@ -1,4 +1,4 @@
-package com.amiculous.nasaview.ui;
+package com.amiculous.nasaview.ui.apod;
 
 import android.support.annotation.NonNull;
 

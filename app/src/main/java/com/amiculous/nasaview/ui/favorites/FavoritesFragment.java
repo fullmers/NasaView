@@ -1,4 +1,4 @@
-package com.amiculous.nasaview.ui;
+package com.amiculous.nasaview.ui.favorites;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;

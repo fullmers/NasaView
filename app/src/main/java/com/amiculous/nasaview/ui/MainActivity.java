@@ -4,14 +4,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.amiculous.nasaview.R;
+import com.amiculous.nasaview.ui.apod.ApodFragment;
+import com.amiculous.nasaview.ui.favorites.FavoritesFragment;
+import com.amiculous.nasaview.ui.search.SearchFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
         android.support.design.widget.BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        android.support.design.widget.CoordinatorLayout.LayoutParams layoutParams = (android.support.design.widget.CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
-        layoutParams.setBehavior(new BottomNavigationBarBehavior());
+       // android.support.design.widget.CoordinatorLayout.LayoutParams layoutParams = (android.support.design.widget.CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+       // layoutParams.setBehavior(new BottomNavigationBarBehavior());
 
         navigation.setSelectedItemId(R.id.navigation_apod);
         loadFragment(ApodFragment.newInstance());

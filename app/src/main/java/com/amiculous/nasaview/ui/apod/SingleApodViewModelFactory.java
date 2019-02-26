@@ -1,4 +1,4 @@
-package com.amiculous.nasaview.data;
+package com.amiculous.nasaview.ui.apod;
 
 import android.app.Application;
 import android.arch.lifecycle.ViewModel;

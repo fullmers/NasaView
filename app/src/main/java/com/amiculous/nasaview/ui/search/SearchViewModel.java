@@ -1,4 +1,4 @@
-package com.amiculous.nasaview.ui;
+package com.amiculous.nasaview.ui.search;
 
 import android.arch.lifecycle.ViewModel;
 

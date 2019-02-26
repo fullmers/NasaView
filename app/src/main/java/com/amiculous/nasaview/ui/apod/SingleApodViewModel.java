@@ -1,12 +1,11 @@
-package com.amiculous.nasaview.data;
+package com.amiculous.nasaview.ui.apod;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
-import java.util.List;
-
-import timber.log.Timber;
+import com.amiculous.nasaview.data.ApodEntity;
+import com.amiculous.nasaview.data.ApodRepository;
 
 public class SingleApodViewModel extends AndroidViewModel {
 

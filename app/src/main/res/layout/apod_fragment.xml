@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.ApodFragment">
+    tools:context=".ui.apod.ApodFragment">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_behavior="com.amiculous.nasaview.ui.FABbehavior"
+            app:layout_behavior="com.amiculous.nasaview.ui.apod.FABbehavior"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        app:layout_behavior="com.amiculous.nasaview.ui.FABbehavior">
+        app:layout_behavior="com.amiculous.nasaview.ui.apod.FABbehavior">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

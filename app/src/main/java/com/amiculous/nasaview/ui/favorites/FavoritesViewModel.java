@@ -1,4 +1,4 @@
-package com.amiculous.nasaview.ui;
+package com.amiculous.nasaview.ui.favorites;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -7,12 +7,7 @@ import android.arch.lifecycle.LiveData;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.ApodRepository;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
-import timber.log.Timber;
 
 public class FavoritesViewModel extends AndroidViewModel {
 

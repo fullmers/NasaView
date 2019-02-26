@@ -1,12 +1,9 @@
-package com.amiculous.nasaview.ui;
+package com.amiculous.nasaview.ui.apod;
 
-import android.support.annotation.NonNull;
-
-import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.Image;
 import com.amiculous.nasaview.data.MediaType;
-
-import java.util.List;
+import com.amiculous.nasaview.ui.BasePresenter;
+import com.amiculous.nasaview.ui.BaseView;
 
 public interface ApodContract {
 
