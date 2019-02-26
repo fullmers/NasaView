@@ -64,24 +64,13 @@ public class ApodPresenter implements ApodContract.Presenter {
         });
     }
 
-    private MediaType getMedia_type() {
+    @Override
+    public MediaType getMedia_type() {
         if (apod.getMedia_type().equals("video"))
             return MediaType.VIDEO;
         else
             return MediaType.IMAGE;
     }
-
-    @Override
-    public void loadNewApod(boolean forceUpdate) {}
-
-    @Override
-    public void addFavoriteApod(ApodEntity apod) {
-        Timber.i("calling addFavoriteApod");
-        Timber.i("recieved " + apod.getTitle());
-    }
-
-    @Override
-    public void removeFavoriteApod(ApodEntity apod) {}
 
     @Override
     public void start() {}

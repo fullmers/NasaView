@@ -26,8 +26,6 @@ public interface ApodContract {
     interface Presenter extends BasePresenter {
         void openImageFullScreem(Image image);
         void loadTodaysApod();
-        void loadNewApod(boolean forceUpdate);
-        void addFavoriteApod(ApodEntity apod);
-        void removeFavoriteApod(ApodEntity apod);
+        MediaType getMedia_type();
     }
 }
