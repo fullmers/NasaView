@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
         android.support.design.widget.BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-       // android.support.design.widget.CoordinatorLayout.LayoutParams layoutParams = (android.support.design.widget.CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
-       // layoutParams.setBehavior(new BottomNavigationBarBehavior());
+        android.support.design.widget.CoordinatorLayout.LayoutParams layoutParams = (android.support.design.widget.CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+        layoutParams.setBehavior(new BottomNavigationBarBehavior());
 
         navigation.setSelectedItemId(R.id.navigation_apod);
         loadFragment(ApodFragment.newInstance());
