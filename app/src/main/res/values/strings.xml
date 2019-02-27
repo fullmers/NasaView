@@ -4,7 +4,7 @@
     <string name="app_name">NasaView</string>
 
     <!-- APOD fragment -->
-    <string name="copyright">Copyright: </string>
+    <string name="copyright">© </string>
 
     <!-- Bottom navigation -->
     <string name="title_favorites">Favorites</string>

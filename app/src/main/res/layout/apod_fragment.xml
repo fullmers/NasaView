@@ -100,6 +100,26 @@
                 app:layout_constraintStart_toEndOf="@+id/leftGuideline"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/line_space"
+                android:text="@string/sample_date"
+                app:layout_constraintStart_toEndOf="@+id/leftGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/title_text" />
+
+            <TextView
+                android:id="@+id/desc_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/line_space"
+                android:paddingBottom="@dimen/main_activity_margin"
+                android:text="@string/sample_desc"
+                app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+                app:layout_constraintStart_toEndOf="@+id/leftGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/date_text" />
+
             <LinearLayout
                 android:id="@+id/copyright_layout"
                 android:layout_width="wrap_content"
@@ -107,7 +127,7 @@
                 android:layout_marginTop="@dimen/line_space"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toEndOf="@+id/leftGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/title_text">
+                app:layout_constraintTop_toBottomOf="@+id/desc_text">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -122,26 +142,6 @@
                     android:text="@string/sample_copyright"
                     android:visibility="visible" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/date_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/line_space"
-                android:text="@string/sample_date"
-                app:layout_constraintStart_toEndOf="@+id/leftGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/copyright_layout" />
-
-            <TextView
-                android:id="@+id/desc_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/line_space"
-                android:paddingBottom="@dimen/main_activity_margin"
-                android:text="@string/sample_desc"
-                app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
-                app:layout_constraintStart_toEndOf="@+id/leftGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/date_text" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 
