@@ -23,9 +23,10 @@ public class MainActivity extends AppCompatActivity {
         android.support.design.widget.BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        android.support.design.widget.CoordinatorLayout.LayoutParams layoutParams = (android.support.design.widget.CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+        //TODO this behavior is buggy. seems on in 27, but not 28. Investigate and fix
+/*      android.support.design.widget.CoordinatorLayout.LayoutParams layoutParams = (android.support.design.widget.CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
         layoutParams.setBehavior(new BottomNavigationBarBehavior());
-
+*/
         navigation.setSelectedItemId(R.id.navigation_apod);
         loadFragment(ApodFragment.newInstance());
     }
@@ -62,10 +63,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //TODO make an about/settings fragment and display this :
-    //Saturn icon:
+    //Saturn icon and Telescope icon::
     //<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-    //Telescope icon:
-    //<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
 
 }
