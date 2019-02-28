@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amiculous.nasaview.R;
+import com.amiculous.nasaview.api.ApodApi;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.Image;
 import com.amiculous.nasaview.data.MediaType;
@@ -32,25 +33,39 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import timber.log.Timber;
 
-public class ApodFragment extends Fragment implements ApodContract.View {
+import static com.amiculous.nasaview.BuildConfig.API_KEY;
 
-    private ApodContract.Presenter presenter;
+public class ApodFragment extends Fragment {
+
     private ApodEntity apodEntity;
     private boolean isFavorite;
     private SingleApodViewModel singleApodViewModel;
     private LiveData<ApodEntity> liveApod;
+    private String date;
 
-    @BindView(R.id.image) ImageView imageView;
-    @BindView(R.id.play_button) ImageView playButton;
-    @BindView(R.id.date_text) TextView dateText;
-    @BindView(R.id.title_text) TextView titleText;
-    @BindView(R.id.desc_text) TextView descText;
-    @BindView(R.id.copyright_text) TextView copyrightText;
-    @BindView(R.id.copyright_layout) LinearLayout copyrightLayout;
-    @BindView(R.id.progress_circular) ProgressBar progressBar;
-    @BindView(R.id.favorite_fab) FloatingActionButton favoritesFAB;
+    @BindView(R.id.image)
+    ImageView imageView;
+    @BindView(R.id.play_button)
+    ImageView playButton;
+    @BindView(R.id.date_text)
+    TextView dateText;
+    @BindView(R.id.title_text)
+    TextView titleText;
+    @BindView(R.id.desc_text)
+    TextView descText;
+    @BindView(R.id.copyright_text)
+    TextView copyrightText;
+    @BindView(R.id.copyright_layout)
+    LinearLayout copyrightLayout;
+    @BindView(R.id.progress_circular)
+    ProgressBar progressBar;
+    @BindView(R.id.favorite_fab)
+    FloatingActionButton favoritesFAB;
 
     public static ApodFragment newInstance() {
         return new ApodFragment();
@@ -60,10 +75,10 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        Timber.i("Calling onCreateView");
         View view = inflater.inflate(R.layout.apod_fragment, container, false);
         ButterKnife.bind(this, view);
-        setPresenter();
-        presenter.loadTodaysApod();
+        date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         return view;
     }
 
@@ -73,10 +88,9 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Timber.i("Calling onActivityCreated");
-        setPresenter();
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         SingleApodViewModelFactory factory = new SingleApodViewModelFactory(getActivity().getApplication(),date);
         singleApodViewModel = ViewModelProviders.of(getActivity(), factory).get(SingleApodViewModel.class);
+        liveApod = singleApodViewModel.getApod();
         populateUI();
     }
 
@@ -89,29 +103,24 @@ public class ApodFragment extends Fragment implements ApodContract.View {
 
     public void populateUI() {
         Timber.i("populateUI()");
-        if(singleApodViewModel.getApod().getValue() != null ) {
-            liveApod = singleApodViewModel.getApod();
-            liveApod.observe(this, new Observer<ApodEntity>() {
-                @Override
-                public void onChanged(@Nullable ApodEntity apod) {
-                    if (liveApod != null) {
-                        setFABButtonToFavoriteState();
-                    } else {
-                        setFABButtonToUnfavoriteState();
-                    }
+        liveApod.observe(this, new Observer<ApodEntity>() {
+            @Override
+            public void onChanged(@Nullable ApodEntity apod) {
+                if (apod != null) {
+                    addApodTitle(apod.getTitle());
+                    addApodImage(apod.getUrl(), apod.getMedia_type().equals("video") ? MediaType.VIDEO : MediaType.IMAGE);
                 }
-            });
-        }
+            }
+        });
     }
 
     @OnClick(R.id.image)
     public void selectImage(View view) {
-        presenter.openImageFullScreem(apodEntity);
+        //TODO open image in a full screen pinch-to-zoom view
     }
 
     @OnClick(R.id.favorite_fab)
     public void onFabTap(View view) {
-        //TODO clean this up
         if (isFavorite) {
             setFABButtonToUnfavoriteState();
         } else {
@@ -122,42 +131,40 @@ public class ApodFragment extends Fragment implements ApodContract.View {
     public void setFABButtonToFavoriteState() {
         Timber.i("setting favorite state to true");
         isFavorite = true;
-        singleApodViewModel.insert(apodEntity);
+        apodEntity.setIsFavorite(true);
+        singleApodViewModel.markFavorite(apodEntity);
         favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_star_white_24dp));
     }
 
     public void setFABButtonToUnfavoriteState() {
         Timber.i("setting favorite state to false");
         isFavorite = false;
-        singleApodViewModel.delete(apodEntity.getDate());
+        apodEntity.setIsFavorite(false);
+        singleApodViewModel.markFavorite(apodEntity);
         favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_star_border_white_24dp));
     }
 
-    @Override
-    public void addApodExplanation(String description) {
+    private void addApodExplanation(String description) {
         descText.setText(description);
     }
 
-    @Override
-    public void addApodDate(String date) {
+    private void addApodDate(String date) {
         dateText.setText(date);
     }
 
-    @Override
-    public void addApodTitle(String title) {
+    private void addApodTitle(String title) {
         titleText.setText(title);
     }
 
-    @Override
-    public void addApodImage(final String url, MediaType mediaType) {
-        switch(mediaType) {
+    private void addApodImage(final String url, MediaType mediaType) {
+        switch (mediaType) {
             case IMAGE:
                 hidePlayButton();
-            Picasso.with(getActivity().getApplicationContext())
-                    .load(url)
-                    .placeholder(getResources().getDrawable(R.drawable.default_apod))
-                    .into(imageView);
-            break;
+                Picasso.with(getActivity().getApplicationContext())
+                        .load(url)
+                        .placeholder(getResources().getDrawable(R.drawable.default_apod))
+                        .into(imageView);
+                break;
             case VIDEO:
                 showPlayButton();
                 String thumbnailUrl = MiscUtils.videoThumbnailUrl(url);
@@ -176,52 +183,30 @@ public class ApodFragment extends Fragment implements ApodContract.View {
         }
     }
 
-    @Override
-    public void showPlayButton() {
+    private void showPlayButton() {
         //TODO determine if thumbnail is mostly light or dark and display white/black play button
         playButton.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void hidePlayButton() {
+    private void hidePlayButton() {
         playButton.setVisibility(View.INVISIBLE);
     }
 
-    @Override
-    public void setApod(String copyright, String date, String explanation, String mediaType, String title, String url) {
-        apodEntity = new ApodEntity(copyright, date, explanation, mediaType, title, url);
-    }
-
-    @Override
-    public void showProgressBar() {
+    private void showProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void hideProgressBar() {
+    private void hideProgressBar() {
         progressBar.setVisibility(View.GONE);
     }
 
-    @Override
-    public void showCopyright(String copyright) {
+    private void showCopyright(String copyright) {
         copyrightLayout.setVisibility(View.VISIBLE);
         copyrightText.setText(copyright);
     }
 
-    @Override
-    public void hideCopyright() {
+    private void hideCopyright() {
         copyrightLayout.setVisibility(View.GONE);
-    }
-
-
-    @Override
-    public void setPresenter() {
-        this.presenter = new ApodPresenter(this);
-    }
-
-    @Override
-    public void showImageFullScreen(Image image) {
-        //TODO open image in a full screen pinch-to-zoom view
     }
 
 }

@@ -1,7 +1,7 @@
 package com.amiculous.nasaview.data;
 
 public interface Image {
-    int getId();
+    long getId();
     String getCopyright();
     String getDate();
     String getExplanation();

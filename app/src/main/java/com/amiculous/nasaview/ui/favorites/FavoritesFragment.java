@@ -56,7 +56,7 @@ public class FavoritesFragment extends Fragment {
             public void onChanged(@Nullable List<ApodEntity> apodEntities) {
                 Timber.i("Favorites:");
                 for(ApodEntity apod: apodEntities) {
-                    Timber.i(apod.getTitle());
+                    Timber.i(apod.getTitle() + " " + apod.getId());
                 }
                 adapter.setFavorites(apodEntities);
             }

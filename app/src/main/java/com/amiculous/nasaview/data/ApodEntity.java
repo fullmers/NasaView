@@ -12,7 +12,7 @@ import android.support.annotation.NonNull;
 public class ApodEntity implements Image, Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
 
     private String copyright;
     private String date;
@@ -20,7 +20,9 @@ public class ApodEntity implements Image, Parcelable {
     private String media_type;
     private String title;
     private String url;
-    public int getId() {
+    private boolean isFavorite;
+
+    public long getId() {
         return id;
     }
 
@@ -48,7 +50,16 @@ public class ApodEntity implements Image, Parcelable {
         return url;
     }
 
-    @Ignore
+    public boolean getIsFavorite() {return isFavorite;}
+
+    //setter required for fields not in constructor with Room
+    public void setIsFavorite(boolean isFavorite) {
+        this.isFavorite = isFavorite;
+    }
+
+    public void setId(long id) {this.id = id;}
+
+
     public ApodEntity(String copyright, @NonNull String date, @NonNull String explanation, @NonNull String media_type, @NonNull String title, @NonNull String url) {
         if (copyright == null)
             this.copyright = "";
@@ -59,49 +70,35 @@ public class ApodEntity implements Image, Parcelable {
         this.media_type = media_type;
         this.title = title;
         this.url = url;
+        this.isFavorite = false;
     }
 
-    public ApodEntity(int id, String copyright, @NonNull String date, @NonNull String explanation, @NonNull String media_type, @NonNull String title, @NonNull String url) {
+    @Ignore
+    public ApodEntity(long id, String copyright, @NonNull String date, @NonNull String explanation, @NonNull String media_type, @NonNull String title, @NonNull String url) {
+        this(copyright, date, explanation, media_type, title, url);
         this.id = id;
-        if (copyright == null)
-            this.copyright = "";
-        else
-            this.copyright = copyright;
-        this.date = date;
-        this.explanation = explanation;
-        this.media_type = media_type;
-        this.title = title;
-        this.url = url;
     }
 
     public ApodEntity(@NonNull Image image) {
-        this.id = image.getId();
-        if (image.getCopyright() == null)
-            this.copyright = "";
-        else
-            this.copyright = image.getCopyright();
-        this.date = image.getDate();
-        this.explanation = image.getExplanation();
-        this.media_type = image.getMedia_type();
-        this.title = image.getTitle();
-        this.url = image.getUrl();
+        this(image.getId(), image.getCopyright(), image.getDate(), image.getExplanation(), image.getMedia_type(), image.getTitle(), image.getUrl());
     }
-
 
     @Override
     public int describeContents() {
         return 0;
     }
 
+    //https://stackoverflow.com/a/7089687
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
+        parcel.writeLong(id);
         parcel.writeString(copyright);
         parcel.writeString(date);
         parcel.writeString(explanation);
         parcel.writeString(media_type);
         parcel.writeString(url);
         parcel.writeString(title);
+        parcel.writeInt(isFavorite ? 1 : 0);
     }
 
     private ApodEntity(Parcel in) {
@@ -112,6 +109,7 @@ public class ApodEntity implements Image, Parcelable {
         media_type = in.readString();
         url = in.readString();
         title = in.readString();
+        isFavorite = in.readInt() != 0;
     }
 
     public static final Parcelable.Creator<ApodEntity> CREATOR = new Parcelable.Creator<ApodEntity>() {

@@ -38,7 +38,7 @@ public class ApodPresenter implements ApodContract.Presenter {
     }
 
     @Override
-    public void loadTodaysApod() {
+    public ApodEntity loadTodaysApod() {
         ApodApi apodApi= ApodApi.retrofit.create(ApodApi.class);
         final Call<ApodEntity> call = apodApi.getApod(API_KEY);
         Timber.i(call.request().url().toString());
@@ -65,8 +65,11 @@ public class ApodPresenter implements ApodContract.Presenter {
             @Override
             public void onFailure(@NonNull Call<ApodEntity> call, @NonNull Throwable t) {
                 apodView.hideProgressBar();
+                apod = null;
             }
         });
+
+        return apod;
     }
 
     @Override

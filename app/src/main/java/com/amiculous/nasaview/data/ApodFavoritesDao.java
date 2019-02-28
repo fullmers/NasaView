@@ -14,14 +14,23 @@ public interface ApodFavoritesDao {
     @Query("SELECT * FROM apod_favorites where date like :date")
     LiveData<ApodEntity> loadApod(String date);
 
-    @Query("SELECT * FROM apod_favorites")
+    @Query("SELECT * FROM apod_favorites where date like :date")
+    boolean hasApod(String date);
+
+    @Query("SELECT * FROM apod_favorites where isFavorite is 1")
     LiveData<List<ApodEntity>> loadAllFavoriteApods();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertApod(ApodEntity apodEntity);
+    long insertApod(ApodEntity apodEntity);
 
-    @Query("DELETE FROM apod_favorites where date like :date")
-    void deleteApod(String date);
+    @Query("UPDATE apod_favorites SET isFavorite = 1 where id like :id")
+    void markFavorite(long id);
+
+    @Query("UPDATE apod_favorites SET isFavorite = 0 where id like :id")
+    void markNotFavorite(long id);
+
+    @Query("DELETE FROM apod_favorites where id like :id")
+    void deleteApod(Long id);
 
     @Query("DELETE FROM apod_favorites")
     void deleteAll();

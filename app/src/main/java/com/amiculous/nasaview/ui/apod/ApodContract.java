@@ -1,5 +1,6 @@
 package com.amiculous.nasaview.ui.apod;
 
+import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.Image;
 import com.amiculous.nasaview.data.MediaType;
 import com.amiculous.nasaview.ui.BasePresenter;
@@ -24,7 +25,7 @@ public interface ApodContract {
 
     interface Presenter extends BasePresenter {
         void openImageFullScreem(Image image);
-        void loadTodaysApod();
+        ApodEntity loadTodaysApod();
         MediaType getMedia_type();
     }
 }
