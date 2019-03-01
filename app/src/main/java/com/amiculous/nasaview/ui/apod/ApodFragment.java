@@ -112,6 +112,17 @@ public class ApodFragment extends Fragment {
                     addApodImage(apod.getUrl(), apod.getMedia_type().equals("video") ? MediaType.VIDEO : MediaType.IMAGE);
                     addApodDate(apod.getDate());
                     addApodExplanation(apod.getExplanation());
+
+                    isFavorite = apod.getIsFavorite();
+                    if (isFavorite)
+                        setFABButtonToFavoriteState();
+                    else
+                        setFABButtonToUnfavoriteState();
+
+                    if(apod.getCopyright() == null)
+                        hideCopyright();
+                     else
+                         showCopyright(apod.getCopyright());
                 } else
                     Timber.i("apod WAS null");
             }
@@ -130,22 +141,24 @@ public class ApodFragment extends Fragment {
         } else {
             setFABButtonToFavoriteState();
         }
+        updateFavoriteStatus();
     }
 
     public void setFABButtonToFavoriteState() {
         Timber.i("setting favorite state to true");
         isFavorite = true;
-        apodEntity.setIsFavorite(true);
-        singleApodViewModel.markFavorite(apodEntity);
         favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_star_white_24dp));
     }
 
     public void setFABButtonToUnfavoriteState() {
         Timber.i("setting favorite state to false");
         isFavorite = false;
-        apodEntity.setIsFavorite(false);
-        singleApodViewModel.markFavorite(apodEntity);
         favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_star_border_white_24dp));
+    }
+
+    private void updateFavoriteStatus() {
+        apodEntity.setIsFavorite(isFavorite);
+        singleApodViewModel.markFavorite(apodEntity);
     }
 
     private void addApodExplanation(String description) {

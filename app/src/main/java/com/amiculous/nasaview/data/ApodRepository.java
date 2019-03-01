@@ -29,6 +29,7 @@ public class ApodRepository {
     private LiveData<ApodEntity> apod;
 
     public ApodRepository(Application application, String date) {
+        Timber.i("constructing repository");
         AppDatabase db = AppDatabase.getInstance(application);
         apodFavoritesDao = db.apodFavoritesDao();
         allFavoriteApods = apodFavoritesDao.loadAllFavoriteApods();
@@ -37,12 +38,8 @@ public class ApodRepository {
 
     public LiveData<ApodEntity> getApod(final String date) {
         Timber.i("calling getApod in repositroy");
-        refreshApod(date);
-        return apod;
-    }
-
-    public void refreshApod(String date) {
         new refreshApodAsyncTask(apodFavoritesDao).execute(date);
+        return apodFavoritesDao.loadApod(date);
     }
 
     private static class refreshApodAsyncTask extends AsyncTask<String, Void, Void> {
@@ -90,7 +87,7 @@ public class ApodRepository {
         }
         @Override
         protected Void doInBackground(final ApodEntity... params) {
-            Timber.i("deleting apod with id = " + params[0] + " from database");
+            Timber.i("inserting apod with id = " + params[0] + " from database");
             ApodEntity apod = params[0];
             apodFavoritesAsyncDao.insertApod(apod);
             return null;
