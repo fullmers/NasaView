@@ -39,7 +39,8 @@ public class ApodRepository {
     public LiveData<ApodEntity> getApod(final String date) {
         Timber.i("calling getApod in repositroy");
         new refreshApodAsyncTask(apodFavoritesDao).execute(date);
-        return apodFavoritesDao.loadApod(date);
+        return apod;
+        //return apodFavoritesDao.loadApod(date);
     }
 
     private static class refreshApodAsyncTask extends AsyncTask<String, Void, Void> {
@@ -77,10 +78,12 @@ public class ApodRepository {
 
 
     private static void insertApod(ApodEntity apod) {
+        Timber.i("insertApod");
         new insertApodAsyncTask(apodFavoritesDao).execute(apod);
     }
 
     private static class insertApodAsyncTask extends AsyncTask<ApodEntity, Void, Void> {
+
         private ApodFavoritesDao apodFavoritesAsyncDao;
         insertApodAsyncTask(ApodFavoritesDao dao) {
             apodFavoritesAsyncDao = dao;

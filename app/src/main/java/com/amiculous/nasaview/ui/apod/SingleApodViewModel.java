@@ -26,6 +26,9 @@ public class SingleApodViewModel extends AndroidViewModel {
 
     public LiveData<ApodEntity> getApod() {
         Timber.i("getApod");
+        //TODO Find answer:
+        //the following line is required, even though I don't think it should be. Why is it needed???
+        apodRepository.getApod(date);
         return apod;
     }
 
