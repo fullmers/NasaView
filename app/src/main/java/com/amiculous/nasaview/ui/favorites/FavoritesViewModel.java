@@ -22,7 +22,7 @@ public class FavoritesViewModel extends AndroidViewModel {
     public FavoritesViewModel(Application application) {
         super(application);
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        apodRepository = new ApodRepository(application, AppExecutors.getInstance().diskIO(), date);
+        apodRepository = new ApodRepository(application, date);
         allFavoriteApods = apodRepository.getAllFavoriteApods();
     }
 

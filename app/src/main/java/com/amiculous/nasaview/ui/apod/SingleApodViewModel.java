@@ -13,15 +13,13 @@ import timber.log.Timber;
 public class SingleApodViewModel extends AndroidViewModel {
 
     private ApodRepository apodRepository;
-    Application application;
     private LiveData<ApodEntity> apod;
     private String date;
 
     public SingleApodViewModel(Application application, String date) {
         super(application);
-        this.application = application;
         Timber.i("constructing SingleApodViewModel " + date);
-        apodRepository = new ApodRepository(application, AppExecutors.getInstance().diskIO(), date);
+        apodRepository = new ApodRepository(application, date);
         this.date = date;
         apod = apodRepository.getApod(date);
     }

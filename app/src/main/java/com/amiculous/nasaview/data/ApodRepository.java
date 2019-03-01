@@ -24,16 +24,14 @@ import static com.amiculous.nasaview.BuildConfig.API_KEY;
 
 public class ApodRepository {
 
-    private ApodFavoritesDao apodFavoritesDao;
+    private static ApodFavoritesDao apodFavoritesDao;
     private LiveData<List<ApodEntity>> allFavoriteApods;
     private LiveData<ApodEntity> apod;
-    private Executor executor;
 
-    public ApodRepository(Application application, Executor executor, String date) {
+    public ApodRepository(Application application, String date) {
         AppDatabase db = AppDatabase.getInstance(application);
         apodFavoritesDao = db.apodFavoritesDao();
         allFavoriteApods = apodFavoritesDao.loadAllFavoriteApods();
-        this.executor = executor;
         apod = apodFavoritesDao.loadApod(date);
     }
 
@@ -43,32 +41,60 @@ public class ApodRepository {
         return apod;
     }
 
-    private void refreshApod(final String date) {
-        Timber.i("calling refreshApod in repositroy");
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                Timber.i("running on executor thread");
-                if (!apodFavoritesDao.hasApod(date)) {
-                    Timber.i("apod was not in db");
-                    ApodApi apodApi = ApodApi.retrofit.create(ApodApi.class);
-                    final Call<ApodEntity> call = apodApi.getApod(API_KEY);
-                    Timber.i(call.request().url().toString());
-                    call.enqueue(new Callback<ApodEntity>() {
-                        @Override
-                        public void onResponse(Call<ApodEntity> call, Response<ApodEntity> response) {
-                            ApodEntity todaysApod = response.body();
-                            apodFavoritesDao.insertApod(todaysApod);
-                        }
+    public void refreshApod(String date) {
+        new refreshApodAsyncTask(apodFavoritesDao).execute(date);
+    }
 
-                        @Override
-                        public void onFailure(@NonNull Call<ApodEntity> call, @NonNull Throwable t) {}
-                    });
-                } else {
-                    Timber.i("apod WAS in db");
-                }
+    private static class refreshApodAsyncTask extends AsyncTask<String, Void, Void> {
+        private ApodFavoritesDao apodFavoritesAsyncDao;
+
+        refreshApodAsyncTask(ApodFavoritesDao dao) {
+            apodFavoritesAsyncDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final String... params) {
+            Timber.i("refreshing apod with id = " + params[0] + " from database");
+            String date = params[0];
+            if (!apodFavoritesAsyncDao.hasApod(date)) {
+                Timber.i("apod was NOT in db");
+                ApodApi apodApi = ApodApi.retrofit.create(ApodApi.class);
+                final Call<ApodEntity> call = apodApi.getApod(API_KEY);
+                Timber.i(call.request().url().toString());
+                call.enqueue(new Callback<ApodEntity>() {
+                    @Override
+                    public void onResponse(Call<ApodEntity> call, Response<ApodEntity> response) {
+                        ApodEntity todaysApod = response.body();
+                        insertApod(todaysApod);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ApodEntity> call, @NonNull Throwable t) {}
+                });
+            } else {
+                Timber.i("apod WAS in db");
             }
-        });
+            return null;
+        }
+    }
+
+
+    private static void insertApod(ApodEntity apod) {
+        new insertApodAsyncTask(apodFavoritesDao).execute(apod);
+    }
+
+    private static class insertApodAsyncTask extends AsyncTask<ApodEntity, Void, Void> {
+        private ApodFavoritesDao apodFavoritesAsyncDao;
+        insertApodAsyncTask(ApodFavoritesDao dao) {
+            apodFavoritesAsyncDao = dao;
+        }
+        @Override
+        protected Void doInBackground(final ApodEntity... params) {
+            Timber.i("deleting apod with id = " + params[0] + " from database");
+            ApodEntity apod = params[0];
+            apodFavoritesAsyncDao.insertApod(apod);
+            return null;
+        }
     }
 
     public LiveData<List<ApodEntity>> getAllFavoriteApods() {

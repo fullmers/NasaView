@@ -59,7 +59,7 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(final Void... params) {
             apodFavoritesDao.deleteAll();
-
+            apod.setIsFavorite(true);
             apodFavoritesDao.insertApod(apod);
             return null;
         }

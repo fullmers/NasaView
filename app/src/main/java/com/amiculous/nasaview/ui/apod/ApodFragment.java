@@ -82,15 +82,10 @@ public class ApodFragment extends Fragment {
         return view;
     }
 
-    //TODO don't reload APOD if have already gotten today's when navigating back here from other
-    // bottom navigation tab
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Timber.i("Calling onActivityCreated");
-        SingleApodViewModelFactory factory = new SingleApodViewModelFactory(getActivity().getApplication(),date);
-        singleApodViewModel = ViewModelProviders.of(getActivity(), factory).get(SingleApodViewModel.class);
-        liveApod = singleApodViewModel.getApod();
         populateUI();
     }
 
@@ -103,13 +98,22 @@ public class ApodFragment extends Fragment {
 
     public void populateUI() {
         Timber.i("populateUI()");
+        SingleApodViewModelFactory factory = new SingleApodViewModelFactory(getActivity().getApplication(),date);
+        singleApodViewModel = ViewModelProviders.of(getActivity(), factory).get(SingleApodViewModel.class);
+        liveApod = singleApodViewModel.getApod();
         liveApod.observe(this, new Observer<ApodEntity>() {
             @Override
             public void onChanged(@Nullable ApodEntity apod) {
+                Timber.i("calling onChanged");
                 if (apod != null) {
+                    apodEntity = apod;
+                    Timber.i("apod was not null");
                     addApodTitle(apod.getTitle());
                     addApodImage(apod.getUrl(), apod.getMedia_type().equals("video") ? MediaType.VIDEO : MediaType.IMAGE);
-                }
+                    addApodDate(apod.getDate());
+                    addApodExplanation(apod.getExplanation());
+                } else
+                    Timber.i("apod WAS null");
             }
         });
     }
