@@ -47,15 +47,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        boolean keep = true;
         switch (item.getItemId()) {
             case R.id.navigation_favorites:
-                commitFragment(FavoritesFragment.newInstance(), true);
+                commitFragment(FavoritesFragment.newInstance(), keep);
                 break;
             case R.id.navigation_apod:
-                commitFragment(ApodFragment.newInstance(), true);
+                commitFragment(ApodFragment.newInstance(), keep);
                 break;
             case R.id.navigation_search:
-                commitFragment(new SearchFragment(), true);
+                commitFragment(new SearchFragment(), keep);
                 break;
         }
         return true;
