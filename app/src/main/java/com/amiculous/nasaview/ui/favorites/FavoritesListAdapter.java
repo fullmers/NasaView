@@ -58,8 +58,6 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
         } else return 0;
     }
 
-
-
     class FavoritesViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imagePreviewImageView;
         private final TextView titleTextView;

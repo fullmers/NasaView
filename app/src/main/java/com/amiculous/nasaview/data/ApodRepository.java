@@ -40,7 +40,6 @@ public class ApodRepository {
         Timber.i("calling getApod in repositroy");
         new refreshApodAsyncTask(apodFavoritesDao).execute(date);
         return apod;
-        //return apodFavoritesDao.loadApod(date);
     }
 
     private static class refreshApodAsyncTask extends AsyncTask<String, Void, Void> {
