@@ -2,7 +2,7 @@ package com.amiculous.nasaview;
 
 import android.util.Log;
 
-import org.jetbrains.annotations.NotNull;
+//import org.jetbrains.annotations.NotNull;
 
 import timber.log.Timber;
 
@@ -10,7 +10,7 @@ public class CustomDebugTree extends Timber.DebugTree {
     private static final int MAX_LOG_LENGTH = 4000;
     private static final String MY_TAG = "MyDebugger ";
 
-    @Override protected void log(int priority, String tag, @NotNull String message, Throwable t) {
+    @Override protected void log(int priority, String tag, String message, Throwable t) {
         if (message.length() < MAX_LOG_LENGTH) {
             if (priority == Log.ASSERT) {
                 Log.wtf(MY_TAG + tag, message);
