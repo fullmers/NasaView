@@ -30,7 +30,7 @@ public class FavoritesViewModel extends AndroidViewModel implements ApodCallback
     LiveData<List<ApodEntity>> getAllFavoriteApods() {return allFavoriteApods;}
 
     @Override
-    public boolean wasSuccessful(boolean b) {
-        return b;
+    public void wasSuccessful(boolean b) {
+
     }
 }

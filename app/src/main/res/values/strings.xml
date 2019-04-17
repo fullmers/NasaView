@@ -5,6 +5,7 @@
 
     <!-- APOD fragment -->
     <string name="copyright">© </string>
+    <string name="error">Something went wrong fetching today\'s APOD</string>
 
     <!-- Bottom navigation -->
     <string name="title_favorites">Favorites</string>

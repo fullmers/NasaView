@@ -49,7 +49,8 @@ public class ApodRepository {
             ApodFavoritesDao apodFavoritesAsyncDao = apodRefreshAsyncInput[0].getApodFavoritesDao();
             ApodCallback callback = apodRefreshAsyncInput[0].getCallback();
             Timber.i("refreshing apod with id = " + date + " from database");
-            if (!apodFavoritesAsyncDao.hasApod(date)) {
+         //   if (!apodFavoritesAsyncDao.hasApod(date)) {
+            if (true) {
                 Timber.i("apod was NOT in db");
 
                 URL ApodUrl = NetworkUtils.buildUrl(context);

@@ -15,6 +15,7 @@ import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.MediaType;
 import com.amiculous.nasaview.util.MiscUtils;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
@@ -24,6 +25,7 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -59,6 +61,11 @@ public class ApodFragment extends Fragment {
     ProgressBar progressBar;
     @BindView(R.id.favorite_fab)
     FloatingActionButton favoritesFAB;
+    @BindView(R.id.app_bar_layout)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.scrollview)
+    NestedScrollView scrollView;
+    @BindView(R.id.error_layout) LinearLayout errorLayout;
 
     public static ApodFragment newInstance() {
         return new ApodFragment();
@@ -69,7 +76,7 @@ public class ApodFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Timber.i("Calling onCreateView");
-        View view = inflater.inflate(R.layout.apod_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_apod, container, false);
         ButterKnife.bind(this, view);
         date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         return view;
@@ -93,8 +100,9 @@ public class ApodFragment extends Fragment {
         Timber.i("populateUI()");
         SingleApodViewModelFactory factory = new SingleApodViewModelFactory(getActivity().getApplication(),date);
         singleApodViewModel = ViewModelProviders.of(getActivity(), factory).get(SingleApodViewModel.class);
+
         liveApod = singleApodViewModel.getApod();
-        liveApod.observe(this, new Observer<ApodEntity>() {
+        liveApod.observe(getViewLifecycleOwner(), new Observer<ApodEntity>() {
             @Override
             public void onChanged(@Nullable ApodEntity apod) {
                 Timber.i("calling onChanged");
@@ -114,12 +122,27 @@ public class ApodFragment extends Fragment {
 
                     if(apod.getCopyright() == null)
                         hideCopyright();
-                     else
-                         showCopyright(apod.getCopyright());
+                    else
+                        showCopyright(apod.getCopyright());
                 } else
                     Timber.i("apod WAS null");
             }
         });
+
+        singleApodViewModel.getWasSuccessful().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean wasSuccessful) {
+                if (wasSuccessful) {
+                    Timber.i("apod call successful");
+                    showApodHideError();
+                } else {
+                    hideApodShowError();
+                    Timber.i("apod call FAILED");
+                }
+            }
+        });
+
+
     }
 
     @OnClick(R.id.image)
@@ -194,7 +217,6 @@ public class ApodFragment extends Fragment {
     }
 
     private void showPlayButton() {
-        //TODO determine if thumbnail is mostly light or dark and display white/black play button
         playButton.setVisibility(View.VISIBLE);
     }
 
@@ -217,6 +239,20 @@ public class ApodFragment extends Fragment {
 
     private void hideCopyright() {
         copyrightLayout.setVisibility(View.GONE);
+    }
+
+    private void showApodHideError() {
+        appBarLayout.setVisibility(View.VISIBLE);
+        scrollView.setVisibility(View.VISIBLE);
+        favoritesFAB.show();
+        errorLayout.setVisibility(View.GONE);
+    }
+
+    private void hideApodShowError() {
+        appBarLayout.setVisibility(View.GONE);
+        scrollView.setVisibility(View.GONE);
+         favoritesFAB.hide();
+        errorLayout.setVisibility(View.VISIBLE);
     }
 
 }
