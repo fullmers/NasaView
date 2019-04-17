@@ -2,31 +2,17 @@ package com.amiculous.nasaview.data;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 
-import com.amiculous.nasaview.api.ApodApi;
 import com.amiculous.nasaview.api.NetworkUtils;
-import com.amiculous.nasaview.ui.apod.MyCallback;
-import com.amiculous.nasaview.ui.apod.SingleApodViewModel;
-import com.amiculous.nasaview.ui.apod.SingleApodViewModelFactory;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.http.Url;
 import timber.log.Timber;
-
-import static com.amiculous.nasaview.BuildConfig.API_KEY;
 
 public class ApodRepository {
 
@@ -34,33 +20,35 @@ public class ApodRepository {
     private LiveData<List<ApodEntity>> allFavoriteApods;
     private LiveData<ApodEntity> apod;
     private static Context context;
+    private ApodCallback callback;
+    private String date;
 
-    public ApodRepository(Application application, String date) {
+    public ApodRepository(Application application, String date, ApodCallback callback) {
         Timber.i("constructing repository");
         AppDatabase db = AppDatabase.getInstance(application);
         apodFavoritesDao = db.apodFavoritesDao();
         allFavoriteApods = apodFavoritesDao.loadAllFavoriteApods();
         apod = apodFavoritesDao.loadApod(date);
         context = application.getApplicationContext();
+        this.callback = callback;
+        this.date = date;
     }
 
     public LiveData<ApodEntity> getApod(final String date) {
         Timber.i("calling getApod in repositroy");
-        new refreshApodAsyncTask(apodFavoritesDao).execute(date);
+        ApodRefreshAsyncInput asyncInput = new ApodRefreshAsyncInput(date, callback,apodFavoritesDao);
+        new refreshApodAsyncTask().execute(asyncInput);
         return apod;
     }
 
-    private static class refreshApodAsyncTask extends AsyncTask<String, Void, Void> {
-        private ApodFavoritesDao apodFavoritesAsyncDao;
-
-        refreshApodAsyncTask(ApodFavoritesDao dao) {
-            apodFavoritesAsyncDao = dao;
-        }
+    private static class refreshApodAsyncTask extends AsyncTask<ApodRefreshAsyncInput, Void, Void> {
 
         @Override
-        protected Void doInBackground(final String... params) {
-            Timber.i("refreshing apod with id = " + params[0] + " from database");
-            String date = params[0];
+        protected Void doInBackground(ApodRefreshAsyncInput... apodRefreshAsyncInput) {
+            String date = apodRefreshAsyncInput[0].getDate();
+            ApodFavoritesDao apodFavoritesAsyncDao = apodRefreshAsyncInput[0].getApodFavoritesDao();
+            ApodCallback callback = apodRefreshAsyncInput[0].getCallback();
+            Timber.i("refreshing apod with id = " + date + " from database");
             if (!apodFavoritesAsyncDao.hasApod(date)) {
                 Timber.i("apod was NOT in db");
 
@@ -73,8 +61,10 @@ public class ApodRepository {
                         ApodEntity todaysApod = NetworkUtils.jsonToApod(response);
                         insertApod(todaysApod);
                         Timber.i("inserting response into db");
+                        callback.wasSuccessful(true);
                     } catch (JsonSyntaxException e) {
                         Timber.i(" could not parse response");
+                        callback.wasSuccessful(false);
                         //todo do something here
                     }
 
@@ -176,4 +166,29 @@ public class ApodRepository {
         }
     }
 
+    private class ApodRefreshAsyncInput {
+        ApodRefreshAsyncInput(String date, ApodCallback callback, ApodFavoritesDao dao) {
+            this.date = date;
+            this.callback = callback;
+            this.dao = dao;
+        }
+
+        ApodFavoritesDao dao;
+
+        ApodFavoritesDao getApodFavoritesDao() {
+            return dao;
+        }
+
+        String date;
+
+        String getDate() {
+            return date;
+        }
+
+        ApodCallback getCallback() {
+            return callback;
+        }
+
+        ApodCallback callback;
+    }
 }

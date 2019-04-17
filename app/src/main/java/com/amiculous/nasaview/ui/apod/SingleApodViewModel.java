@@ -5,12 +5,13 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
 import com.amiculous.nasaview.AppExecutors;
+import com.amiculous.nasaview.data.ApodCallback;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.ApodRepository;
 
 import timber.log.Timber;
 
-public class SingleApodViewModel extends AndroidViewModel {
+public class SingleApodViewModel extends AndroidViewModel implements ApodCallback {
 
     private ApodRepository apodRepository;
     private LiveData<ApodEntity> apod;
@@ -19,7 +20,7 @@ public class SingleApodViewModel extends AndroidViewModel {
     public SingleApodViewModel(Application application, String date) {
         super(application);
         Timber.i("constructing SingleApodViewModel " + date);
-        apodRepository = new ApodRepository(application, date);
+        apodRepository = new ApodRepository(application, date, this);
         this.date = date;
         apod = apodRepository.getApod(date);
     }
@@ -38,5 +39,11 @@ public class SingleApodViewModel extends AndroidViewModel {
     }
 
     public String getDate() {return date;}
+
+    @Override
+    public boolean wasSuccessful(boolean apodCallWasSuccessful) {
+        Timber.i("ApodRefresh wasSuccessful:%s", apodCallWasSuccessful);
+        return apodCallWasSuccessful;
+    }
 }
 
