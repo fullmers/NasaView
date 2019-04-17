@@ -1,5 +1,7 @@
 package com.amiculous.nasaview.ui.apod;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,11 +30,11 @@ import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import timber.log.Timber;
 
 public class ApodFragment extends Fragment {
@@ -40,7 +42,6 @@ public class ApodFragment extends Fragment {
     private ApodEntity apodEntity;
     private boolean isFavorite;
     private SingleApodViewModel singleApodViewModel;
-    private LiveData<ApodEntity> liveApod;
     private String date;
 
     @BindView(R.id.image)
@@ -67,6 +68,9 @@ public class ApodFragment extends Fragment {
     NestedScrollView scrollView;
     @BindView(R.id.error_layout) LinearLayout errorLayout;
 
+    private Unbinder unbinder;
+    private Activity activity;
+
     public static ApodFragment newInstance() {
         return new ApodFragment();
     }
@@ -75,83 +79,88 @@ public class ApodFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Timber.i("Calling onCreateView");
         View view = inflater.inflate(R.layout.fragment_apod, container, false);
-        ButterKnife.bind(this, view);
         date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         return view;
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle bundle) {
+        super.onViewCreated(view, bundle);
+        unbinder = ButterKnife.bind(this, view);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Timber.i("Calling onActivityCreated");
         populateUI();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Timber.i("Calling onResume");
         populateUI();
     }
 
-    public void populateUI() {
-        Timber.i("populateUI()");
-        SingleApodViewModelFactory factory = new SingleApodViewModelFactory(getActivity().getApplication(),date);
-        singleApodViewModel = ViewModelProviders.of(getActivity(), factory).get(SingleApodViewModel.class);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (Activity) context;
+    }
 
-        liveApod = singleApodViewModel.getApod();
-        liveApod.observe(getViewLifecycleOwner(), new Observer<ApodEntity>() {
-            @Override
-            public void onChanged(@Nullable ApodEntity apod) {
-                Timber.i("calling onChanged");
-                if (apod != null) {
-                    apodEntity = apod;
-                    Timber.i("apod was not null");
-                    addApodTitle(apod.getTitle());
-                    addApodImage(apod.getUrl(), apod.getMedia_type().equals("video") ? MediaType.VIDEO : MediaType.IMAGE);
-                    addApodDate(apod.getDate());
-                    addApodExplanation(apod.getExplanation());
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+        singleApodViewModel.getWasSuccessful().removeObservers(this);
+        singleApodViewModel.getApod().removeObservers(this);
+    }
 
-                    isFavorite = apod.getIsFavorite();
-                    if (isFavorite)
-                        setFABButtonToFavoriteState();
-                    else
-                        setFABButtonToUnfavoriteState();
+    private void populateUI() {
+        SingleApodViewModelFactory factory = new SingleApodViewModelFactory(activity.getApplication(),date);
+        singleApodViewModel = ViewModelProviders.of(this, factory).get(SingleApodViewModel.class);
 
-                    if(apod.getCopyright() == null)
-                        hideCopyright();
-                    else
-                        showCopyright(apod.getCopyright());
-                } else
-                    Timber.i("apod WAS null");
+        LiveData<ApodEntity> liveApod = singleApodViewModel.getApod();
+
+        singleApodViewModel.getWasSuccessful().observe(this, wasSuccessful -> {
+            if (wasSuccessful) {
+                showApodHideError();
+            } else {
+                hideApodShowError();
             }
         });
 
-        singleApodViewModel.getWasSuccessful().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean wasSuccessful) {
-                if (wasSuccessful) {
-                    Timber.i("apod call successful");
-                    showApodHideError();
-                } else {
-                    hideApodShowError();
-                    Timber.i("apod call FAILED");
-                }
-            }
+        liveApod.observe(getViewLifecycleOwner(), apod -> {
+            Timber.i("calling onChanged");
+            if (apod != null) {
+                apodEntity = apod;
+                addApodTitle(apod.getTitle());
+                addApodImage(apod.getUrl(), apod.getMedia_type().equals("video") ? MediaType.VIDEO : MediaType.IMAGE);
+                addApodDate(apod.getDate());
+                addApodExplanation(apod.getExplanation());
+
+                isFavorite = apod.getIsFavorite();
+                if (isFavorite)
+                    setFABButtonToFavoriteState();
+                else
+                    setFABButtonToUnfavoriteState();
+
+                if(apod.getCopyright() == null)
+                    hideCopyright();
+                else
+                    showCopyright(apod.getCopyright());
+            } else
+                Timber.i("apod WAS null");
         });
-
-
     }
 
     @OnClick(R.id.image)
-    public void selectImage(View view) {
+    void selectImage() {
         //TODO open image in a full screen pinch-to-zoom view
     }
 
     @OnClick(R.id.favorite_fab)
-    public void onFabTap(View view) {
+    void onFabTap() {
         if (isFavorite) {
             setFABButtonToUnfavoriteState();
         } else {
@@ -160,16 +169,14 @@ public class ApodFragment extends Fragment {
         updateFavoriteStatus();
     }
 
-    public void setFABButtonToFavoriteState() {
-        Timber.i("setting favorite state to true");
+    private void setFABButtonToFavoriteState() {
         isFavorite = true;
-        favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_star_white_24dp));
+        favoritesFAB.setImageDrawable(activity.getDrawable(R.drawable.ic_star_white_24dp));
     }
 
-    public void setFABButtonToUnfavoriteState() {
-        Timber.i("setting favorite state to false");
+    private void setFABButtonToUnfavoriteState() {
         isFavorite = false;
-        favoritesFAB.setImageDrawable(getActivity().getDrawable(R.drawable.ic_star_border_white_24dp));
+        favoritesFAB.setImageDrawable(activity.getDrawable(R.drawable.ic_star_border_white_24dp));
     }
 
     private void updateFavoriteStatus() {
@@ -205,13 +212,10 @@ public class ApodFragment extends Fragment {
                         .load(thumbnailUrl)
                         .placeholder(getResources().getDrawable(R.drawable.default_apod))
                         .into(imageView);
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent launchYouTube = new Intent(Intent.ACTION_VIEW);
-                        launchYouTube.setData(Uri.parse(url));
-                        startActivity(launchYouTube);
-                    }
+                imageView.setOnClickListener(v -> {
+                    Intent launchYouTube = new Intent(Intent.ACTION_VIEW);
+                    launchYouTube.setData(Uri.parse(url));
+                    startActivity(launchYouTube);
                 });
         }
     }
@@ -222,14 +226,6 @@ public class ApodFragment extends Fragment {
 
     private void hidePlayButton() {
         playButton.setVisibility(View.INVISIBLE);
-    }
-
-    private void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void hideProgressBar() {
-        progressBar.setVisibility(View.GONE);
     }
 
     private void showCopyright(String copyright) {
@@ -251,7 +247,7 @@ public class ApodFragment extends Fragment {
     private void hideApodShowError() {
         appBarLayout.setVisibility(View.GONE);
         scrollView.setVisibility(View.GONE);
-         favoritesFAB.hide();
+        favoritesFAB.hide();
         errorLayout.setVisibility(View.VISIBLE);
     }
 
