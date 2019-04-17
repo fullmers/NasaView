@@ -1,6 +1,5 @@
 package com.amiculous.nasaview.ui.favorites;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

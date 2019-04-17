@@ -1,15 +1,11 @@
 package com.amiculous.nasaview.api;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.amiculous.nasaview.BuildConfig;
-import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.Gson;

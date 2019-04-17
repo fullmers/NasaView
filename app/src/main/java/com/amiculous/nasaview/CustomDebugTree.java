@@ -2,8 +2,6 @@ package com.amiculous.nasaview;
 
 import android.util.Log;
 
-//import org.jetbrains.annotations.NotNull;
-
 import timber.log.Timber;
 
 public class CustomDebugTree extends Timber.DebugTree {

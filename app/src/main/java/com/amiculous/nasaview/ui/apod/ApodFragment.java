@@ -12,9 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amiculous.nasaview.R;
-import com.amiculous.nasaview.api.ApodApi;
 import com.amiculous.nasaview.data.ApodEntity;
-import com.amiculous.nasaview.data.Image;
 import com.amiculous.nasaview.data.MediaType;
 import com.amiculous.nasaview.util.MiscUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -33,12 +31,7 @@ import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import timber.log.Timber;
-
-import static com.amiculous.nasaview.BuildConfig.API_KEY;
 
 public class ApodFragment extends Fragment {
 
@@ -177,7 +170,7 @@ public class ApodFragment extends Fragment {
         switch (mediaType) {
             case IMAGE:
                 hidePlayButton();
-                Picasso.with(getActivity().getApplicationContext())
+                Picasso.get()
                         .load(url)
                         .placeholder(getResources().getDrawable(R.drawable.default_apod))
                         .into(imageView);
@@ -185,7 +178,7 @@ public class ApodFragment extends Fragment {
             case VIDEO:
                 showPlayButton();
                 String thumbnailUrl = MiscUtils.videoThumbnailUrl(url);
-                Picasso.with(getActivity().getApplicationContext())
+                Picasso.get()
                         .load(thumbnailUrl)
                         .placeholder(getResources().getDrawable(R.drawable.default_apod))
                         .into(imageView);

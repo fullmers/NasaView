@@ -2,13 +2,11 @@ package com.amiculous.nasaview.ui.apod;
 
 import android.app.Application;
 
-import com.amiculous.nasaview.AppExecutors;
 import com.amiculous.nasaview.data.ApodCallback;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.ApodRepository;
 //import androidx.databinding.ObservableField;
 
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import timber.log.Timber;

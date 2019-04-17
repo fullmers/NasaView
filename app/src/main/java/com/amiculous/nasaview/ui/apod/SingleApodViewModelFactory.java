@@ -2,7 +2,6 @@ package com.amiculous.nasaview.ui.apod;
 
 import android.app.Application;
 
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;

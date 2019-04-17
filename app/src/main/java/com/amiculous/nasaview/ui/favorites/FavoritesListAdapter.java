@@ -38,7 +38,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
             holder.titleTextView.setText(current.getTitle());
             holder.descPreviewTextView.setText(current.getExplanation());
 
-            Picasso.with(context.getApplicationContext())
+            Picasso.get()
                     .load(current.getUrl())
                     .placeholder(context.getResources().getDrawable(R.drawable.default_apod))
                     .into(holder.imagePreviewImageView);

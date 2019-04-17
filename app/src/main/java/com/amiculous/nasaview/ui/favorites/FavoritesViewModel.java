@@ -2,7 +2,6 @@ package com.amiculous.nasaview.ui.favorites;
 
 import android.app.Application;
 
-import com.amiculous.nasaview.AppExecutors;
 import com.amiculous.nasaview.data.ApodCallback;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.ApodRepository;
