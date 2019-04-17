@@ -3,14 +3,19 @@ package com.amiculous.nasaview.data;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.amiculous.nasaview.api.ApodApi;
+import com.amiculous.nasaview.api.NetworkUtils;
 import com.amiculous.nasaview.ui.apod.MyCallback;
 import com.amiculous.nasaview.ui.apod.SingleApodViewModel;
 import com.amiculous.nasaview.ui.apod.SingleApodViewModelFactory;
+import com.google.gson.JsonSyntaxException;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -18,6 +23,7 @@ import java.util.concurrent.Executor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Url;
 import timber.log.Timber;
 
 import static com.amiculous.nasaview.BuildConfig.API_KEY;
@@ -27,6 +33,7 @@ public class ApodRepository {
     private static ApodFavoritesDao apodFavoritesDao;
     private LiveData<List<ApodEntity>> allFavoriteApods;
     private LiveData<ApodEntity> apod;
+    private static Context context;
 
     public ApodRepository(Application application, String date) {
         Timber.i("constructing repository");
@@ -34,6 +41,7 @@ public class ApodRepository {
         apodFavoritesDao = db.apodFavoritesDao();
         allFavoriteApods = apodFavoritesDao.loadAllFavoriteApods();
         apod = apodFavoritesDao.loadApod(date);
+        context = application.getApplicationContext();
     }
 
     public LiveData<ApodEntity> getApod(final String date) {
@@ -55,7 +63,28 @@ public class ApodRepository {
             String date = params[0];
             if (!apodFavoritesAsyncDao.hasApod(date)) {
                 Timber.i("apod was NOT in db");
-                ApodApi apodApi = ApodApi.retrofit.create(ApodApi.class);
+
+                URL ApodUrl = NetworkUtils.buildUrl(context);
+
+                try {
+                    Timber.i("trying to fetch with network utils");
+                    String response = NetworkUtils.getResponseFromHttpUrl(ApodUrl);
+                    try {
+                        ApodEntity todaysApod = NetworkUtils.jsonToApod(response);
+                        insertApod(todaysApod);
+                        Timber.i("inserting response into db");
+                    } catch (JsonSyntaxException e) {
+                        Timber.i(" could not parse response");
+                        //todo do something here
+                    }
+
+                    Timber.i(response);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            /*    ApodApi apodApi = ApodApi.retrofit.create(ApodApi.class);
                 final Call<ApodEntity> call = apodApi.getApod(API_KEY);
                 Timber.i(call.request().url().toString());
                 call.enqueue(new Callback<ApodEntity>() {
@@ -67,7 +96,7 @@ public class ApodRepository {
 
                     @Override
                     public void onFailure(@NonNull Call<ApodEntity> call, @NonNull Throwable t) {}
-                });
+                });*/
             } else {
                 Timber.i("apod WAS in db");
             }

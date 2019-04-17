@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.amiculous.nasaview.R;
+import com.amiculous.nasaview.api.NetworkUtils;
 import com.amiculous.nasaview.ui.apod.ApodFragment;
 import com.amiculous.nasaview.ui.favorites.FavoritesFragment;
 import com.amiculous.nasaview.ui.search.SearchFragment;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        NetworkUtils.buildUrl(this);
         setContentView(R.layout.activity_main);
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setSelectedItemId(R.id.navigation_apod);
