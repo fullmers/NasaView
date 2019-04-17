@@ -1,12 +1,12 @@
 package com.amiculous.nasaview.data;
 
-
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "apod_favorites")
 public class ApodEntity implements Image, Parcelable {
@@ -59,6 +59,8 @@ public class ApodEntity implements Image, Parcelable {
 
     public void setId(long id) {this.id = id;}
 
+    @Ignore
+    public ApodEntity() {}
 
     public ApodEntity(String copyright, @NonNull String date, @NonNull String explanation, @NonNull String media_type, @NonNull String title, @NonNull String url) {
         if (copyright == null)

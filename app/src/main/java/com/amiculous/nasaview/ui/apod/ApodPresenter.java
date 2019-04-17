@@ -1,20 +1,18 @@
 package com.amiculous.nasaview.ui.apod;
 
-import android.support.annotation.NonNull;
-
 import com.amiculous.nasaview.BuildConfig;
 import com.amiculous.nasaview.api.ApodApi;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.Image;
 import com.amiculous.nasaview.data.MediaType;
 
+import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.amiculous.nasaview.util.Preconditions.checkNotNull;
-
 
 public class ApodPresenter implements ApodContract.Presenter {
 

@@ -1,13 +1,6 @@
 package com.amiculous.nasaview.ui;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.amiculous.nasaview.R;
@@ -15,13 +8,20 @@ import com.amiculous.nasaview.api.NetworkUtils;
 import com.amiculous.nasaview.ui.apod.ApodFragment;
 import com.amiculous.nasaview.ui.favorites.FavoritesFragment;
 import com.amiculous.nasaview.ui.search.SearchFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
+    BottomNavigationView navigation;
 
-    android.support.design.widget.BottomNavigationView navigation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

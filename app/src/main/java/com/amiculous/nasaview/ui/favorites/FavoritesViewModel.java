@@ -1,8 +1,6 @@
 package com.amiculous.nasaview.ui.favorites;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
 
 import com.amiculous.nasaview.AppExecutors;
 import com.amiculous.nasaview.data.ApodCallback;
@@ -13,6 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 public class FavoritesViewModel extends AndroidViewModel implements ApodCallback {
 

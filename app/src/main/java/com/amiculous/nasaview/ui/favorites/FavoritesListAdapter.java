@@ -1,7 +1,6 @@
 package com.amiculous.nasaview.ui.favorites;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,8 @@ import com.amiculous.nasaview.data.ApodEntity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdapter.FavoritesViewHolder> {
 

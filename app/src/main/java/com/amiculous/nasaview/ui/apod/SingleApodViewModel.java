@@ -1,27 +1,30 @@
 package com.amiculous.nasaview.ui.apod;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
 
 import com.amiculous.nasaview.AppExecutors;
 import com.amiculous.nasaview.data.ApodCallback;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.ApodRepository;
+//import androidx.databinding.ObservableField;
 
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 import timber.log.Timber;
 
-public class SingleApodViewModel extends AndroidViewModel implements ApodCallback {
+public class SingleApodViewModel extends ViewModel implements ApodCallback {
 
     private ApodRepository apodRepository;
     private LiveData<ApodEntity> apod;
     private String date;
+   // private ObservableField<Boolean>
 
     public SingleApodViewModel(Application application, String date) {
-        super(application);
+      //  super(application);
         Timber.i("constructing SingleApodViewModel " + date);
         apodRepository = new ApodRepository(application, date, this);
-        this.date = date;
+      //  this.date = date;
         apod = apodRepository.getApod(date);
     }
 

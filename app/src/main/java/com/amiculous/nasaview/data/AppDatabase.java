@@ -1,31 +1,31 @@
 package com.amiculous.nasaview.data;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.amiculous.nasaview.BuildConfig;
 
-@Database(entities = {ApodEntity.class}, version = 3, exportSchema = false)
+import androidx.annotation.NonNull;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import timber.log.Timber;
+
+@Database(entities = {ApodEntity.class}, version = 4, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
-    private static final String LOG_TAG = AppDatabase.class.getSimpleName();
     private static final Object LOCK = new Object();
     private static final String DATABASE_NAME = "nasa_media_db";
     private static final String API_KEY = BuildConfig.API_KEY;
 
     private static AppDatabase INSTANCE;
 
-    //use singleton to prevent having multiple instances of the database opened at same tiome
+    //use singleton to prevent having multiple instances of the database opened at same time
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (LOCK) {
-                Log.d(LOG_TAG, "Creating new database instance");
+                Timber.d("Creating new database instance");
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                         AppDatabase.class, AppDatabase.DATABASE_NAME)
                         .fallbackToDestructiveMigration()
@@ -33,7 +33,7 @@ public abstract class AppDatabase extends RoomDatabase {
                         .build();
             }
         }
-        Log.d(LOG_TAG, "Getting the database instance");
+        Timber.d("Getting the database instance");
         return INSTANCE;
     }
 

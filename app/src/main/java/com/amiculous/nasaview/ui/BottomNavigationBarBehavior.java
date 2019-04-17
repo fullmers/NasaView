@@ -1,12 +1,14 @@
 package com.amiculous.nasaview.ui;
 
 import android.content.Context;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.ViewCompat;
 
 //https://www.androidhive.info/2017/12/android-working-with-bottom-navigation/
 public class BottomNavigationBarBehavior extends CoordinatorLayout.Behavior<BottomNavigationView> {

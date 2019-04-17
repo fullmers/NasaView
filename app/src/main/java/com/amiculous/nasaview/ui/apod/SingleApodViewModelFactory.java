@@ -1,9 +1,11 @@
 package com.amiculous.nasaview.ui.apod;
 
 import android.app.Application;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
 
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import timber.log.Timber;
 
 public class SingleApodViewModelFactory extends ViewModelProvider.NewInstanceFactory {
@@ -17,8 +19,9 @@ public class SingleApodViewModelFactory extends ViewModelProvider.NewInstanceFac
         this.date = date;
     }
 
+    @NonNull
     @Override
-    public <T extends ViewModel> T create(Class<T> modelClass) {
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
         return (T) new SingleApodViewModel(app, date);
     }

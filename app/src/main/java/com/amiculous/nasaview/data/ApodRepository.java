@@ -1,7 +1,7 @@
 package com.amiculous.nasaview.data;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
+//import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import timber.log.Timber;
 
 public class ApodRepository {
