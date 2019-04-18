@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.amiculous.nasaview.api.NetworkUtils;
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
@@ -62,6 +63,7 @@ public class ApodRepository {
                             Timber.i("inserting response into db");
                             callback.wasSuccessful(true);
                         } catch (JsonSyntaxException e) {
+                            Crashlytics.logException(e);
                             Timber.i(" could not parse response");
                             callback.wasSuccessful(false);
                             //todo do something here
@@ -69,7 +71,7 @@ public class ApodRepository {
 
                         Timber.i(response);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Crashlytics.logException(e);
                     }
                 } else {
                     callback.wasSuccessful(false);

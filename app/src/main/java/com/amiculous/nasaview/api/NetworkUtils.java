@@ -7,6 +7,7 @@ import android.net.Uri;
 
 import com.amiculous.nasaview.BuildConfig;
 import com.amiculous.nasaview.data.ApodEntity;
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.Gson;
 
@@ -47,7 +48,7 @@ public class NetworkUtils {
             Timber.i(apodQueryUrl.toString());
             return apodQueryUrl;
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Crashlytics.logException(e);
             return null;
         }
     }
@@ -68,6 +69,7 @@ public class NetworkUtils {
                 return null;
             }
         } finally {
+            Crashlytics.logException(new IOException());
             urlConnection.disconnect();
         }
     }
