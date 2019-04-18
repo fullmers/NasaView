@@ -8,7 +8,9 @@ import com.amiculous.nasaview.api.NetworkUtils;
 import com.amiculous.nasaview.ui.apod.ApodFragment;
 import com.amiculous.nasaview.ui.favorites.FavoritesFragment;
 import com.amiculous.nasaview.ui.search.SearchFragment;
+import com.amiculous.nasaview.util.FirebaseUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     private BottomNavigationView navigation;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         navigation.setSelectedItemId(R.id.navigation_apod);
         commitFragment(ApodFragment.newInstance(), false);
         navigation.setOnNavigationItemSelectedListener(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
     /**
@@ -52,12 +56,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (item.getItemId()) {
             case R.id.navigation_favorites:
                 commitFragment(FavoritesFragment.newInstance(), keep);
+                mFirebaseAnalytics.setCurrentScreen(this, FirebaseUtils.FAVORITES_FRAGMENT, null);
                 break;
             case R.id.navigation_apod:
                 commitFragment(ApodFragment.newInstance(), keep);
+                mFirebaseAnalytics.setCurrentScreen(this, FirebaseUtils.APOD_FRAGMENT, null);
                 break;
             case R.id.navigation_search:
                 commitFragment(new SearchFragment(), keep);
+                mFirebaseAnalytics.setCurrentScreen(this, FirebaseUtils.SEARCH_FRAGMENT, null);
                 break;
         }
         return true;
