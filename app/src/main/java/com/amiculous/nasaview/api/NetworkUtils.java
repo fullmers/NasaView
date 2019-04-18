@@ -20,11 +20,11 @@ import java.util.Scanner;
 import timber.log.Timber;
 
 public class NetworkUtils {
-    private static Gson gson = new Gson();
-    private static String BASE_URL = "https://api.nasa.gov/planetary/apod";
+    private static final Gson gson = new Gson();
     private static final String API_KEY_VALUE = BuildConfig.API_KEY;
     private static final String API_KEY_LABEL = "api_key";
 
+    @SuppressWarnings("CaughtExceptionImmediatelyRethrown")
     public static ApodEntity jsonToApod(String apodJsonString) throws JsonSyntaxException {
         if (apodJsonString != null) {
             try {
@@ -36,8 +36,9 @@ public class NetworkUtils {
             return null;
     }
 
-    public static URL buildUrl(Context context) {
+    public static URL buildUrl() {
         Uri apodQueryUri;
+        String BASE_URL = "https://api.nasa.gov/planetary/apod";
         apodQueryUri = Uri.parse(BASE_URL).buildUpon()
                     .appendQueryParameter(API_KEY_LABEL, API_KEY_VALUE)
                     .build();
@@ -71,6 +72,7 @@ public class NetworkUtils {
         }
     }
 
+    @SuppressWarnings("unused")
     public static boolean isConnectedToInternet(Context context) {
         ConnectivityManager cm =
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);

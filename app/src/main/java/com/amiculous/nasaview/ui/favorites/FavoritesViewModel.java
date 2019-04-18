@@ -16,14 +16,12 @@ import androidx.lifecycle.LiveData;
 
 public class FavoritesViewModel extends AndroidViewModel implements ApodCallback {
 
-    private ApodRepository apodRepository;
-
-    private LiveData<List<ApodEntity>> allFavoriteApods;
+    private final LiveData<List<ApodEntity>> allFavoriteApods;
 
     public FavoritesViewModel(Application application) {
         super(application);
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        apodRepository = new ApodRepository(application, date, this);
+        ApodRepository apodRepository = new ApodRepository(application, date, this);
         allFavoriteApods = apodRepository.getAllFavoriteApods();
     }
 

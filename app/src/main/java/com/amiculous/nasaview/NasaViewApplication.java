@@ -4,7 +4,8 @@ import android.app.Application;
 
 import timber.log.Timber;
 
-public class NasaViewApplication extends Application {
+@SuppressWarnings("unused")
+class NasaViewApplication extends Application {
 
     @Override
     public void onCreate() {

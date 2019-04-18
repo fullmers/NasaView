@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,7 +21,6 @@ import timber.log.Timber;
 
 public class FavoritesFragment extends Fragment {
 
-    private FavoritesViewModel favoritesViewModel;
     @BindView(R.id.favorites)
     RecyclerView recyclerView;
 
@@ -31,7 +28,7 @@ public class FavoritesFragment extends Fragment {
         return new FavoritesFragment();
     }
 
-    FavoritesListAdapter adapter;
+    private FavoritesListAdapter adapter;
 
     @Nullable
     @Override
@@ -46,21 +43,18 @@ public class FavoritesFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        FavoritesViewModel favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
         adapter = new FavoritesListAdapter(getActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        favoritesViewModel.getAllFavoriteApods().observe(getActivity(), new Observer<List<ApodEntity>>() {
-            @Override
-            public void onChanged(@Nullable List<ApodEntity> apodEntities) {
-                Timber.i("Favorites:");
-                for(ApodEntity apod: apodEntities) {
-                    Timber.i(apod.getTitle() + " " + apod.getId());
-                }
-                adapter.setFavorites(apodEntities);
+        favoritesViewModel.getAllFavoriteApods().observe(getActivity(), apodEntities -> {
+            Timber.i("Favorites:");
+            for(ApodEntity apod: apodEntities) {
+                Timber.i(apod.getTitle() + " " + apod.getId());
             }
+            adapter.setFavorites(apodEntities);
         });
     }
 

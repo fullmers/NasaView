@@ -10,7 +10,8 @@
         android:layout_width="@dimen/preview_side"
         android:layout_height="@dimen/preview_side"
         android:src="@drawable/default_apod"
-        android:background="@color/colorAccent"/>
+        android:background="@color/colorAccent"
+        android:contentDescription="TODO" />
 
     <LinearLayout
         android:orientation="vertical"

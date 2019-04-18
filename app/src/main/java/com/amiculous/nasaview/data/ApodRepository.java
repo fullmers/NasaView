@@ -17,11 +17,10 @@ import timber.log.Timber;
 public class ApodRepository {
 
     private static ApodFavoritesDao apodFavoritesDao;
-    private LiveData<List<ApodEntity>> allFavoriteApods;
-    private LiveData<ApodEntity> apod;
+    private final LiveData<List<ApodEntity>> allFavoriteApods;
+    private final LiveData<ApodEntity> apod;
     private static Context context;
-    private ApodCallback callback;
-    private String date;
+    private final ApodCallback callback;
 
     public ApodRepository(Application application, String date, ApodCallback callback) {
         Timber.i("constructing repository");
@@ -31,7 +30,6 @@ public class ApodRepository {
         apod = apodFavoritesDao.loadApod(date);
         context = application.getApplicationContext();
         this.callback = callback;
-        this.date = date;
     }
 
     public LiveData<ApodEntity> getApod(final String date) {
@@ -53,25 +51,30 @@ public class ApodRepository {
             if (true) {
                 Timber.i("apod was NOT in db");
 
-                URL ApodUrl = NetworkUtils.buildUrl(context);
+                URL ApodUrl = NetworkUtils.buildUrl();
+                if (ApodUrl != null) {
 
-                try {
-                    Timber.i("trying to fetch with network utils");
-                    String response = NetworkUtils.getResponseFromHttpUrl(ApodUrl);
                     try {
-                        ApodEntity todaysApod = NetworkUtils.jsonToApod(response);
-                        insertApod(todaysApod);
-                        Timber.i("inserting response into db");
-                        callback.wasSuccessful(true);
-                    } catch (JsonSyntaxException e) {
-                        Timber.i(" could not parse response");
-                        callback.wasSuccessful(false);
-                        //todo do something here
-                    }
+                        Timber.i("trying to fetch with network utils");
 
-                    Timber.i(response);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        String response = NetworkUtils.getResponseFromHttpUrl(ApodUrl);
+                        try {
+                            ApodEntity todaysApod = NetworkUtils.jsonToApod(response);
+                            insertApod(todaysApod);
+                            Timber.i("inserting response into db");
+                            callback.wasSuccessful(true);
+                        } catch (JsonSyntaxException e) {
+                            Timber.i(" could not parse response");
+                            callback.wasSuccessful(false);
+                            //todo do something here
+                        }
+
+                        Timber.i(response);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    callback.wasSuccessful(false);
                 }
 
 
@@ -103,7 +106,7 @@ public class ApodRepository {
 
     private static class insertApodAsyncTask extends AsyncTask<ApodEntity, Void, Void> {
 
-        private ApodFavoritesDao apodFavoritesAsyncDao;
+        private final ApodFavoritesDao apodFavoritesAsyncDao;
         insertApodAsyncTask(ApodFavoritesDao dao) {
             apodFavoritesAsyncDao = dao;
         }
@@ -126,7 +129,7 @@ public class ApodRepository {
     }
 
     private static class deleteApodAsyncTask extends AsyncTask<Long, Void, Void> {
-        private ApodFavoritesDao apodFavoritesAsyncDao;
+        private final ApodFavoritesDao apodFavoritesAsyncDao;
 
         deleteApodAsyncTask(ApodFavoritesDao dao) {
             apodFavoritesAsyncDao = dao;
@@ -141,12 +144,12 @@ public class ApodRepository {
     }
 
     public void markFavorite(ApodEntity apodEntity) {
-        Timber.i("calling markFavorite in the ApodRepository. isFavorite = " + apodEntity.getIsFavorite());
+        Timber.i("calling markFavorite in the ApodRepository. isFavorite = %s", apodEntity.getIsFavorite());
         new markFavoriteAsyncTask(apodFavoritesDao).execute(apodEntity);
     }
 
     private static class markFavoriteAsyncTask extends AsyncTask<ApodEntity, Void, Void> {
-        private ApodFavoritesDao apodFavoritesAsyncDao;
+        private final ApodFavoritesDao apodFavoritesAsyncDao;
 
         markFavoriteAsyncTask(ApodFavoritesDao dao) {
             apodFavoritesAsyncDao = dao;
@@ -174,13 +177,13 @@ public class ApodRepository {
             this.dao = dao;
         }
 
-        ApodFavoritesDao dao;
+        final ApodFavoritesDao dao;
 
         ApodFavoritesDao getApodFavoritesDao() {
             return dao;
         }
 
-        String date;
+        final String date;
 
         String getDate() {
             return date;
@@ -190,6 +193,6 @@ public class ApodRepository {
             return callback;
         }
 
-        ApodCallback callback;
+        final ApodCallback callback;
     }
 }

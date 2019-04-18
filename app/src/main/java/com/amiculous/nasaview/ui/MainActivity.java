@@ -16,18 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
-    BottomNavigationView navigation;
+    private BottomNavigationView navigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NetworkUtils.buildUrl(this);
+        NetworkUtils.buildUrl();
         setContentView(R.layout.activity_main);
-        navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setSelectedItemId(R.id.navigation_apod);
         commitFragment(ApodFragment.newInstance(), false);
         navigation.setOnNavigationItemSelectedListener(this);

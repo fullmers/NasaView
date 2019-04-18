@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import timber.log.Timber;
 
-public class SingleApodViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+class SingleApodViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private final Application app;
     private final String date;

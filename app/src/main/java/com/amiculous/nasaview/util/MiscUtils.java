@@ -2,8 +2,6 @@ package com.amiculous.nasaview.util;
 
 import android.net.Uri;
 
-import timber.log.Timber;
-
 public class MiscUtils {
 
     private static final String YOUTUBE_IMAGE_BASE = "https://img.youtube.com/vi/";

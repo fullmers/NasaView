@@ -15,8 +15,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 public class SearchFragment extends Fragment {
 
-    private SearchViewModel mViewModel;
-
     public static SearchFragment newInstance() {
         return new SearchFragment();
     }
@@ -30,7 +28,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+        SearchViewModel mViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
         // TODO: Use the ViewModel
     }
 

@@ -9,6 +9,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 
@@ -32,10 +33,10 @@ public class FABbehavior extends AppBarLayout.ScrollingViewBehavior {
 
     @Override
     public boolean onStartNestedScroll(
-            final CoordinatorLayout coordinatorLayout,
-            final View child,
-            final View directTargetChild,
-            final View target,
+            @NonNull final CoordinatorLayout coordinatorLayout,
+            @NonNull final View child,
+            @NonNull final View directTargetChild,
+            @NonNull final View target,
             final int nestedScrollAxes,
             final int type) {
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL
@@ -45,9 +46,9 @@ public class FABbehavior extends AppBarLayout.ScrollingViewBehavior {
 
     @Override
     public void onNestedScroll(
-            final CoordinatorLayout coordinatorLayout,
-            final View child,
-            final View target,
+            @NonNull final CoordinatorLayout coordinatorLayout,
+            @NonNull final View child,
+            @NonNull final View target,
             final int dxConsumed,
             final int dyConsumed,
             final int dxUnconsumed,

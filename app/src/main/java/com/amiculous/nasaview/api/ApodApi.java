@@ -1,6 +1,5 @@
 package com.amiculous.nasaview.api;
 
-import com.amiculous.nasaview.BuildConfig;
 import com.amiculous.nasaview.data.ApodEntity;
 
 import java.util.concurrent.TimeUnit;

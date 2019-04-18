@@ -19,6 +19,7 @@ public interface ApodFavoritesDao {
     @Query("SELECT * FROM apod_favorites where isFavorite is 1")
     LiveData<List<ApodEntity>> loadAllFavoriteApods();
 
+    @SuppressWarnings("UnusedReturnValue")
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertApod(ApodEntity apodEntity);
 

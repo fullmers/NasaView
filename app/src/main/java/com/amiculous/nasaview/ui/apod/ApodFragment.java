@@ -35,7 +35,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import timber.log.Timber;
 
 public class ApodFragment extends Fragment {
 
@@ -131,8 +130,8 @@ public class ApodFragment extends Fragment {
         });
 
         liveApod.observe(getViewLifecycleOwner(), apod -> {
-            Timber.i("calling onChanged");
             if (apod != null) {
+                showApodHideError();
                 apodEntity = apod;
                 addApodTitle(apod.getTitle());
                 addApodImage(apod.getUrl(), apod.getMedia_type().equals("video") ? MediaType.VIDEO : MediaType.IMAGE);
@@ -149,8 +148,9 @@ public class ApodFragment extends Fragment {
                     hideCopyright();
                 else
                     showCopyright(apod.getCopyright());
-            } else
-                Timber.i("apod WAS null");
+            } else {
+                hideApodShowError();
+            }
         });
     }
 

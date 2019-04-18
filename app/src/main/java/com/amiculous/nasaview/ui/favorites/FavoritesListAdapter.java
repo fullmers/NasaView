@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdapter.FavoritesViewHolder> {
@@ -20,19 +21,20 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
 
     private final LayoutInflater inflater;
     private List<ApodEntity> favorites;
-    private Context context;
+    private final Context context;
 
     FavoritesListAdapter(Context context) {inflater = LayoutInflater.from(context);
     this.context = context;}
 
+    @NonNull
     @Override
-    public FavoritesViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public FavoritesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         View itemView = inflater.inflate(R.layout.favorites_item,parent,false);
         return new FavoritesViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(FavoritesViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FavoritesViewHolder holder, int position) {
         if (favorites != null ) {
             ApodEntity current = favorites.get(position);
             holder.titleTextView.setText(current.getTitle());
@@ -43,7 +45,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
                     .placeholder(context.getResources().getDrawable(R.drawable.default_apod))
                     .into(holder.imagePreviewImageView);
         } else {
-            holder.titleTextView.setText("No favorites saved yet");
+            holder.titleTextView.setText(context.getString(R.string.no_favorites));
         }
     }
 
