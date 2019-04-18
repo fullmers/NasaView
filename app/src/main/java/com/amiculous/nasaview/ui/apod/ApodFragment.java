@@ -1,7 +1,6 @@
 package com.amiculous.nasaview.ui.apod;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -43,6 +42,8 @@ public class ApodFragment extends Fragment {
     private boolean isFavorite;
     private SingleApodViewModel singleApodViewModel;
     private String date;
+    private Unbinder unbinder;
+    private Activity activity;
 
     @BindView(R.id.image)
     ImageView imageView;
@@ -67,9 +68,6 @@ public class ApodFragment extends Fragment {
     @BindView(R.id.scrollview)
     NestedScrollView scrollView;
     @BindView(R.id.error_layout) LinearLayout errorLayout;
-
-    private Unbinder unbinder;
-    private Activity activity;
 
     public static ApodFragment newInstance() {
         return new ApodFragment();
