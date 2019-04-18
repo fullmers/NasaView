@@ -13,19 +13,19 @@ import timber.log.Timber;
 
 public class SingleApodViewModel extends ViewModel implements ApodCallback {
 
-    private final ApodRepository apodRepository;
-    private final LiveData<ApodEntity> apod;
+    private ApodRepository apodRepository;
+    private LiveData<ApodEntity> apod;
     private final MutableLiveData<Boolean> wasSuccessful = new MutableLiveData<>();
-    private final String date;
+    private String date;
 
-    public String getDate() {
-        return date;
-    }
-
-    SingleApodViewModel(Application application, String date) {
+    void initFields(Application application, String date) {
         apodRepository = new ApodRepository(application, date, this);
         this.date = date;
         apod = apodRepository.getApod(date);
+    }
+
+    public String getDate() {
+        return date;
     }
 
     @Override

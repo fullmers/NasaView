@@ -1,6 +1,7 @@
 package com.amiculous.nasaview.ui.apod;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -80,6 +81,7 @@ public class ApodFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_apod, container, false);
         date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        singleApodViewModel = ViewModelProviders.of(this).get(SingleApodViewModel.class);
         return view;
     }
 
@@ -90,8 +92,15 @@ public class ApodFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (Activity) context;
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        singleApodViewModel.initFields(activity.getApplication(), date);
         populateUI();
     }
 
@@ -99,12 +108,6 @@ public class ApodFragment extends Fragment {
     public void onResume() {
         super.onResume();
         populateUI();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        activity = (Activity) context;
     }
 
     @Override
@@ -116,9 +119,6 @@ public class ApodFragment extends Fragment {
     }
 
     private void populateUI() {
-        SingleApodViewModelFactory factory = new SingleApodViewModelFactory(activity.getApplication(),date);
-        singleApodViewModel = ViewModelProviders.of(this, factory).get(SingleApodViewModel.class);
-
         LiveData<ApodEntity> liveApod = singleApodViewModel.getApod();
 
         singleApodViewModel.getWasSuccessful().observe(this, wasSuccessful -> {
@@ -169,6 +169,7 @@ public class ApodFragment extends Fragment {
         updateFavoriteStatus();
     }
 
+    //todo refactor below with databinding
     private void setFABButtonToFavoriteState() {
         isFavorite = true;
         favoritesFAB.setImageDrawable(activity.getDrawable(R.drawable.ic_star_white_24dp));

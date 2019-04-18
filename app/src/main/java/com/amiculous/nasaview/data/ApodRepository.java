@@ -19,7 +19,6 @@ public class ApodRepository {
     private static ApodFavoritesDao apodFavoritesDao;
     private final LiveData<List<ApodEntity>> allFavoriteApods;
     private final LiveData<ApodEntity> apod;
-    private static Context context;
     private final ApodCallback callback;
 
     public ApodRepository(Application application, String date, ApodCallback callback) {
@@ -28,7 +27,6 @@ public class ApodRepository {
         apodFavoritesDao = db.apodFavoritesDao();
         allFavoriteApods = apodFavoritesDao.loadAllFavoriteApods();
         apod = apodFavoritesDao.loadApod(date);
-        context = application.getApplicationContext();
         this.callback = callback;
     }
 
