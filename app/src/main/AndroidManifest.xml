@@ -19,7 +19,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/> <!--sample id for testing -->
+            android:value="@string/meta_data_value"/> <!--sample id for testing -->
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait"

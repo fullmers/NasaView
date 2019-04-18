@@ -3,7 +3,7 @@ package com.amiculous.nasaview.util;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-
+import com.amiculous.nasaview.R;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -18,8 +18,7 @@ public class FirebaseUtils {
 
     public static void init(Context context) {
         analytics = FirebaseAnalytics.getInstance(context);
-        MobileAds.initialize(context, "ca-app-pub-3940256099942544~3347511713");
-
+        MobileAds.initialize(context, context.getString(R.string.meta_data_value));
     }
 
     public static void screenShown(Activity activity, @NonNull String screenName) {
