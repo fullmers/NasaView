@@ -56,15 +56,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (item.getItemId()) {
             case R.id.navigation_favorites:
                 commitFragment(FavoritesFragment.newInstance(), keep);
-                mFirebaseAnalytics.setCurrentScreen(this, FirebaseUtils.FAVORITES_FRAGMENT, null);
+                FirebaseUtils.screenShown(this, FirebaseUtils.FAVORITES_FRAGMENT);
                 break;
             case R.id.navigation_apod:
                 commitFragment(ApodFragment.newInstance(), keep);
-                mFirebaseAnalytics.setCurrentScreen(this, FirebaseUtils.APOD_FRAGMENT, null);
+                FirebaseUtils.screenShown(this, FirebaseUtils.APOD_FRAGMENT);
                 break;
             case R.id.navigation_search:
                 commitFragment(new SearchFragment(), keep);
-                mFirebaseAnalytics.setCurrentScreen(this, FirebaseUtils.SEARCH_FRAGMENT, null);
+                FirebaseUtils.screenShown(this, FirebaseUtils.SEARCH_FRAGMENT);
                 break;
         }
         return true;
