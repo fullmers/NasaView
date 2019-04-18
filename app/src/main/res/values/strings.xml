@@ -22,6 +22,12 @@
 
 
     <!-- Content descriptors -->
+    <string name="play">play</string>
+    <string name="add_to_favorites">Add to favorites</string>
+    <string name="apod_image">Apod image</string>
+
+    <!-- AdMob -->
+    <string name="test_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
 
     <!-- Testing -->

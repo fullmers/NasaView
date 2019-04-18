@@ -11,7 +11,7 @@
         android:layout_height="@dimen/preview_side"
         android:src="@drawable/default_apod"
         android:background="@color/colorAccent"
-        android:contentDescription="TODO" />
+        android:contentDescription="@string/apod_image" />
 
     <LinearLayout
         android:orientation="vertical"

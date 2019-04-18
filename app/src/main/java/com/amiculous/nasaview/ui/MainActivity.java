@@ -10,8 +10,6 @@ import com.amiculous.nasaview.ui.favorites.FavoritesFragment;
 import com.amiculous.nasaview.ui.search.SearchFragment;
 import com.amiculous.nasaview.util.FirebaseUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +20,6 @@ import androidx.fragment.app.FragmentTransaction;
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     private BottomNavigationView navigation;
-    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +28,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
         navigation = findViewById(R.id.navigation);
         navigation.setSelectedItemId(R.id.navigation_apod);
+        FirebaseUtils.screenShown(this, FirebaseUtils.APOD_FRAGMENT);
         commitFragment(ApodFragment.newInstance(), false);
         navigation.setOnNavigationItemSelectedListener(this);
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
     /**

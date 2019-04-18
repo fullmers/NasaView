@@ -64,14 +64,13 @@ public class ApodRepository {
                             callback.wasSuccessful(true);
                         } catch (JsonSyntaxException e) {
                             Crashlytics.logException(e);
-                            Timber.i(" could not parse response");
                             callback.wasSuccessful(false);
-                            //todo do something here
                         }
 
                         Timber.i(response);
                     } catch (IOException e) {
                         Crashlytics.logException(e);
+                        callback.wasSuccessful(false);
                     }
                 } else {
                     callback.wasSuccessful(false);
