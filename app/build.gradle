@@ -38,7 +38,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
 
     //---Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
 
     //Network dependencies
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
