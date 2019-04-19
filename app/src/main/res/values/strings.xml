@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- General -->
     <string name="title_activity_main">NasaView</string>
     <string name="app_name">NasaView</string>
@@ -22,12 +22,12 @@
 
 
     <!-- Content descriptors -->
-    <string name="play">play</string>
+    <string name="play">play button</string>
     <string name="add_to_favorites">Add to favorites</string>
-    <string name="apod_image">Apod image</string>
+    <string name="apod_image">Astronomy picture of the day</string>
 
     <!-- AdMob -->
-    <string name="test_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="test_ad_unit_id" tools:ignore="ExtraTranslation">ca-app-pub-3940256099942544/6300978111</string>
     <string name="meta_data_value">ca-app-pub-3940256099942544~3347511713</string>
 
 
