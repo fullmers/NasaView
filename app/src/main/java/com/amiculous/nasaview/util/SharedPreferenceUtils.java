@@ -1,0 +1,55 @@
+package com.amiculous.nasaview.util;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.amiculous.nasaview.data.ApodEntity;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
+import androidx.annotation.NonNull;
+
+public class SharedPreferenceUtils {
+
+    private static final String PREFERENCES_KEY = "nasa_view_preferences";
+    private static final String TODAYS_APOD_JSON = "todays_apod_json";
+
+    private static Gson gson = new Gson();
+
+    //simple helpers:
+    public static String apodToJSONstring(ApodEntity contact) {
+        if (contact != null)
+            return gson.toJson(contact);
+        else
+            return "";
+    }
+
+    @SuppressWarnings("all")
+    public static ApodEntity jsonToApod(String apodJsonString) throws JsonSyntaxException {
+        if (apodJsonString != null) {
+            try {
+                return gson.fromJson(apodJsonString, ApodEntity.class);
+            } catch (JsonSyntaxException e) {
+                throw e; //intentional. see usage
+            }
+        } else
+            return null;
+    }
+
+
+    private static SharedPreferences getSharedPreferences (@NonNull final Context context) {
+        return context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
+    }
+
+    private static SharedPreferences.Editor getSharedPreferencesEditor (@NonNull final Context context) {
+        return getSharedPreferences(context).edit();
+    }
+
+    public static void storeTodaysApodJson(@NonNull final Context context, @NonNull final String apodJson){
+        getSharedPreferencesEditor(context).putString(TODAYS_APOD_JSON, apodJson).apply();
+    }
+
+    public static String fetchTodaysApodJson(@NonNull final Context context){
+        return getSharedPreferences(context).getString(TODAYS_APOD_JSON, null);
+    }
+}
