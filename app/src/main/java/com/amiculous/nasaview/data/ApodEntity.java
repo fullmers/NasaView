@@ -9,7 +9,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "apod_favorites")
-public class ApodEntity implements Image, Parcelable {
+public class ApodEntity implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
@@ -79,10 +79,6 @@ public class ApodEntity implements Image, Parcelable {
     public ApodEntity(long id, String copyright, @NonNull String date, @NonNull String explanation, @NonNull String media_type, @NonNull String title, @NonNull String url) {
         this(copyright, date, explanation, media_type, title, url);
         this.id = id;
-    }
-
-    public ApodEntity(@NonNull Image image) {
-        this(image.getId(), image.getCopyright(), image.getDate(), image.getExplanation(), image.getMedia_type(), image.getTitle(), image.getUrl());
     }
 
     @Override

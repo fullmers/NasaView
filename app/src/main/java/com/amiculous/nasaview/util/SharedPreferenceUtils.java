@@ -17,9 +17,9 @@ public class SharedPreferenceUtils {
     private static Gson gson = new Gson();
 
     //simple helpers:
-    public static String apodToJSONstring(ApodEntity contact) {
-        if (contact != null)
-            return gson.toJson(contact);
+    public static String apodToJSONstring(ApodEntity apodEntity) {
+        if (apodEntity != null)
+            return gson.toJson(apodEntity);
         else
             return "";
     }

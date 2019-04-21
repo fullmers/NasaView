@@ -1,7 +1,6 @@
 package com.amiculous.nasaview.data;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.amiculous.nasaview.api.NetworkUtils;
@@ -46,8 +45,8 @@ public class ApodRepository {
             ApodFavoritesDao apodFavoritesAsyncDao = apodRefreshAsyncInput[0].getApodFavoritesDao();
             ApodCallback callback = apodRefreshAsyncInput[0].getCallback();
             Timber.i("refreshing apod with id = " + date + " from database");
-         //   if (!apodFavoritesAsyncDao.hasApod(date)) {
-            if (true) {
+            if (!apodFavoritesAsyncDao.hasApod(date)) {
+        //    if (true) {
                 Timber.i("apod was NOT in db");
 
                 URL ApodUrl = NetworkUtils.buildUrl();

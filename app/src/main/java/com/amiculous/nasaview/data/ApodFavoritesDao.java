@@ -32,6 +32,9 @@ public interface ApodFavoritesDao {
     @Query("DELETE FROM apod_favorites where id like :id")
     void deleteApod(Long id);
 
+    @Query("DELETE FROM apod_favorites where isFavorite is 0")
+    void deleteNonFavoriteApods();
+
     @Query("DELETE FROM apod_favorites")
     void deleteAll();
 }
