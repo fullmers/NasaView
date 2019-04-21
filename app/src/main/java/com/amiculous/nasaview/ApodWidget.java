@@ -1,9 +1,13 @@
 package com.amiculous.nasaview;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
+
+import com.amiculous.nasaview.ui.MainActivity;
 
 /**
  * Implementation of App Widget functionality.
@@ -12,7 +16,11 @@ public class ApodWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.apod_widget);
+        remoteViews.setOnClickPendingIntent(R.id.widget_background, pendingIntent);
+        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
      /*   CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.apod_widget);
