@@ -5,11 +5,15 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.tool.util.StringUtils;
 import android.widget.RemoteViews;
 
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.ui.MainActivity;
 import com.amiculous.nasaview.util.SharedPreferenceUtils;
+import com.google.gson.JsonSyntaxException;
+
+import androidx.room.util.StringUtil;
 
 /**
  * Implementation of App Widget functionality.
@@ -36,8 +40,20 @@ public class ApodWidget extends AppWidgetProvider {
         SharedPreferenceUtils.storeTodaysApodJson(context, apodJson);*/
 
         String fetchedApodJson = SharedPreferenceUtils.fetchTodaysApodJson(context);
-        ApodEntity todaysApod = SharedPreferenceUtils.jsonToApod(fetchedApodJson);
-        return todaysApod.getTitle();
+        if (StringUtils.isNotBlank(fetchedApodJson)) {
+            try {
+                ApodEntity todaysApod = SharedPreferenceUtils.jsonToApod(fetchedApodJson);
+                if (todaysApod != null) {
+                    return todaysApod.getTitle();
+                } else {
+                    return context.getString(R.string.apod_data_not_yet_available);
+                }
+            } catch (JsonSyntaxException e) {
+                return context.getString(R.string.apod_data_not_yet_available);
+            }
+        } else {
+            return context.getString(R.string.apod_data_not_yet_available);
+        }
     }
 
     @Override

@@ -33,6 +33,7 @@
 
     <!-- Widget -->
     <string name="todays_apod">Today\'s APOD</string>
+    <string name="apod_data_not_yet_available">APOD data not yet available</string>
 
     <!-- Testing -->
     <string name="sample_title">NGC 2359: Thor\'s Helmet But now the title is quite a bit longer for testing the widget</string>
