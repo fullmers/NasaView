@@ -30,4 +30,5 @@ task clean(type: Delete) {
 ext {
     roomVersion = '2.1.0-alpha06'
     androidXversion='2.1.0-alpha04'
+    workManagerVersion='2.0.1'
 }

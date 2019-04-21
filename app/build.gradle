@@ -63,6 +63,7 @@ dependencies {
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.androidXversion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$rootProject.androidXversion"
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.androidXversion"
+    implementation "androidx.work:work-runtime:$rootProject.workManagerVersion"
 
     //Databinding
     annotationProcessor 'androidx.databinding:databinding-compiler:3.3.2'
