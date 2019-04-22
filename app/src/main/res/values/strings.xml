@@ -43,5 +43,6 @@
     <string name="sample_desc_short">NGC 2359 is a helmet-shaped cosmic cloud with wing-like appendages popularly called Thor\'s Helmet. Heroically sized even for a Norse god, Thor\'s Helmet is about 30 light-years across. In fact, the helmet is more like an interstellar bubble, blown as a fast wind from the bright, massive star near the bubble\'s center inflates a region within the surrounding molecular cloud.</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="title_activity_favorite_details">FavoriteDetails</string>
 
 </resources>

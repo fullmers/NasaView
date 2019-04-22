@@ -1,5 +1,6 @@
 package com.amiculous.nasaview.ui.favorites;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,8 @@ import android.view.ViewGroup;
 
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
+import com.amiculous.nasaview.ui.FavoriteDetailsActivity;
+import com.amiculous.nasaview.ui.MainActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,6 +75,7 @@ public class FavoritesFragment extends Fragment implements FavoritesListAdapter.
     @Override
     public void onFavoriteSelected(ApodEntity apod) {
         Timber.i("tapped: " + apod.getTitle());
-
+        Intent startFavoriteDetailsActivityIntent = new Intent(getActivity(), FavoriteDetailsActivity.class);
+        startActivity(startFavoriteDetailsActivityIntent);
     }
 }

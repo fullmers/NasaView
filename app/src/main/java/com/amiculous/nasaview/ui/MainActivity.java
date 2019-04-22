@@ -16,21 +16,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     private BottomNavigationView navigation;
+    int selectedTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NetworkUtils.buildUrl();
-        setContentView(R.layout.activity_main);
-        navigation = findViewById(R.id.navigation);
-        navigation.setSelectedItemId(R.id.navigation_apod);
-        FirebaseUtils.screenShown(this, FirebaseUtils.APOD_FRAGMENT);
-        commitFragment(ApodFragment.newInstance(), false);
-        navigation.setOnNavigationItemSelectedListener(this);
+        if (savedInstanceState != null) { //seems like it is always null...?
+            int selected = savedInstanceState.getInt("TAB",R.id.navigation_favorites);
+            navigation.setSelectedItemId(selected);
+        } else {
+            NetworkUtils.buildUrl();
+            setContentView(R.layout.activity_main);
+            navigation = findViewById(R.id.navigation);
+            navigation.setSelectedItemId(R.id.navigation_apod);
+            selectedTab = R.id.navigation_apod;
+            FirebaseUtils.screenShown(this, FirebaseUtils.APOD_FRAGMENT);
+            commitFragment(ApodFragment.newInstance(), false);
+            navigation.setOnNavigationItemSelectedListener(this);
+        }
     }
 
     /**
@@ -54,14 +62,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_favorites:
                 commitFragment(FavoritesFragment.newInstance(), keep);
                 FirebaseUtils.screenShown(this, FirebaseUtils.FAVORITES_FRAGMENT);
+                selectedTab = R.id.navigation_favorites;
                 break;
             case R.id.navigation_apod:
                 commitFragment(ApodFragment.newInstance(), keep);
                 FirebaseUtils.screenShown(this, FirebaseUtils.APOD_FRAGMENT);
+                selectedTab = R.id.navigation_apod;
                 break;
             case R.id.navigation_search:
                 commitFragment(new SearchFragment(), keep);
                 FirebaseUtils.screenShown(this, FirebaseUtils.SEARCH_FRAGMENT);
+                selectedTab = R.id.navigation_search;
                 break;
         }
         return true;
@@ -80,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             transaction.replace(R.id.frame_container, fragment);
         }
         transaction.commit();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt("TAB", R.id.navigation_favorites);
+        super.onSaveInstanceState(outState);
     }
 
     //TODO make an about/settings fragment and display this :
