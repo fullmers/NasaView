@@ -26,7 +26,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
     private FavoriteSelectionListener favoriteSelectionListener;
 
     public interface FavoriteSelectionListener {
-        void onFavoriteSelected(ApodEntity apod);
+        void onFavoriteSelected(ApodEntity apod, ImageView image);
     }
 
     public FavoritesListAdapter(Context context, FavoriteSelectionListener favoriteSelectionListener) {
@@ -84,7 +84,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
 
         @Override
         public void onClick(View v) {
-            favoriteSelectionListener.onFavoriteSelected(favorites.get(getAdapterPosition()));
+            favoriteSelectionListener.onFavoriteSelected(favorites.get(getAdapterPosition()), imagePreviewImageView);
         }
     }
 

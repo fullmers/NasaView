@@ -5,14 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.ui.FavoriteDetailsActivity;
-import com.amiculous.nasaview.ui.MainActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ public class FavoritesFragment extends Fragment implements FavoritesListAdapter.
     private Unbinder unbinder;
     private FavoritesViewModel favoritesViewModel;
     private FavoritesListAdapter adapter;
+    private ImageView detailsImageView;
 
     public static FavoritesFragment newInstance() {
         return new FavoritesFragment();
@@ -63,6 +65,8 @@ public class FavoritesFragment extends Fragment implements FavoritesListAdapter.
             }
             adapter.setFavorites(apodEntities);
         });
+
+        detailsImageView = getActivity().findViewById(R.id.preview_image);
     }
 
     @Override
@@ -73,9 +77,13 @@ public class FavoritesFragment extends Fragment implements FavoritesListAdapter.
     }
 
     @Override
-    public void onFavoriteSelected(ApodEntity apod) {
+    public void onFavoriteSelected(ApodEntity apod, ImageView preview) {
         Timber.i("tapped: " + apod.getTitle());
         Intent startFavoriteDetailsActivityIntent = new Intent(getActivity(), FavoriteDetailsActivity.class);
-        startActivity(startFavoriteDetailsActivityIntent);
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(getActivity(), preview, "apod");
+        startActivity(startFavoriteDetailsActivityIntent, options.toBundle());
+     //   startActivity(startFavoriteDetailsActivityIntent);
     }
 }

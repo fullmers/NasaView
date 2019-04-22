@@ -2,6 +2,7 @@
     <!-- General -->
     <string name="title_activity_main">NasaView</string>
     <string name="app_name">NasaView</string>
+    <string name="apod_transition_name">apod</string>
 
     <!-- Favorites fragment -->
     <string name="no_favorites">No favorites saved yett</string>
