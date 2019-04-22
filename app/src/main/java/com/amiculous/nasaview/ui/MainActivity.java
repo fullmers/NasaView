@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.amiculous.nasaview.R;
-import com.amiculous.nasaview.api.NetworkUtils;
 import com.amiculous.nasaview.ui.apod.ApodFragment;
 import com.amiculous.nasaview.ui.favorites.FavoritesFragment;
 import com.amiculous.nasaview.ui.search.SearchFragment;
@@ -20,25 +19,25 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
+    private static final String selectedFragmentKey = "SELECTED_FRAGMENT";
     private BottomNavigationView navigation;
-    int selectedTab;
+    private int selectedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) { //seems like it is always null...?
-            int selected = savedInstanceState.getInt("TAB",R.id.navigation_favorites);
-            navigation.setSelectedItemId(selected);
+        setContentView(R.layout.activity_main);
+        navigation = findViewById(R.id.navigation);
+        int selected = R.id.navigation_apod;
+        if (savedInstanceState != null) {
+            Timber.i("savedInstanceState not Null, restoring state");
+            selected = savedInstanceState.getInt(selectedFragmentKey,R.id.navigation_favorites);
         } else {
-            NetworkUtils.buildUrl();
-            setContentView(R.layout.activity_main);
-            navigation = findViewById(R.id.navigation);
-            navigation.setSelectedItemId(R.id.navigation_apod);
-            selectedTab = R.id.navigation_apod;
-            FirebaseUtils.screenShown(this, FirebaseUtils.APOD_FRAGMENT);
-            commitFragment(ApodFragment.newInstance(), false);
-            navigation.setOnNavigationItemSelectedListener(this);
+            Timber.i("savedInstanceState null, loading fresh");
         }
+        navigation.setSelectedItemId(selected);
+        showSelectedFragment(selected,false);
+        navigation.setOnNavigationItemSelectedListener(this);
     }
 
     /**
@@ -57,25 +56,32 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        boolean keep = true;
-        switch (item.getItemId()) {
+        showSelectedFragment(item.getItemId(),true);
+        return true;
+    }
+
+    private void showSelectedFragment(int fragmentId, boolean keep) {
+        switch (fragmentId) {
             case R.id.navigation_favorites:
                 commitFragment(FavoritesFragment.newInstance(), keep);
                 FirebaseUtils.screenShown(this, FirebaseUtils.FAVORITES_FRAGMENT);
-                selectedTab = R.id.navigation_favorites;
+                selectedFragment = R.id.navigation_favorites;
                 break;
             case R.id.navigation_apod:
                 commitFragment(ApodFragment.newInstance(), keep);
                 FirebaseUtils.screenShown(this, FirebaseUtils.APOD_FRAGMENT);
-                selectedTab = R.id.navigation_apod;
+                selectedFragment = R.id.navigation_apod;
                 break;
             case R.id.navigation_search:
                 commitFragment(new SearchFragment(), keep);
                 FirebaseUtils.screenShown(this, FirebaseUtils.SEARCH_FRAGMENT);
-                selectedTab = R.id.navigation_search;
+                selectedFragment = R.id.navigation_search;
                 break;
+            default:
+                commitFragment(ApodFragment.newInstance(), keep);
+                FirebaseUtils.screenShown(this, FirebaseUtils.APOD_FRAGMENT);
+                selectedFragment = R.id.navigation_apod;
         }
-        return true;
     }
 
     private void commitFragment(@NonNull Fragment fragment, boolean keep) {
@@ -95,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putInt("TAB", R.id.navigation_favorites);
+        outState.putInt(selectedFragmentKey, selectedFragment);
         super.onSaveInstanceState(outState);
     }
 

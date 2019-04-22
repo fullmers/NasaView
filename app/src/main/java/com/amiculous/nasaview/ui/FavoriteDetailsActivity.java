@@ -25,8 +25,6 @@ public class FavoriteDetailsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
     }
 
     //necessary to get up navigation to go back to favorites tab. (saveInstanceState does not work?)
