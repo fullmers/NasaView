@@ -20,6 +20,7 @@
             android:name=".ui.FavoriteDetailsActivity"
             android:label="@string/title_activity_favorite_details"
             android:parentActivityName=".ui.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
