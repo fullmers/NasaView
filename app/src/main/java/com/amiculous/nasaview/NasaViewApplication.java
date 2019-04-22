@@ -10,14 +10,13 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import java.util.concurrent.TimeUnit;
 
 import androidx.work.Constraints;
-import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import timber.log.Timber;
 
 @SuppressWarnings("unused")
-class NasaViewApplication extends Application {
+public class NasaViewApplication extends Application {
 
     @Override
     public void onCreate() {
