@@ -15,16 +15,25 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdapter.FavoritesViewHolder> {
-
 
     private final LayoutInflater inflater;
     private List<ApodEntity> favorites;
     private final Context context;
+    private FavoriteSelectionListener favoriteSelectionListener;
 
-    FavoritesListAdapter(Context context) {inflater = LayoutInflater.from(context);
-    this.context = context;}
+    public interface FavoriteSelectionListener {
+        void onFavoriteSelected(ApodEntity apod);
+    }
+
+    public FavoritesListAdapter(Context context, FavoriteSelectionListener favoriteSelectionListener) {
+        this.inflater = LayoutInflater.from(context);
+        this.context = context;
+        this.favoriteSelectionListener = favoriteSelectionListener;
+    }
 
     @NonNull
     @Override
@@ -61,17 +70,21 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
         } else return 0;
     }
 
-    class FavoritesViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView imagePreviewImageView;
-        private final TextView titleTextView;
-        private final TextView descPreviewTextView;
+    public class FavoritesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.preview_image) ImageView imagePreviewImageView;
+        @BindView(R.id.title_text) TextView titleTextView;
+        @BindView(R.id.desc_text) TextView descPreviewTextView;
+
 
         private FavoritesViewHolder(View itemView) {
             super(itemView);
-            imagePreviewImageView = itemView.findViewById(R.id.preview_image);
-            titleTextView = itemView.findViewById(R.id.title_text);
-            descPreviewTextView = itemView.findViewById(R.id.desc_text);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
 
+        @Override
+        public void onClick(View v) {
+            favoriteSelectionListener.onFavoriteSelected(favorites.get(getAdapterPosition()));
         }
     }
 

@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import timber.log.Timber;
 
-public class FavoritesFragment extends Fragment {
+public class FavoritesFragment extends Fragment implements FavoritesListAdapter.FavoriteSelectionListener {
 
     @BindView(R.id.favorites) RecyclerView recyclerView;
 
@@ -49,7 +49,7 @@ public class FavoritesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
-        adapter = new FavoritesListAdapter(getActivity());
+        adapter = new FavoritesListAdapter(getActivity(), this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -69,4 +69,9 @@ public class FavoritesFragment extends Fragment {
         favoritesViewModel.getAllFavoriteApods().removeObservers(this);
     }
 
+    @Override
+    public void onFavoriteSelected(ApodEntity apod) {
+        Timber.i("tapped: " + apod.getTitle());
+
+    }
 }
