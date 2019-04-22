@@ -11,15 +11,14 @@ import com.amiculous.nasaview.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import timber.log.Timber;
 
 public class SearchFragment extends Fragment {
-
-    private AdView mAdView;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -36,13 +35,10 @@ public class SearchFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (BuildConfig.DEBUG) {
-            Timber.i("Showing ad");
-            mAdView = getActivity().findViewById(R.id.adView);
+            AdView mAdView = Objects.requireNonNull(getActivity()).findViewById(R.id.adView);
             mAdView.setVisibility(View.VISIBLE);
             AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
-        } else {
-            Timber.i("NOT howing ad");
         }
 
         SearchViewModel mViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);

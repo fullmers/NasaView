@@ -35,6 +35,7 @@ public class NasaViewApplication extends Application {
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
 
+        //todo find out how to kick this off at 00:10 EST ish
         PeriodicWorkRequest updateWidgetWorkRequest = new PeriodicWorkRequest
                 .Builder(FetchApodWorker.class, 1, TimeUnit.DAYS)
                 .setConstraints(constraint)
