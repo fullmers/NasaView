@@ -14,6 +14,7 @@ import com.amiculous.nasaview.util.SharedPreferenceUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -65,7 +66,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void showSelectedFragment(int fragmentId, boolean keep) {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
         switch (fragmentId) {
             case R.id.navigation_favorites:
                 commitFragment(FavoritesFragment.newInstance(), keep);
@@ -116,7 +119,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Bundle bundle = new Bundle();
         bundle.putString(SharedPreferenceUtils.APOD_JSON_KEY,apodString);
         commitFragment(FavoriteDetailsFragment.newInstance(bundle), true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      //  commitFragment(ApodFragment.newInstance(bundle), true);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
     }
 
     @Override

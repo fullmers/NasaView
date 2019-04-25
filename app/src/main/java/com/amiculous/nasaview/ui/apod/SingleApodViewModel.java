@@ -18,8 +18,8 @@ public class SingleApodViewModel extends ViewModel implements ApodCallback {
     private final MutableLiveData<Boolean> wasSuccessful = new MutableLiveData<>();
     private String date;
 
-    void initFields(Application application, String date) {
-        apodRepository = new ApodRepository(application, date, this);
+    void initFields(String date) {
+        apodRepository = new ApodRepository(date, this);
         this.date = date;
         apod = apodRepository.getApod(date);
     }

@@ -2,6 +2,7 @@ package com.amiculous.nasaview;
 
 import android.app.Application;
 
+import com.amiculous.nasaview.data.ApodRepository;
 import com.amiculous.nasaview.util.FirebaseUtils;
 import com.amiculous.nasaview.workers.DeleteNonFavoriteApodsWorker;
 import com.amiculous.nasaview.workers.FetchApodWorker;
@@ -26,6 +27,7 @@ public class NasaViewApplication extends Application {
         }
         FirebaseUtils.init(this);
         FirebaseUtils.logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
+        ApodRepository.initDao(this);
 
         initWorkers();
     }

@@ -1,8 +1,10 @@
 package com.amiculous.nasaview.data;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.AsyncTask;
 
+import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.api.NetworkUtils;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.JsonSyntaxException;
@@ -21,10 +23,15 @@ public class ApodRepository {
     private final LiveData<ApodEntity> apod;
     private final ApodCallback callback;
 
-    public ApodRepository(Application application, String date, ApodCallback callback) {
+    public static void initDao(Application application) {
+        if (apodFavoritesDao == null) {
+            AppDatabase db = AppDatabase.getInstance(application);
+            apodFavoritesDao = db.apodFavoritesDao();
+        }
+    }
+
+    public ApodRepository(String date, ApodCallback callback) {
         Timber.i("constructing repository");
-        AppDatabase db = AppDatabase.getInstance(application);
-        apodFavoritesDao = db.apodFavoritesDao();
         allFavoriteApods = apodFavoritesDao.loadAllFavoriteApods();
         apod = apodFavoritesDao.loadApod(date);
         this.callback = callback;
@@ -141,7 +148,7 @@ public class ApodRepository {
         }
     }
 
-    public void markFavorite(ApodEntity apodEntity) {
+    public static void markFavorite(ApodEntity apodEntity) {
         Timber.i("calling markFavorite in the ApodRepository. isFavorite = %s", apodEntity.getIsFavorite());
         new markFavoriteAsyncTask(apodFavoritesDao).execute(apodEntity);
     }

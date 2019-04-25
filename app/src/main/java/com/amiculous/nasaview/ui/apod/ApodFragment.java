@@ -98,7 +98,7 @@ public class ApodFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        singleApodViewModel.initFields(activity.getApplication(), date);
+        singleApodViewModel.initFields(date);
         populateUI();
     }
 
