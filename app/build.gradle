@@ -51,7 +51,6 @@ android {
 }
 
 
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
@@ -75,6 +74,7 @@ dependencies {
     //---Room components
     implementation "androidx.room:room-common:$rootProject.androidXversion"
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor "androidx.room:room-compiler:$rootProject.androidXversion"
 
     //---Lifecycle components

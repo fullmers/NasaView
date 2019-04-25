@@ -1,5 +1,6 @@
 package com.amiculous.nasaview.ui.favorites;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.ImageView;
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.ui.FavoriteDetailsActivity;
+import com.amiculous.nasaview.ui.favorite_details.FavoriteDetailsFragment;
+import com.amiculous.nasaview.util.SharedPreferenceUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +34,12 @@ public class FavoritesFragment extends Fragment implements FavoritesListAdapter.
     private FavoritesViewModel favoritesViewModel;
     private FavoritesListAdapter adapter;
     private ImageView detailsImageView;
+
+    private FavoriteSelectListener favoriteSelectListener;
+
+    public interface FavoriteSelectListener {
+        void onFavoriteSelected(ApodEntity apod);
+    }
 
     public static FavoritesFragment newInstance() {
         return new FavoritesFragment();
@@ -70,6 +79,17 @@ public class FavoritesFragment extends Fragment implements FavoritesListAdapter.
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            favoriteSelectListener = (FavoriteSelectListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnArticleSelectedListener");
+        }
+    }
+
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
@@ -79,11 +99,8 @@ public class FavoritesFragment extends Fragment implements FavoritesListAdapter.
     @Override
     public void onFavoriteSelected(ApodEntity apod, ImageView preview) {
         Timber.i("tapped: " + apod.getTitle());
-        Intent startFavoriteDetailsActivityIntent = new Intent(getActivity(), FavoriteDetailsActivity.class);
-
-        ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(getActivity(), preview, "apod");
-        startActivity(startFavoriteDetailsActivityIntent, options.toBundle());
-     //   startActivity(startFavoriteDetailsActivityIntent);
+        Bundle bundle = new Bundle();
+        bundle.putString(SharedPreferenceUtils.APOD_JSON_KEY,SharedPreferenceUtils.apodToJSONstring(apod));
+        favoriteSelectListener.onFavoriteSelected(apod);
     }
 }

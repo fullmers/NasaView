@@ -2,13 +2,15 @@ package com.amiculous.nasaview.ui;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.amiculous.nasaview.R;
+import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.ui.apod.ApodFragment;
+import com.amiculous.nasaview.ui.favorite_details.FavoriteDetailsFragment;
 import com.amiculous.nasaview.ui.favorites.FavoritesFragment;
 import com.amiculous.nasaview.ui.search.SearchFragment;
 import com.amiculous.nasaview.util.FirebaseUtils;
+import com.amiculous.nasaview.util.SharedPreferenceUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -18,7 +20,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,
+        FavoritesFragment.FavoriteSelectListener {
 
     private static final String selectedFragmentKey = "SELECTED_FRAGMENT";
     private BottomNavigationView navigation;
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void showSelectedFragment(int fragmentId, boolean keep) {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         switch (fragmentId) {
             case R.id.navigation_favorites:
                 commitFragment(FavoritesFragment.newInstance(), keep);
@@ -104,6 +108,25 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(selectedFragmentKey, selectedFragment);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onFavoriteSelected(ApodEntity apod) {
+        String apodString = SharedPreferenceUtils.apodToJSONstring(apod);
+        Bundle bundle = new Bundle();
+        bundle.putString(SharedPreferenceUtils.APOD_JSON_KEY,apodString);
+        commitFragment(FavoriteDetailsFragment.newInstance(bundle), true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            showSelectedFragment(R.id.navigation_favorites, true);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     //TODO make an about/settings fragment and display this :

@@ -13,6 +13,7 @@ public class SharedPreferenceUtils {
 
     private static final String PREFERENCES_KEY = "nasa_view_preferences";
     private static final String TODAYS_APOD_JSON = "todays_apod_json";
+    public static final String APOD_JSON_KEY = "apod_json_key";
 
     private static Gson gson = new Gson();
 
