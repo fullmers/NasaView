@@ -148,23 +148,25 @@ public class ApodRepository {
         }
     }
 
-    public static void markFavorite(ApodEntity apodEntity) {
+    public static void markFavorite(ApodEntity apodEntity, boolean markAsFavorite) {
         Timber.i("calling markFavorite in the ApodRepository. isFavorite = %s", apodEntity.getIsFavorite());
-        new markFavoriteAsyncTask(apodFavoritesDao).execute(apodEntity);
+        new markFavoriteAsyncTask(apodFavoritesDao, markAsFavorite).execute(apodEntity);
     }
 
     private static class markFavoriteAsyncTask extends AsyncTask<ApodEntity, Void, Void> {
         private final ApodFavoritesDao apodFavoritesAsyncDao;
+        private final boolean markAsFavorite;
 
-        markFavoriteAsyncTask(ApodFavoritesDao dao) {
-            apodFavoritesAsyncDao = dao;
+        markFavoriteAsyncTask(ApodFavoritesDao dao, boolean markAsFavorite) {
+            this.apodFavoritesAsyncDao = dao;
+            this.markAsFavorite = markAsFavorite;
         }
 
         @Override
         protected Void doInBackground(final ApodEntity... params) {
             Timber.i("marking favorite where id = " + params[0].getId() + "from database");
             ApodEntity apodEntity = params[0];
-            if (apodEntity.getIsFavorite()) {
+            if (markAsFavorite) {
                 Timber.i("marking as favorite");
                 apodFavoritesAsyncDao.markFavorite(apodEntity.getId());
             } else {

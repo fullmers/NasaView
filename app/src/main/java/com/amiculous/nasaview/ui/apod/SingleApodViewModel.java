@@ -47,9 +47,9 @@ public class SingleApodViewModel extends ViewModel implements ApodCallback {
         return apod;
     }
 
-    void markFavorite(ApodEntity apodEntity) {
+    void markFavorite(ApodEntity apodEntity, boolean isFavorite) {
         Timber.i("calling markFavorite from SingleApodViewModel. isFavorite = %s", apodEntity.getIsFavorite());
-        apodRepository.markFavorite(apodEntity);
+        ApodRepository.markFavorite(apodEntity, isFavorite);
     }
 }
 

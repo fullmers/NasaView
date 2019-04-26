@@ -180,7 +180,7 @@ public class ApodFragment extends Fragment {
 
     private void updateFavoriteStatus() {
         apodEntity.setIsFavorite(isFavorite);
-        singleApodViewModel.markFavorite(apodEntity);
+        singleApodViewModel.markFavorite(apodEntity, isFavorite);
     }
 
     private void addApodExplanation(String description) {

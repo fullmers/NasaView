@@ -18,18 +18,6 @@ public class FavoriteApodViewModel extends ViewModel {
 
     public boolean showPlayButton;
 
-    public ObservableField<Boolean> getIsFavorite() {
-        return isFavorite;
-    }
-
-    public void setIsFavorite(ObservableField<Boolean> isFavorite) {
-        this.isFavorite = isFavorite;
-    }
-
-    public void setIsFavorite(boolean isFavorite) {
-        this.isFavorite.set(isFavorite);
-    }
-
     public ObservableField<Boolean> isFavorite = new ObservableField<Boolean>();
 
     public void init(ApodEntity apodEntity) {
@@ -48,15 +36,28 @@ public class FavoriteApodViewModel extends ViewModel {
     }
 
     public void toggleIsFavorite(boolean isFavoriteNow) {
-        ApodRepository.markFavorite(getApodEntity());
-        if (isFavoriteNow) {
-            isFavorite.set(false);
-        } else {
+        boolean markAsFavorite = !isFavoriteNow;
+        ApodRepository.markFavorite(getApodEntity(), markAsFavorite);
+        if (markAsFavorite) {
             isFavorite.set(true);
+        } else {
+            isFavorite.set(false);
         }
     }
 
     //Getters and setters required for data binding:
+
+    public ObservableField<Boolean> getIsFavorite() {
+        return isFavorite;
+    }
+
+    public void setIsFavorite(ObservableField<Boolean> isFavorite) {
+        this.isFavorite = isFavorite;
+    }
+
+    public void setIsFavorite(boolean isFavorite) {
+        this.isFavorite.set(isFavorite);
+    }
 
     public ApodEntity getApodEntity() {
         return apodEntity;
