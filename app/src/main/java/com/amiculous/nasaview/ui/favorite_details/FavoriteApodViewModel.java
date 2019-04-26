@@ -11,16 +11,14 @@ public class FavoriteApodViewModel extends ViewModel {
     public String title;
     public String copyright;
     public String date;
-    public String explanation;
+    private String explanation;
     public  ApodEntity apodEntity;
-    private String media_type;
-    private String url;
 
-    public boolean showPlayButton;
+    private boolean showPlayButton;
 
-    public ObservableField<Boolean> isFavorite = new ObservableField<Boolean>();
+    public ObservableField<Boolean> isFavorite = new ObservableField<>();
 
-    public void init(ApodEntity apodEntity) {
+    void init(ApodEntity apodEntity) {
         setTitle(apodEntity.getTitle());
         setCopyright(apodEntity.getCopyright());
         setDate(apodEntity.getDate());
@@ -87,7 +85,7 @@ public class FavoriteApodViewModel extends ViewModel {
         return explanation;
     }
 
-    public void setExplanation(String explanation) {
+    private void setExplanation(String explanation) {
         this.explanation = explanation;
     }
 
@@ -103,7 +101,7 @@ public class FavoriteApodViewModel extends ViewModel {
         return showPlayButton;
     }
 
-    public void setShowPlayButton(boolean showPlayButton) {
+    private void setShowPlayButton(boolean showPlayButton) {
         this.showPlayButton = showPlayButton;
     }
 
