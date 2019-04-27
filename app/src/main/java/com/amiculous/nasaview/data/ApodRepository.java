@@ -1,10 +1,8 @@
 package com.amiculous.nasaview.data;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.AsyncTask;
 
-import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.api.NetworkUtils;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.JsonSyntaxException;
@@ -12,29 +10,45 @@ import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import androidx.lifecycle.LiveData;
+
 import timber.log.Timber;
 
 public class ApodRepository {
 
+    public enum ApodCallState {
+        HAS_NOT_TRIED, WAITING, SUCCESSFUL, FAILED
+    }
+
     private static ApodFavoritesDao apodFavoritesDao;
-    private final LiveData<List<ApodEntity>> allFavoriteApods;
+    private static LiveData<List<ApodEntity>> allFavoriteApods;
     private final LiveData<ApodEntity> apod;
-    private final ApodCallback callback;
+    private ApodCallback callback;
 
     public static void initDao(Application application) {
         if (apodFavoritesDao == null) {
             AppDatabase db = AppDatabase.getInstance(application);
             apodFavoritesDao = db.apodFavoritesDao();
+            allFavoriteApods = apodFavoritesDao.loadAllFavoriteApods();
         }
     }
 
-    public ApodRepository(String date, ApodCallback callback) {
+    public ApodRepository(Application application, String date, ApodCallback callback) {
         Timber.i("constructing repository");
-        allFavoriteApods = apodFavoritesDao.loadAllFavoriteApods();
+        initDao(application);
+        ApodRefreshAsyncInput asyncInput = new ApodRefreshAsyncInput(date,callback,apodFavoritesDao);
         apod = apodFavoritesDao.loadApod(date);
         this.callback = callback;
+        try {
+            String apodJson = new refreshApodAsyncTask().execute(asyncInput).get();
+            Timber.i("getApod json:%s", apodJson);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public LiveData<ApodEntity> getApod(final String date) {
@@ -44,62 +58,56 @@ public class ApodRepository {
         return apod;
     }
 
-    private static class refreshApodAsyncTask extends AsyncTask<ApodRefreshAsyncInput, Void, Void> {
+    public LiveData<ApodEntity> getApod() {
+        return apod;
+    }
+
+    private static class refreshApodAsyncTask extends AsyncTask<ApodRefreshAsyncInput, Void, String> {
 
         @Override
-        protected Void doInBackground(ApodRefreshAsyncInput... apodRefreshAsyncInput) {
+        protected String doInBackground(ApodRefreshAsyncInput... apodRefreshAsyncInput) {
             String date = apodRefreshAsyncInput[0].getDate();
             ApodFavoritesDao apodFavoritesAsyncDao = apodRefreshAsyncInput[0].getApodFavoritesDao();
             ApodCallback callback = apodRefreshAsyncInput[0].getCallback();
+            callback.setCallState(ApodCallState.WAITING);
             Timber.i("refreshing apod with id = " + date + " from database");
             if (!apodFavoritesAsyncDao.hasApod(date)) {
-        //    if (true) {
                 Timber.i("apod was NOT in db");
 
                 URL ApodUrl = NetworkUtils.buildUrl();
                 if (ApodUrl != null) {
-
                     try {
                         Timber.i("trying to fetch with network utils");
-
                         String response = NetworkUtils.getResponseFromHttpUrl(ApodUrl);
                         try {
                             ApodEntity todaysApod = NetworkUtils.jsonToApod(response);
                             insertApod(todaysApod);
                             Timber.i("inserting response into db");
-                            callback.wasSuccessful(true);
+                            callback.setApod(todaysApod);
+                            callback.setCallState(ApodCallState.SUCCESSFUL);
                         } catch (JsonSyntaxException e) {
                             Crashlytics.logException(e);
-                            callback.wasSuccessful(false);
+                            callback.setCallState(ApodCallState.FAILED);
                         }
 
                         Timber.i(response);
                     } catch (IOException e) {
                         Crashlytics.logException(e);
-                        callback.wasSuccessful(false);
+                        callback.setCallState(ApodCallState.FAILED);
                     }
                 } else {
-                    callback.wasSuccessful(false);
+                    callback.setCallState(ApodCallState.FAILED);
                 }
-
-
-            /*    ApodApi apodApi = ApodApi.retrofit.create(ApodApi.class);
-                final Call<ApodEntity> call = apodApi.getApod(API_KEY);
-                Timber.i(call.request().url().toString());
-                call.enqueue(new Callback<ApodEntity>() {
-                    @Override
-                    public void onResponse(Call<ApodEntity> call, Response<ApodEntity> response) {
-                        ApodEntity todaysApod = response.body();
-                        insertApod(todaysApod);
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<ApodEntity> call, @NonNull Throwable t) {}
-                });*/
             } else {
+                callback.setCallState(ApodCallState.SUCCESSFUL);
                 Timber.i("apod WAS in db");
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
         }
     }
 
@@ -129,25 +137,6 @@ public class ApodRepository {
         return allFavoriteApods;
     }
 
-    public void deleteApod(long id) {
-        new deleteApodAsyncTask(apodFavoritesDao).execute(id);
-    }
-
-    private static class deleteApodAsyncTask extends AsyncTask<Long, Void, Void> {
-        private final ApodFavoritesDao apodFavoritesAsyncDao;
-
-        deleteApodAsyncTask(ApodFavoritesDao dao) {
-            apodFavoritesAsyncDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(final Long... params) {
-            Timber.i("deleting apod with id = " + params[0] + " from database");
-            apodFavoritesAsyncDao.deleteApod(params[0]);
-            return null;
-        }
-    }
-
     public static void markFavorite(ApodEntity apodEntity, boolean markAsFavorite) {
         Timber.i("calling markFavorite in the ApodRepository. isFavorite = %s", apodEntity.getIsFavorite());
         new markFavoriteAsyncTask(apodFavoritesDao, markAsFavorite).execute(apodEntity);
@@ -167,10 +156,8 @@ public class ApodRepository {
             Timber.i("marking favorite where id = " + params[0].getId() + "from database");
             ApodEntity apodEntity = params[0];
             if (markAsFavorite) {
-                Timber.i("marking as favorite");
                 apodFavoritesAsyncDao.markFavorite(apodEntity.getId());
             } else {
-                Timber.i("marking as NOT favorite");
                 apodFavoritesAsyncDao.markNotFavorite(apodEntity.getId());
             }
             return null;

@@ -42,15 +42,14 @@ public class BinderAdapaters {
                     imageView.getContext().startActivity(launchYouTube);
                 });
         }
-      //  imageView.setColorFilter(ContextCompat.getColor(imageView.getContext(), QuotaHelper.getQuotaColorRes(categoryDetail)));
     }
 
     @BindingAdapter("visibleIf")
-    public static void showPlayButton(@NonNull ImageView imageView, boolean isVisible) {
+    public static void showPlayButton(@NonNull View view, boolean isVisible) {
         if (isVisible) {
-            imageView.setVisibility(View.VISIBLE);
+            view.setVisibility(View.VISIBLE);
         } else {
-            imageView.setVisibility(View.INVISIBLE);
+            view.setVisibility(View.INVISIBLE);
         }
     }
 

@@ -37,6 +37,14 @@ public class SharedPreferenceUtils {
             return null;
     }
 
+    public static boolean isTodaysApodJsonUpToDate(Context context, String todaysDate) {
+        String apodJson = fetchTodaysApodJson(context);
+        ApodEntity apodEntity = jsonToApod(apodJson);
+        if (apodEntity != null) {
+            return apodEntity.getDate().equals(todaysDate);
+        } else return false;
+    }
+
 
     private static SharedPreferences getSharedPreferences (@NonNull final Context context) {
         return context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);

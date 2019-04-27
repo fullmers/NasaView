@@ -1,5 +1,6 @@
 package com.amiculous.nasaview.data;
 
 public interface ApodCallback {
-    void wasSuccessful(boolean b);
+    void setCallState(ApodRepository.ApodCallState callState);
+    void setApod(ApodEntity apodEntity);
 }

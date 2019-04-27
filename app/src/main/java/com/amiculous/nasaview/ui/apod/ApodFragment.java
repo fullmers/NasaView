@@ -16,7 +16,11 @@ import android.widget.TextView;
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.MediaType;
+import com.amiculous.nasaview.databinding.FragmentApodBinding;
+import com.amiculous.nasaview.databinding.FragmentFavoriteDetailsBinding;
+import com.amiculous.nasaview.ui.favorite_details.FavoriteApodViewModel;
 import com.amiculous.nasaview.util.MiscUtils;
+import com.amiculous.nasaview.util.SharedPreferenceUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
@@ -28,6 +32,7 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
@@ -67,7 +72,7 @@ public class ApodFragment extends Fragment {
     AppBarLayout appBarLayout;
     @BindView(R.id.scrollview)
     NestedScrollView scrollView;
-    @BindView(R.id.error_layout) LinearLayout errorLayout;
+  //  @BindView(R.id.error_layout) LinearLayout errorLayout;
 
     public static ApodFragment newInstance() {
         return new ApodFragment();
@@ -77,16 +82,38 @@ public class ApodFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_apod, container, false);
+
         date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         singleApodViewModel = ViewModelProviders.of(this).get(SingleApodViewModel.class);
-        return view;
+        FragmentApodBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_apod, container, false);
+        binding.setViewmodel(singleApodViewModel);
+        singleApodViewModel.init();
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle bundle) {
         super.onViewCreated(view, bundle);
         unbinder = ButterKnife.bind(this, view);
+
+        LiveData<ApodEntity> liveApod = singleApodViewModel.getApodEntityLive();
+        liveApod.observe(getViewLifecycleOwner(), apod -> {
+            if (apod != null) {
+                apodEntity = apod;
+                isFavorite = apod.getIsFavorite();
+            //    updateFavoriteStatus(isFavorite);
+            }
+        });
+    }
+
+    @OnClick(R.id.favorite_fab)
+    void onFabTap() {
+        updateFavoriteStatus(isFavorite);
+    }
+
+    private void updateFavoriteStatus(boolean isFavorite) {
+      //  apodEntity.setIsFavorite(isFavorite);
+        singleApodViewModel.toggleIsFavorite(apodEntity,isFavorite);
     }
 
     @Override
@@ -98,24 +125,19 @@ public class ApodFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        singleApodViewModel.initFields(date);
-        populateUI();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        populateUI();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        singleApodViewModel.getWasSuccessful().removeObservers(this);
-        singleApodViewModel.getApod().removeObservers(this);
     }
-
+/*
     private void populateUI() {
         LiveData<ApodEntity> liveApod = singleApodViewModel.getApod();
 
@@ -157,6 +179,7 @@ public class ApodFragment extends Fragment {
         //TODO open image in a full screen pinch-to-zoom view
     }
 
+
     @OnClick(R.id.favorite_fab)
     void onFabTap() {
         if (isFavorite) {
@@ -168,6 +191,7 @@ public class ApodFragment extends Fragment {
     }
 
     //todo refactor below with databinding
+
     private void setFABButtonToFavoriteState() {
         isFavorite = true;
         favoritesFAB.setImageDrawable(activity.getDrawable(R.drawable.ic_star_white_24dp));
@@ -234,9 +258,9 @@ public class ApodFragment extends Fragment {
 
     private void hideCopyright() {
         copyrightLayout.setVisibility(View.GONE);
-    }
+    } */
 
-    private void showApodHideError() {
+  /*  private void showApodHideError() {
         appBarLayout.setVisibility(View.VISIBLE);
         scrollView.setVisibility(View.VISIBLE);
         favoritesFAB.show();
@@ -248,6 +272,6 @@ public class ApodFragment extends Fragment {
         scrollView.setVisibility(View.GONE);
         favoritesFAB.hide();
         errorLayout.setVisibility(View.VISIBLE);
-    }
+    }*/
 
 }

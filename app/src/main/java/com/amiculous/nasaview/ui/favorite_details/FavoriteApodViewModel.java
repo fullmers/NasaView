@@ -1,22 +1,33 @@
 package com.amiculous.nasaview.ui.favorite_details;
 
+import android.app.Application;
+import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.ViewModel;
 
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.data.ApodRepository;
+import com.amiculous.nasaview.util.SharedPreferenceUtils;
 
-public class FavoriteApodViewModel extends ViewModel {
+public class FavoriteApodViewModel extends AndroidViewModel{
 
     public String title;
     public String copyright;
     public String date;
     private String explanation;
     public  ApodEntity apodEntity;
-
+    public Context context;
     private boolean showPlayButton;
 
     public ObservableField<Boolean> isFavorite = new ObservableField<>();
+
+    public FavoriteApodViewModel(@NonNull Application application) {
+        super(application);
+        this.context = application.getBaseContext();
+    }
 
     void init(ApodEntity apodEntity) {
         setTitle(apodEntity.getTitle());
@@ -36,11 +47,9 @@ public class FavoriteApodViewModel extends ViewModel {
     public void toggleIsFavorite(boolean isFavoriteNow) {
         boolean markAsFavorite = !isFavoriteNow;
         ApodRepository.markFavorite(getApodEntity(), markAsFavorite);
-        if (markAsFavorite) {
-            isFavorite.set(true);
-        } else {
-            isFavorite.set(false);
-        }
+        apodEntity.setIsFavorite(markAsFavorite);
+        isFavorite.set(markAsFavorite);
+        SharedPreferenceUtils.storeTodaysApodJson(context,SharedPreferenceUtils.apodToJSONstring(apodEntity));
     }
 
     //Getters and setters required for data binding:

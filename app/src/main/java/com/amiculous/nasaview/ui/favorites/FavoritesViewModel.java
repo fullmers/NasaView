@@ -21,14 +21,19 @@ public class FavoritesViewModel extends AndroidViewModel implements ApodCallback
     public FavoritesViewModel(Application application) {
         super(application);
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        ApodRepository apodRepository = new ApodRepository(date, this);
+        ApodRepository apodRepository = new ApodRepository(application, date, this);
         allFavoriteApods = apodRepository.getAllFavoriteApods();
     }
 
     LiveData<List<ApodEntity>> getAllFavoriteApods() {return allFavoriteApods;}
 
     @Override
-    public void wasSuccessful(boolean b) {
+    public void setCallState(ApodRepository.ApodCallState callState) {
+
+    }
+
+    @Override
+    public void setApod(ApodEntity apodEntity) {
 
     }
 }
