@@ -1,6 +1,5 @@
 package com.amiculous.nasaview.ui.apod;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,34 +52,16 @@ public class ApodFragment extends Fragment {
             if (apod != null) {
                 apodEntity = apod;
                 isFavorite = apod.getIsFavorite();
-            //    updateFavoriteStatus(isFavorite);
+            //    apodEntity.setIsFavorite(isFavorite);
+            //    singleApodViewModel.toggleIsFavorite(apodEntity,isFavorite);
             }
         });
     }
 
     @OnClick(R.id.favorite_fab)
     void onFabTap() {
-        updateFavoriteStatus(isFavorite);
-    }
-
-    private void updateFavoriteStatus(boolean isFavorite) {
-      //  apodEntity.setIsFavorite(isFavorite);
+        //  apodEntity.setIsFavorite(isFavorite);
         singleApodViewModel.toggleIsFavorite(apodEntity,isFavorite);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
