@@ -1,6 +1,7 @@
 package com.amiculous.nasaview.ui.settings;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.amiculous.nasaview.BuildConfig;
 import com.amiculous.nasaview.R;
+import com.amiculous.nasaview.ui.AboutActivity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -23,17 +25,15 @@ import androidx.lifecycle.ViewModelProviders;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 public class SettingsFragment extends Fragment {
 
     private Unbinder unbinder;
     @BindView(R.id.design_attribution_text) TextView designAttributionText;
     @BindView(R.id.apod_attribution_text) TextView apodAttributionText;
-
-    public static SettingsFragment newInstance() {
-        return new SettingsFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -65,6 +65,14 @@ public class SettingsFragment extends Fragment {
         SettingsViewModel mViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         // TODO: Use the ViewModel
     }
+
+    @OnClick(R.id.about_button)
+    void aboutButtonclicked() {
+        Timber.i("you tapped the button");
+        Intent intent = new Intent(getActivity(), AboutActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     public void onDestroyView() {

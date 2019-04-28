@@ -108,7 +108,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_button"
         android:layout_marginTop="40dp"
-        android:text="@string/about"
+        android:text="@string/about_button_label"
         app:layout_constraintTop_toBottomOf="@id/attributions_divider_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>

@@ -19,7 +19,10 @@
     <string name="Attributions">Attributions</string>
     <string name="apod_attribution"><![CDATA[The Astronomy Picture of the Day (APOD) is provided by NASA. More information about this excellent service may be found at: <a href="https://api.nasa.gov/api.html#apod"title="NASA APIs">api.nasa.gov</a>]]></string>
     <string name="design_attribution"><![CDATA[Icons made by <a href="https://www.freepik.com/?__hstc=57440181.06e6a15742487407d793465268dd525c.1556444554003.1556444554003.1556444554003.1&__hssc=57440181.3.1556444554003&__hsfp=3793565771" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"title="Flaticon">www.flaticon.com</a>. It is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>]]></string>
-    <string name="about">about the app</string>
+    <string name="about_button_label">about the app</string>
+
+    <!-- About activity-->
+    <string name="about_text">This is an activity. It exists solely to satisfy the Udacity capstone requirement for activity transitions. It will be removed after grading and the app is updated to use the new Navigation Component, which strongly encourages a single activity architecture.</string>
 
     <!-- Bottom navigation -->
     <string name="title_favorites">Favorites</string>
@@ -50,7 +53,7 @@
     <string name="sample_desc_short">NGC 2359 is a helmet-shaped cosmic cloud with wing-like appendages popularly called Thor\'s Helmet. Heroically sized even for a Norse god, Thor\'s Helmet is about 30 light-years across. In fact, the helmet is more like an interstellar bubble, blown as a fast wind from the bright, massive star near the bubble\'s center inflates a region within the surrounding molecular cloud.</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
-    <string name="title_activity_favorite_details">FavoriteDetails</string>
+    <string name="title_activity_about">About</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

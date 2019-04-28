@@ -1,7 +1,6 @@
 package com.amiculous.nasaview.ui.favorites;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +9,10 @@ import android.widget.ImageView;
 
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
-import com.amiculous.nasaview.ui.FavoriteDetailsActivity;
-import com.amiculous.nasaview.ui.favorite_details.FavoriteDetailsFragment;
 import com.amiculous.nasaview.util.SharedPreferenceUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
