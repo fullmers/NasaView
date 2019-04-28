@@ -63,7 +63,7 @@ public class SharedPreferenceUtils {
         return getSharedPreferences(context).getString(TODAYS_APOD_JSON, null);
     }
 
-    public static void storeWantsHD(@NonNull final Context context, @NonNull boolean wantsHD){
+    public static void storeWantsHD(@NonNull final Context context, boolean wantsHD){
         getSharedPreferencesEditor(context).putBoolean(WANTS_HD_KEY, wantsHD).apply();
     }
 

@@ -1,9 +1,12 @@
 package com.amiculous.nasaview.ui.apod;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +23,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import timber.log.Timber;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class ApodFragment extends Fragment {
 
@@ -64,6 +69,16 @@ public class ApodFragment extends Fragment {
         //  apodEntity.setIsFavorite(isFavorite);
         Timber.i("calling on Fab tap");
         singleApodViewModel.toggleIsFavorite(apodEntity,isFavorite);
+    }
+
+    @OnClick(R.id.image)
+    void onTap(ImageView imageView) {
+        Intent launchYouTube = new Intent(Intent.ACTION_VIEW);
+        if (launchYouTube.resolveActivity(imageView.getContext().getPackageManager()) != null) {
+            Timber.i("package manager not null. url:" + apodEntity.getUrl());
+            launchYouTube.setData(Uri.parse(apodEntity.getUrl()));
+            startActivity(launchYouTube);
+        }
     }
 
     @Override
