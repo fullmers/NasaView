@@ -22,7 +22,7 @@
     <string name="about_button_label">about the app</string>
 
     <!-- About activity-->
-    <string name="about_text">This is an activity. It exists solely to satisfy the Udacity capstone requirement for activity transitions. It will be removed after grading and the app is updated to use the new Navigation Component, which strongly encourages a single activity architecture.</string>
+    <string name="about_text">This is an activity. It exists to satisfy the Udacity capstone requirement for activity transitions. It will be removed after grading and the app is updated to use the new Navigation Component, which requires a single activity architecture.</string>
 
     <!-- Bottom navigation -->
     <string name="title_favorites">Favorites</string>

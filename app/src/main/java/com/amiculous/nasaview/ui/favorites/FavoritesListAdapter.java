@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
+import com.amiculous.nasaview.util.CircleTransform;
+import com.amiculous.nasaview.util.MiscUtils;
 import com.amiculous.nasaview.util.SharedPreferenceUtils;
 import com.squareup.picasso.Picasso;
 
@@ -52,11 +54,19 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
             holder.descPreviewTextView.setText(current.getExplanation());
 
             String url;
+
             if (current.getMedia_type().equals("video")) {
-                url = current.getUrl();
+                if (current.getUrl().startsWith("https:")) { //sometimes the api guys forget the required https: in the youtube url...
+                    url = current.getUrl();
+                } else {
+                    url = "https:" + current.getUrl();
+                }
+                url = MiscUtils.videoThumbnailUrl(url);
+                holder.playButtonImageView.setVisibility(View.VISIBLE);
             } else {
                 boolean wantsHd = SharedPreferenceUtils.fetchWantsHD(context);
                 url = wantsHd ? current.getHdUrl() : current.getUrl();
+                holder.playButtonImageView.setVisibility(View.INVISIBLE);
             }
 
             Timber.i("url: " + url);
@@ -64,6 +74,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
             Picasso.get()
                     .load(url)
                     .placeholder(context.getResources().getDrawable(R.drawable.default_apod))
+                    .transform(new CircleTransform())
                     .into(holder.imagePreviewImageView);
         } else {
             holder.titleTextView.setText(context.getString(R.string.no_favorites));
@@ -84,6 +95,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
 
     public class FavoritesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.preview_image) ImageView imagePreviewImageView;
+        @BindView(R.id.play_button) ImageView playButtonImageView;
         @BindView(R.id.title_text) TextView titleTextView;
         @BindView(R.id.desc_text) TextView descPreviewTextView;
 
