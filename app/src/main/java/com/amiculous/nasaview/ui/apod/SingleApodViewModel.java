@@ -24,6 +24,7 @@ public class SingleApodViewModel extends AndroidViewModel implements ApodCallbac
     private Context context;
     private Application application;
     public ApodEntity apodEntity;
+    ApodRepository repository;
 
     private LiveData<ApodEntity> apodEntityLive;
     private boolean showPlayButton;
@@ -48,7 +49,6 @@ public class SingleApodViewModel extends AndroidViewModel implements ApodCallbac
         String todaysDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         boolean isApodCurrent = SharedPreferenceUtils.isTodaysApodJsonUpToDate(context, todaysDate);
         Timber.i("isApodCurrent: %s", isApodCurrent);
-        ApodRepository repository = new ApodRepository(application, todaysDate, this);
         if (isApodCurrent) {
             String apodString = SharedPreferenceUtils.fetchTodaysApodJson(context);
             ApodEntity apodEntity = SharedPreferenceUtils.jsonToApod(apodString);
@@ -60,7 +60,9 @@ public class SingleApodViewModel extends AndroidViewModel implements ApodCallbac
             }
             showApod();
         }
-        apodEntityLive = repository.getApod(todaysDate);
+            repository = new ApodRepository(application, todaysDate, this);
+
+        apodEntityLive = repository.getApod();
     }
 
     private void setViews(ApodEntity apodEntity) {
@@ -69,10 +71,12 @@ public class SingleApodViewModel extends AndroidViewModel implements ApodCallbac
         setDate(apodEntity.getDate());
         setExplanation(apodEntity.getExplanation());
         setApodEntity(apodEntity);
+        Timber.i("calling set Views. with isFavorite value:%s", apodEntity.getIsFavorite());
         setIsFavorite(apodEntity.getIsFavorite());
     }
 
     void toggleIsFavorite(ApodEntity apod, boolean isFavoriteNow) {
+        Timber.i("calling toggleIsFavorite");
         boolean markAsFavorite = !isFavoriteNow;
         ApodRepository.markFavorite(apod, markAsFavorite);
         apod.setIsFavorite(markAsFavorite);

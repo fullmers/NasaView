@@ -25,7 +25,7 @@ public class ApodRepository {
     private static ApodFavoritesDao apodFavoritesDao;
     private static LiveData<List<ApodEntity>> allFavoriteApods;
     private final LiveData<ApodEntity> apod;
-    private ApodCallback callback;
+    private ApodRefreshAsyncInput asyncInput;
 
     public static void initDao(Application application) {
         if (apodFavoritesDao == null) {
@@ -38,27 +38,18 @@ public class ApodRepository {
     public ApodRepository(Application application, String date, ApodCallback callback) {
         Timber.i("constructing repository");
         initDao(application);
-        ApodRefreshAsyncInput asyncInput = new ApodRefreshAsyncInput(date,callback,apodFavoritesDao);
+        asyncInput = new ApodRefreshAsyncInput(date,callback,apodFavoritesDao);
         apod = apodFavoritesDao.loadApod(date);
-        this.callback = callback;
+    }
+
+    public LiveData<ApodEntity> getApod() {
         try {
-            String apodJson = new refreshApodAsyncTask().execute(asyncInput).get();
-            Timber.i("getApod json:%s", apodJson);
+            new refreshApodAsyncTask().execute(asyncInput).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    public LiveData<ApodEntity> getApod(final String date) {
-        Timber.i("calling getApod in repositroy");
-        ApodRefreshAsyncInput asyncInput = new ApodRefreshAsyncInput(date, callback,apodFavoritesDao);
-        new refreshApodAsyncTask().execute(asyncInput);
-        return apod;
-    }
-
-    public LiveData<ApodEntity> getApod() {
         return apod;
     }
 
@@ -73,7 +64,6 @@ public class ApodRepository {
             Timber.i("refreshing apod with id = " + date + " from database");
             if (!apodFavoritesAsyncDao.hasApod(date)) {
                 Timber.i("apod was NOT in db");
-
                 URL ApodUrl = NetworkUtils.buildUrl();
                 if (ApodUrl != null) {
                     try {
@@ -89,8 +79,6 @@ public class ApodRepository {
                             Crashlytics.logException(e);
                             callback.setCallState(ApodCallState.FAILED);
                         }
-
-                        Timber.i(response);
                     } catch (IOException e) {
                         Crashlytics.logException(e);
                         callback.setCallState(ApodCallState.FAILED);

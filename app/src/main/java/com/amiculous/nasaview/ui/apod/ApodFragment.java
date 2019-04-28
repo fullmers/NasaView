@@ -19,6 +19,7 @@ import com.amiculous.nasaview.databinding.FragmentApodBinding;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 public class ApodFragment extends Fragment {
 
@@ -61,6 +62,7 @@ public class ApodFragment extends Fragment {
     @OnClick(R.id.favorite_fab)
     void onFabTap() {
         //  apodEntity.setIsFavorite(isFavorite);
+        Timber.i("calling on Fab tap");
         singleApodViewModel.toggleIsFavorite(apodEntity,isFavorite);
     }
 
