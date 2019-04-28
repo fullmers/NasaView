@@ -6,14 +6,12 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.BindingAdapter;
 
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
-import com.amiculous.nasaview.data.MediaType;
 import com.amiculous.nasaview.util.MiscUtils;
+import com.amiculous.nasaview.util.SharedPreferenceUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
@@ -24,11 +22,14 @@ public class BinderAdapaters {
     public static void configureApod(@NonNull ImageView imageView, ApodEntity apodEntity) {
         String mediaType = apodEntity.getMedia_type();
         switch (mediaType) {
-            case "image":
+            case "image": {
+                boolean wantsHd = SharedPreferenceUtils.fetchWantsHD(imageView.getContext());
+                String url = wantsHd ? apodEntity.getHdUrl() : apodEntity.getUrl();
                 Picasso.get()
-                        .load(apodEntity.getUrl())
+                        .load(url)
                         .placeholder(imageView.getResources().getDrawable(R.drawable.default_apod))
                         .into(imageView);
+            }
                 break;
             case "video":
                 String thumbnailUrl = MiscUtils.videoThumbnailUrl(apodEntity.getUrl());

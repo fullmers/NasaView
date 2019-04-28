@@ -31,7 +31,8 @@ public class FetchApodWorker extends Worker {
     @Override
     public Result doWork() {
         try {
-            URL ApodUrl = NetworkUtils.buildUrl();
+            boolean wantsHd = SharedPreferenceUtils.fetchWantsHD(context);
+            URL ApodUrl = NetworkUtils.buildUrl(wantsHd);
             if (ApodUrl != null) {
                 try {
                     String response = NetworkUtils.getResponseFromHttpUrl(ApodUrl);

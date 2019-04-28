@@ -14,6 +14,7 @@ public class SharedPreferenceUtils {
     private static final String PREFERENCES_KEY = "nasa_view_preferences";
     private static final String TODAYS_APOD_JSON = "todays_apod_json";
     public static final String APOD_JSON_KEY = "apod_json_key";
+    private static final String WANTS_HD_KEY = "wants_hd_key";
 
     private static Gson gson = new Gson();
 
@@ -60,5 +61,13 @@ public class SharedPreferenceUtils {
 
     public static String fetchTodaysApodJson(@NonNull final Context context){
         return getSharedPreferences(context).getString(TODAYS_APOD_JSON, null);
+    }
+
+    public static void storeWantsHD(@NonNull final Context context, @NonNull boolean wantsHD){
+        getSharedPreferencesEditor(context).putBoolean(WANTS_HD_KEY, wantsHD).apply();
+    }
+
+    public static boolean fetchWantsHD(@NonNull final Context context){
+        return getSharedPreferences(context).getBoolean(WANTS_HD_KEY, false);
     }
 }

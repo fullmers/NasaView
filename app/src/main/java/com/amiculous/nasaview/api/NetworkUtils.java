@@ -37,7 +37,7 @@ public class NetworkUtils {
             return null;
     }
 
-    public static URL buildUrl() {
+    public static URL buildUrl(boolean wantsHd) {
         Uri apodQueryUri;
         String BASE_URL = "https://api.nasa.gov/planetary/apod";
         apodQueryUri = Uri.parse(BASE_URL).buildUpon()

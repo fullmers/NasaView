@@ -20,6 +20,7 @@ public class ApodEntity implements Parcelable {
     private String media_type;
     private String title;
     private String url;
+    private String hdUrl;
     private boolean isFavorite;
 
     public long getId() {
@@ -50,6 +51,10 @@ public class ApodEntity implements Parcelable {
         return url;
     }
 
+    public String getHdUrl() {
+        return hdUrl;
+    }
+
     public boolean getIsFavorite() {return isFavorite;}
 
     //setter required for fields not in constructor with Room
@@ -62,7 +67,7 @@ public class ApodEntity implements Parcelable {
     @Ignore
     public ApodEntity() {}
 
-    public ApodEntity(String copyright, @NonNull String date, @NonNull String explanation, @NonNull String media_type, @NonNull String title, @NonNull String url) {
+    public ApodEntity(String copyright, @NonNull String date, @NonNull String explanation, @NonNull String media_type, @NonNull String title, String hdUrl, @NonNull String url) {
         if (copyright == null)
             this.copyright = "";
         else
@@ -71,13 +76,17 @@ public class ApodEntity implements Parcelable {
         this.explanation = explanation;
         this.media_type = media_type;
         this.title = title;
+        if (hdUrl == null || hdUrl.isEmpty())
+            this.hdUrl = url;
+        else
+            this.hdUrl = hdUrl;
         this.url = url;
         this.isFavorite = false;
     }
 
     @Ignore
-    public ApodEntity(long id, String copyright, @NonNull String date, @NonNull String explanation, @NonNull String media_type, @NonNull String title, @NonNull String url) {
-        this(copyright, date, explanation, media_type, title, url);
+    public ApodEntity(long id, String copyright, @NonNull String date, @NonNull String explanation, @NonNull String media_type, @NonNull String title, String hdUrl, @NonNull String url) {
+        this(copyright, date, explanation, media_type, title, hdUrl, url);
         this.id = id;
     }
 
@@ -95,6 +104,7 @@ public class ApodEntity implements Parcelable {
         parcel.writeString(explanation);
         parcel.writeString(media_type);
         parcel.writeString(url);
+        parcel.writeString(hdUrl);
         parcel.writeString(title);
         parcel.writeInt(isFavorite ? 1 : 0);
     }
@@ -106,6 +116,7 @@ public class ApodEntity implements Parcelable {
         explanation = in.readString();
         media_type = in.readString();
         url = in.readString();
+        hdUrl = in.readString();
         title = in.readString();
         isFavorite = in.readInt() != 0;
     }

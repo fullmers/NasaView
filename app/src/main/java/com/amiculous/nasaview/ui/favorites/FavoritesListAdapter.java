@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
+import com.amiculous.nasaview.util.SharedPreferenceUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdapter.FavoritesViewHolder> {
 
@@ -49,8 +51,18 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
             holder.titleTextView.setText(current.getTitle());
             holder.descPreviewTextView.setText(current.getExplanation());
 
+            String url;
+            if (current.getMedia_type().equals("video")) {
+                url = current.getUrl();
+            } else {
+                boolean wantsHd = SharedPreferenceUtils.fetchWantsHD(context);
+                url = wantsHd ? current.getHdUrl() : current.getUrl();
+            }
+
+            Timber.i("url: " + url);
+
             Picasso.get()
-                    .load(current.getUrl())
+                    .load(url)
                     .placeholder(context.getResources().getDrawable(R.drawable.default_apod))
                     .into(holder.imagePreviewImageView);
         } else {

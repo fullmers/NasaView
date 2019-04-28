@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import com.amiculous.nasaview.api.NetworkUtils;
+import com.amiculous.nasaview.util.SharedPreferenceUtils;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.JsonSyntaxException;
 
@@ -26,6 +27,7 @@ public class ApodRepository {
     private static LiveData<List<ApodEntity>> allFavoriteApods;
     private final LiveData<ApodEntity> apod;
     private ApodRefreshAsyncInput asyncInput;
+    private static boolean wantsHd;
 
     public static void initDao(Application application) {
         if (apodFavoritesDao == null) {
@@ -40,6 +42,7 @@ public class ApodRepository {
         initDao(application);
         asyncInput = new ApodRefreshAsyncInput(date,callback,apodFavoritesDao);
         apod = apodFavoritesDao.loadApod(date);
+        wantsHd = SharedPreferenceUtils.fetchWantsHD(application.getBaseContext());
     }
 
     public LiveData<ApodEntity> getApod() {
@@ -64,7 +67,7 @@ public class ApodRepository {
             Timber.i("refreshing apod with id = " + date + " from database");
             if (!apodFavoritesAsyncDao.hasApod(date)) {
                 Timber.i("apod was NOT in db");
-                URL ApodUrl = NetworkUtils.buildUrl();
+                URL ApodUrl = NetworkUtils.buildUrl(wantsHd);
                 if (ApodUrl != null) {
                     try {
                         Timber.i("trying to fetch with network utils");
