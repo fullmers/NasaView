@@ -50,12 +50,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
      */
     @Override
     public void onBackPressed() {
-        int selectedItemId = navigation.getSelectedItemId();
-        if (R.id.navigation_apod != selectedItemId) {
-            navigation.setSelectedItemId(R.id.navigation_apod);
-        } else {
-            super.onBackPressed();
+        //go back to favorites list fragment from details
+        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.frame_container);
+        if(currentFrag instanceof FavoriteDetailsFragment) {
+            navigation.setSelectedItemId(R.id.navigation_favorites);
+            showSelectedFragment(R.id.navigation_favorites,false);
+        } else { //otherwise, go back to main apod fragment from other fragments
+            int selectedItemId = navigation.getSelectedItemId();
+            if (R.id.navigation_apod != selectedItemId) {
+                navigation.setSelectedItemId(R.id.navigation_apod);
+            } else {
+                super.onBackPressed();
+            }
         }
+
     }
 
     @Override
@@ -134,9 +142,4 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             return super.onOptionsItemSelected(item);
         }
     }
-
-    //TODO make an about/settings fragment and display this :
-    //Saturn icon and Telescope icon and observatory launch icon::
-    //<div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-// <div>Icons made by <a href="https://www.freepik.com/?__hstc=57440181.06e6a15742487407d793465268dd525c.1556444554003.1556444554003.1556444554003.1&__hssc=57440181.3.1556444554003&__hsfp=3793565771" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 }
