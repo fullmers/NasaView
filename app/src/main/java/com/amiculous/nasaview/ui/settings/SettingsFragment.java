@@ -2,9 +2,12 @@ package com.amiculous.nasaview.ui.settings;
 
 
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.amiculous.nasaview.BuildConfig;
 import com.amiculous.nasaview.R;
@@ -18,7 +21,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class SettingsFragment extends Fragment {
+
+    private Unbinder unbinder;
+    @BindView(R.id.design_attribution_text) TextView designAttributionText;
+    @BindView(R.id.apod_attribution_text) TextView apodAttributionText;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -27,8 +38,18 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.settings_fragment, container, false);
+    }
 
-        return inflater.inflate(R.layout.search_fragment, container, false);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle bundle) {
+        super.onViewCreated(view, bundle);
+        unbinder = ButterKnife.bind(this, view);
+        designAttributionText.setText(Html.fromHtml(getString(R.string.design_attribution)));
+        designAttributionText.setMovementMethod(LinkMovementMethod.getInstance());
+
+        apodAttributionText.setText(Html.fromHtml(getString(R.string.apod_attribution)));
+        apodAttributionText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -45,4 +66,9 @@ public class SettingsFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

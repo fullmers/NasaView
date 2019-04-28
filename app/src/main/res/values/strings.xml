@@ -12,9 +12,14 @@
     <string name="copyright">© </string>
 
 
-    <!-- Search fragment -->
+    <!-- Settings fragment -->
     <string name="search_fragment">Search Fragment</string>
-
+    <string name="settings_fragment">Settings Fragment</string>
+    <string name="hd_when_possible">Get the HD version of an APOD when possible</string>
+    <string name="Attributions">Attributions</string>
+    <string name="apod_attribution"><![CDATA[The Astronomy Picture of the Day (APOD) is provided by NASA. More information about this excellent service may be found at: <a href="https://api.nasa.gov/api.html#apod"title="NASA APIs">api.nasa.gov</a>]]></string>
+    <string name="design_attribution"><![CDATA[Icons made by <a href="https://www.freepik.com/?__hstc=57440181.06e6a15742487407d793465268dd525c.1556444554003.1556444554003.1556444554003.1&__hssc=57440181.3.1556444554003&__hsfp=3793565771" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"title="Flaticon">www.flaticon.com</a>. It is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>]]></string>
+    <string name="about">about the app</string>
 
     <!-- Bottom navigation -->
     <string name="title_favorites">Favorites</string>
