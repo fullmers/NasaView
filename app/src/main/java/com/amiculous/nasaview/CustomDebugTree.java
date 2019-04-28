@@ -5,6 +5,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import timber.log.Timber;
 
+//referred to:
+//https://android.jlelse.eu/my-timber-setup-493a8ec7a10c
+
 class CustomDebugTree extends Timber.DebugTree {
     private static final int MAX_LOG_LENGTH = 4000;
     private static final String MY_TAG = "MyDebugger ";

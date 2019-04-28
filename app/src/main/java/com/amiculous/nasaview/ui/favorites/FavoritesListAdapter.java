@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdapter.FavoritesViewHolder> {
 
@@ -68,8 +67,6 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
                 url = wantsHd ? current.getHdUrl() : current.getUrl();
                 holder.playButtonImageView.setVisibility(View.INVISIBLE);
             }
-
-            Timber.i("url: " + url);
 
             Picasso.get()
                     .load(url)
