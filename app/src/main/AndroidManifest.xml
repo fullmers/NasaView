@@ -42,11 +42,10 @@
             android:value="@string/meta_data_value" /> <!-- sample id for testing -->
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/title_activity_main"
+            android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
