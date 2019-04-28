@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 
+import timber.log.Timber;
+
 //sources:
 //https://lab.getbase.com/introduction-to-coordinator-layout-on-android/
 //https://stackoverflow.com/a/32039007
@@ -56,9 +58,13 @@ public class FABbehavior extends AppBarLayout.ScrollingViewBehavior {
             final int type) {
         super.onNestedScroll(coordinatorLayout, child, target,
                 dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, type);
+    }
+
+    @Override
+    public void onNestedPreScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull View child, @NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
+        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type);
         List<View> dependencies = coordinatorLayout.getDependencies(child);
-        int scrollThreshold = 0;
-        if ((dyUnconsumed > scrollThreshold)){
+        if ((dy > 0)){
             for (View view : dependencies) {
                 if (view instanceof FloatingActionButton) {
                     ((FloatingActionButton) view).hide();

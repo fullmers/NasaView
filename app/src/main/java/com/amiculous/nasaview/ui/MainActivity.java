@@ -1,11 +1,14 @@
 package com.amiculous.nasaview.ui;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
@@ -14,21 +17,10 @@ import com.amiculous.nasaview.ui.favorite_details.FavoriteDetailsFragment;
 import com.amiculous.nasaview.ui.favorites.FavoritesFragment;
 import com.amiculous.nasaview.ui.settings.SettingsFragment;
 import com.amiculous.nasaview.util.FirebaseUtils;
-import com.amiculous.nasaview.util.MiscUtils;
 import com.amiculous.nasaview.util.SharedPreferenceUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.squareup.picasso.Picasso;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.BindingAdapter;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import timber.log.Timber;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener,
         FavoritesFragment.FavoriteSelectListener {
@@ -36,12 +28,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private static final String selectedFragmentKey = "SELECTED_FRAGMENT";
     private BottomNavigationView navigation;
     private int selectedFragment;
-    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
         setContentView(R.layout.activity_main);
         navigation = findViewById(R.id.navigation);
         int selected = R.id.navigation_apod;
@@ -153,37 +143,4 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             return super.onOptionsItemSelected(item);
         }
     }
-
-  /*  @BindingAdapter("displayApod")
-    public static void configureApod(@NonNull ImageView imageView, ApodEntity apodEntity) {
-        String mediaType = apodEntity.getMedia_type();
-        switch (mediaType) {
-            case "image": {
-                boolean wantsHd = SharedPreferenceUtils.fetchWantsHD(imageView.getContext());
-                String url = wantsHd ? apodEntity.getHdUrl() : apodEntity.getUrl();
-                Picasso.get()
-                        .load(url)
-                        .placeholder(imageView.getResources().getDrawable(R.drawable.default_apod))
-                        .into(imageView);
-            }
-            break;
-            case "video":
-                String thumbnailUrl = MiscUtils.videoThumbnailUrl(apodEntity.getUrl());
-                Picasso.get()
-                        .load(thumbnailUrl)
-                        .placeholder(imageView.getResources().getDrawable(R.drawable.default_apod))
-                        .into(imageView);
-                imageView.setOnClickListener(v -> {
-                    Intent launchYouTube = new Intent(Intent.ACTION_VIEW);
-                    if (launchYouTube.resolveActivity(imageView.getContext().getPackageManager()) != null) {
-                        Timber.i("package manager not null");
-                        launchYouTube.setData(Uri.parse(apodEntity.getUrl()));
-                        context.startActivity(launchYouTube);
-                        //imageView.getContext().startActivity(launchYouTube);
-                    }
-                    // launchYouTube.setData(Uri.parse(apodEntity.getUrl()));
-                    // imageView.getContext().startActivity(launchYouTube);
-                });
-        }
-    } */
 }

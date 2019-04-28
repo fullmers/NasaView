@@ -1,6 +1,5 @@
 package com.amiculous.nasaview.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
@@ -16,13 +15,7 @@ import com.amiculous.nasaview.util.SharedPreferenceUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
-import timber.log.Timber;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-
-
 public class BinderAdapaters {
-
 
     @BindingAdapter("displayApod")
     public static void configureApod(@NonNull ImageView imageView, ApodEntity apodEntity) {
@@ -45,21 +38,17 @@ public class BinderAdapaters {
                         .into(imageView);
                 imageView.setOnClickListener(v -> {
                     Intent launchYouTube = new Intent(Intent.ACTION_VIEW);
-                    String url; //sometimes the api guys forget the https:...
+                    String url; //sometimes the api guys forget the required https: in the youtube url...
                     if (apodEntity.getUrl().startsWith("https:")) {
                         url = apodEntity.getUrl();
                     } else {
                         url = "https:" + apodEntity.getUrl();
                     }
                     if (launchYouTube.resolveActivity(imageView.getContext().getPackageManager()) != null) {
-                        Timber.i("package manager not null. url:" + url);
                         launchYouTube.setData(Uri.parse(url));
-                        launchYouTube.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                        //imageView.getContext().getApplicationContext().startActivity(launchYouTube);
+//                        launchYouTube.addFlags(FLAG_ACTIVITY_NEW_TASK);
                         imageView.getContext().startActivity(launchYouTube);
                     }
-                   // launchYouTube.setData(Uri.parse(apodEntity.getUrl()));
-                   // imageView.getContext().startActivity(launchYouTube);
                 });
         }
     }

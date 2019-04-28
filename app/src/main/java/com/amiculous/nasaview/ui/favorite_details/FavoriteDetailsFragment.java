@@ -18,7 +18,6 @@ import com.amiculous.nasaview.R;
 import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.databinding.FragmentFavoriteDetailsBinding;
 import com.amiculous.nasaview.util.SharedPreferenceUtils;
-import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

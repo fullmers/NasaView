@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
                 app:contentScrim="?attr/colorPrimary"
-                app:layout_behavior="com.amiculous.nasaview.ui.apod.FABbehavior"
+                app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:titleEnabled="false">
 
