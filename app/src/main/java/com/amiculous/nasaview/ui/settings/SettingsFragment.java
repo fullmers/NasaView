@@ -1,4 +1,4 @@
-package com.amiculous.nasaview.ui.search;
+package com.amiculous.nasaview.ui.settings;
 
 
 import android.os.Bundle;
@@ -18,10 +18,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-public class SearchFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 
-    public static SearchFragment newInstance() {
-        return new SearchFragment();
+    public static SettingsFragment newInstance() {
+        return new SettingsFragment();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SearchFragment extends Fragment {
             mAdView.loadAd(adRequest);
         }
 
-        SearchViewModel mViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+        SettingsViewModel mViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         // TODO: Use the ViewModel
     }
 

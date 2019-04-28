@@ -8,7 +8,7 @@ import com.amiculous.nasaview.data.ApodEntity;
 import com.amiculous.nasaview.ui.apod.ApodFragment;
 import com.amiculous.nasaview.ui.favorite_details.FavoriteDetailsFragment;
 import com.amiculous.nasaview.ui.favorites.FavoritesFragment;
-import com.amiculous.nasaview.ui.search.SearchFragment;
+import com.amiculous.nasaview.ui.settings.SettingsFragment;
 import com.amiculous.nasaview.util.FirebaseUtils;
 import com.amiculous.nasaview.util.SharedPreferenceUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 selectedFragment = R.id.navigation_apod;
                 break;
             case R.id.navigation_search:
-                commitFragment(new SearchFragment(), keep);
+                commitFragment(new SettingsFragment(), keep);
                 FirebaseUtils.screenShown(this, FirebaseUtils.SEARCH_FRAGMENT);
                 selectedFragment = R.id.navigation_search;
                 break;

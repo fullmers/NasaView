@@ -1,9 +1,9 @@
-package com.amiculous.nasaview.ui.search;
+package com.amiculous.nasaview.ui.settings;
 
 
 import androidx.lifecycle.ViewModel;
 
 @SuppressWarnings("WeakerAccess") //needs to be public for androidx
-public class SearchViewModel extends ViewModel {
+public class SettingsViewModel extends ViewModel {
     // TODO: Implement the ViewModel
 }
