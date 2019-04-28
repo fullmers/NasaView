@@ -1,2 +1,2 @@
 # NasaView
-Explore the treasure trove of public NASA images
+See APODs from NASA.
