@@ -5,7 +5,7 @@
     <string name="apod_transition_name">apod</string>
 
     <!-- Favorites fragment -->
-    <string name="no_favorites">No favorites saved yett</string>
+    <string name="no_favorites">No favorites saved yet.</string>
 
     <!-- APOD fragment -->
     <string name="error">Something went wrong fetching today\'s APOD.</string>
