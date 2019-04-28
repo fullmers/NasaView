@@ -23,9 +23,9 @@ public class AboutActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    //necessary to get up navigation to go back to favorites tab. (saveInstanceState does not work?)
+    //necessary to get up navigation to go back to settings tab. (saveInstanceState does not work?)
     //https://stackoverflow.com/a/29464116/2311585
-/*    @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             Intent intent = NavUtils.getParentActivityIntent(this);
@@ -34,5 +34,5 @@ public class AboutActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    } */
+    }
 }
