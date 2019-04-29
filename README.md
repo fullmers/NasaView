@@ -23,3 +23,6 @@ An API key from [NASA APIs](https://api.nasa.gov/api.html) is required to run th
 
 ```API_KEY="your_api_key"```
 
+# License
+
+This app project is available under the [MIT LICENSE](https://github.com/fullmers/NasaView/blob/master/LICENSE).
