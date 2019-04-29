@@ -11,9 +11,9 @@ This Android app allows users to fetch and view the Astronomy Picture of the Day
 # Screenshots
 
 <img width="45%" src="screenshots/apod_fragment.png" />
-<img width="90%" src=".github/no_favorites.png" />
+<img width="45%" src=".github/no_favorites.png" />
 <img width="45%" src=".github/favorites_list.png" />
-<img width="90%" src=".github/settings.png" />
+<img width="45%" src=".github/settings.png" />
 
 # Developer Setup
 
