@@ -16,6 +16,7 @@ import androidx.lifecycle.LiveData;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import timber.log.Timber;
 
@@ -46,8 +47,13 @@ public class SingleApodViewModel extends AndroidViewModel implements ApodCallbac
     }
 
     void init() {
-        String todaysDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        boolean isApodCurrent = SharedPreferenceUtils.isTodaysApodJsonUpToDate(context, todaysDate);
+        //APODs are released at midnight EST, so to the west of EST, the date will be one day ahead for a few hours
+        //need to get EST date of current time, or else risk asking for date one day "in the future"
+        SimpleDateFormat todaysDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        todaysDate.setTimeZone(TimeZone.getTimeZone("EST"));
+        String todayString = todaysDate.format(new Date());
+
+        boolean isApodCurrent = SharedPreferenceUtils.isTodaysApodJsonUpToDate(context, todayString);
         Timber.i("isApodCurrent: %s", isApodCurrent);
         if (isApodCurrent) {
             String apodString = SharedPreferenceUtils.fetchTodaysApodJson(context);
@@ -60,7 +66,7 @@ public class SingleApodViewModel extends AndroidViewModel implements ApodCallbac
             }
             showApod();
         }
-            repository = new ApodRepository(application, todaysDate, this);
+            repository = new ApodRepository(application, todayString, this);
 
         apodEntityLive = repository.getApod();
     }
